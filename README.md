@@ -2,7 +2,7 @@
 
 Repositório relacionado ao primeiro projeto no qual irei trabalhar no meu novo estágio no Asaas, como Engenheiro de Software. Está sendo desenvolvido por 2 estagiários com o objetivo de aplicar na prática os conhecimentos adquiridos durante o curso da [Alura](https://www.alura.com.br/), servindo como treino para situações reais do ambiente de trabalho.
 
-![Logo Asaas](assets/logo-asaas-azul.png)
+![Logo Asaas](logo-asaas-azul.png)
 
 ## 📚 Índice
 
