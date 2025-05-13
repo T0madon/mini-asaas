@@ -1,6 +1,4 @@
-# mini-asaas
-
-Repositório relacionado ao primeiro projeto no qual irei trabalhar no meu novo estágio no Asaas, como Engenheiro de Software. Está sendo desenvolvido por 2 estagiários com o objetivo de aplicar na prática os conhecimentos adquiridos durante o curso da [Alura](https://www.alura.com.br/), servindo como treino para situações reais do ambiente de trabalho.
+# Projeto **mini-asaas**
 
 ![Logo Asaas](logo-asaas-azul.png)
 
@@ -13,7 +11,7 @@ Repositório relacionado ao primeiro projeto no qual irei trabalhar no meu novo 
 
 ## 📌 Sobre o Projeto
 
-O **Mini Asaas** é uma tentativa de replicar, em escala reduzida, algumas funcionalidades do sistema da empresa [Asaas](https://www.asaas.com/), onde atualmente estamos estagiando. A ideia é criar uma versão simplificada da plataforma, com foco na prática de conceitos como: 
+O **Mini Asaas** é um projeto que visa replicar, em escala reduzida, algumas funcionalidades do sistema da empresa [Asaas](https://www.asaas.com/), onde atualmente estamos estagiando. A ideia é criar uma versão simplificada da plataforma, com foco na prática de conceitos como: 
 
 - Modelagem de banco de dados
 - Integração entre front-end e back-end
@@ -33,9 +31,8 @@ O **Mini Asaas** é uma tentativa de replicar, em escala reduzida, algumas funci
 
 Como o projeto ainda está em fase de planejamento e aprendizagem, as tecnologias listadas **podem ser alteradas** conforme o progresso:
 
--**Front-end:** Em estudo
--**Back-end:** Spring Boot
--**Banco de Dados:** PostgreSQL ou MySQL
+-**Front-end e Back-end:** Framework Grails com linguagem Groovy
+-**Banco de Dados:** MySQL
 -**Versionamento:** Git e Github
 -**Documentação de API:** Em estudo
 -**Gerenciamento de Tarefas:** Trello ou GitHub Projects
