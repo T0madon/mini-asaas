@@ -31,11 +31,11 @@ O **Mini Asaas** é um projeto que visa replicar, em escala reduzida, algumas fu
 
 Como o projeto ainda está em fase de planejamento e aprendizagem, as tecnologias listadas **podem ser alteradas** conforme o progresso:
 
--**Front-end e Back-end:** Framework Grails com linguagem Groovy
--**Banco de Dados:** MySQL
--**Versionamento:** Git e Github
--**Documentação de API:** Em estudo
--**Gerenciamento de Tarefas:** Trello ou GitHub Projects
+- **Front-end e Back-end:** Framework Grails com linguagem Groovy
+- **Banco de Dados:** MySQL
+- **Versionamento:** Git e Github
+- **Documentação de API:** Em estudo
+- **Gerenciamento de Tarefas:** Trello ou GitHub Projects
 
 ## 🚧 Status do Projeto
 
