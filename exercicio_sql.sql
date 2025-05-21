@@ -13,7 +13,7 @@ SELECT ca.name, SUM(p.value) as valor_total_recebido
 FROM customer_account ca
 INNER JOIN payment p ON ca.id = p.customer_account_id
 WHERE p.status = 'RECEIVED'
-GROUP BY ca.name
+GROUP BY ca.id
 HAVING SUM(p.value) > 1000
 ORDER BY SUM(p.value) DESC
 LIMIT 20;
