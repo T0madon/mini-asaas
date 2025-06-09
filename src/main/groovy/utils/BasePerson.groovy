@@ -10,7 +10,6 @@ abstract class BasePerson extends BaseEntity {
 
     String cpfCnpj
 
-    // PERGUNTAR DO CEP
     String cep
 
     String state
