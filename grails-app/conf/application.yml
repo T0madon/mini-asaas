@@ -126,7 +126,7 @@ dataSource:
 environments:
     development:
         dataSource:
-            dbCreate: create-drop
+            dbCreate: update
             url: ${DB_URL}
     test:
         dataSource:
