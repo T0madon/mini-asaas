@@ -1,6 +1,7 @@
 package utils
 
 abstract class BaseEntity {
+
     Date dateCreated
 
     Date lastUpdated
