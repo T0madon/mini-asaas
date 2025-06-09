@@ -30,7 +30,6 @@ abstract class BasePerson extends BaseEntity {
         name blank: false
         email blank: false, email: true
         cpfCnpj blank: false, size: 11..14
-        // Campo size só está incluindo os números de cpf(11) e cnpj(14)
         state blank: false
         cep blank: false
         state blank: false
