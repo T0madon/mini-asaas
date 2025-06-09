@@ -37,6 +37,6 @@ class User extends BasePerson implements Serializable {
     }
 
     static mapping = {
-	    password column: '`password`'
+        password column: '`password`'
     }
 }
