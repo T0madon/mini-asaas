@@ -40,6 +40,7 @@ abstract class BasePerson extends BaseEntity {
         complement nullable: true
         personType blank: false
     }
+
     static mappings = {
         email unique: true
         cpfCnpj unique: true
