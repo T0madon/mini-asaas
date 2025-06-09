@@ -10,7 +10,7 @@ abstract class BasePerson extends BaseEntity {
 
     String cpfCnpj
 
-    String cep
+    String postalCode
 
     String state
 
