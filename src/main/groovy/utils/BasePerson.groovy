@@ -2,7 +2,8 @@ package utils
 
 import enums.PersonType
 
-abstract class BasePerson extends BaseEntity{
+abstract class BasePerson extends BaseEntity {
+
     String name
 
     String email
