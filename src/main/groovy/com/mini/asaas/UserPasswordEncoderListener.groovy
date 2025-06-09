@@ -1,5 +1,6 @@
 package com.mini.asaas
 
+import com.mini.asaas.user.User
 import grails.plugin.springsecurity.SpringSecurityService
 import org.grails.datastore.mapping.engine.event.AbstractPersistenceEvent
 import org.grails.datastore.mapping.engine.event.PreInsertEvent

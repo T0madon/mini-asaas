@@ -1,4 +1,4 @@
-package com.mini.asaas
+package com.mini.asaas.user
 
 import grails.gorm.DetachedCriteria
 import groovy.transform.ToString

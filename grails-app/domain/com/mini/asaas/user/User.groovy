@@ -1,5 +1,6 @@
-package com.mini.asaas
+package com.mini.asaas.user
 
+import com.mini.asaas.Customer
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import grails.compiler.GrailsCompileStatic

@@ -1,4 +1,4 @@
-package com.mini.asaas
+package com.mini.asaas.user
 
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
