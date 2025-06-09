@@ -31,7 +31,7 @@ abstract class BasePerson extends BaseEntity {
         email blank: false, email: true
         cpfCnpj blank: false, size: 11..14
         state blank: false
-        cep blank: false
+        postalCode blank: false
         state blank: false
         city blank: false
         neighborhood blank: false
