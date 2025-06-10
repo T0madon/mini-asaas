@@ -55,25 +55,25 @@ class UserRole implements Serializable {
         instance
     }
 
-    public static boolean remove(User u, Role r) {
-        if (u != null && r != null) {
+    public static boolean remove(User user, Role role) {
+        if (user != null && role != null) {
             UserRole.where { user == u && role == r }.deleteAll()
         }
     }
 
-    public static int removeAll(User u) {
-        u == null ? 0 : UserRole.where { user == u }.deleteAll() as int
+    public static int removeAll(User user1) {
+        user1 == null ? 0 : UserRole.where { user == user1 }.deleteAll() as int
     }
 
-    public static int removeAll(Role r) {
-        r == null ? 0 : UserRole.where { role == r }.deleteAll() as int
+    public static int removeAll(Role role1) {
+        role1 == null ? 0 : UserRole.where { role == role1 }.deleteAll() as int
     }
 
     static constraints = {
         user nullable: false
-        role nullable: false, validator: { Role r, UserRole ur ->
+        role nullable: false, validator: { Role role2, UserRole ur ->
             if (ur.user?.id) {
-                if (UserRole.exists(ur.user.id, r.id)) {
+                if (UserRole.exists(ur.user.id, role2.id)) {
                     return ['userRole.exists']
                 }
             }
