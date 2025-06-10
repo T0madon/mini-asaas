@@ -23,8 +23,7 @@ class Payment extends BaseEntity {
     String description
 
     static constraints = {
-        value scale: 2
         paymentDate nullable: true
-        description nullable: true, maxSize: 255
+        description nullable: true
     }
 }
