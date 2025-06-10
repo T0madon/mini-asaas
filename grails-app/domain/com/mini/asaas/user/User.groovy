@@ -1,10 +1,10 @@
 package com.mini.asaas.user
 
 import com.mini.asaas.Customer
+import com.mini.asaas.base.BasePerson
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import grails.compiler.GrailsCompileStatic
-import utils.BasePerson
 
 @GrailsCompileStatic
 @EqualsAndHashCode(includes='username')
