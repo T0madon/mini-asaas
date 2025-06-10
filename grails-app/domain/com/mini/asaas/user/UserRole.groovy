@@ -34,11 +34,11 @@ class UserRole implements Serializable {
         hashCode
     }
 
-    static UserRole get(long userId, long roleId) {
+    public static UserRole get(long userId, long roleId) {
         criteriaFor(userId, roleId).get()
     }
 
-    static boolean exists(long userId, long roleId) {
+    public static boolean exists(long userId, long roleId) {
         criteriaFor(userId, roleId).count()
     }
 
@@ -49,23 +49,23 @@ class UserRole implements Serializable {
         }
     }
 
-    static UserRole create(User user, Role role, boolean flush = false) {
+    public static UserRole create(User user, Role role, boolean flush = false) {
         def instance = new UserRole(user: user, role: role)
         instance.save(flush: flush)
         instance
     }
 
-    static boolean remove(User u, Role r) {
+    public static boolean remove(User u, Role r) {
         if (u != null && r != null) {
             UserRole.where { user == u && role == r }.deleteAll()
         }
     }
 
-    static int removeAll(User u) {
+    public static int removeAll(User u) {
         u == null ? 0 : UserRole.where { user == u }.deleteAll() as int
     }
 
-    static int removeAll(Role r) {
+    public static int removeAll(Role r) {
         r == null ? 0 : UserRole.where { role == r }.deleteAll() as int
     }
 
