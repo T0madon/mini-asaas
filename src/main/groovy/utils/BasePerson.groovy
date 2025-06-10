@@ -2,14 +2,15 @@ package utils
 
 import enums.PersonType
 
-abstract class BasePerson extends BaseEntity{
+abstract class BasePerson extends BaseEntity {
+
     String name
 
     String email
 
     String cpfCnpj
 
-    String cep
+    String postalCode
 
     String state
 
@@ -30,7 +31,7 @@ abstract class BasePerson extends BaseEntity{
         email blank: false, email: true
         cpfCnpj blank: false, size: 11..14
         state blank: false
-        cep blank: false
+        postalCode blank: false
         state blank: false
         city blank: false
         neighborhood blank: false
