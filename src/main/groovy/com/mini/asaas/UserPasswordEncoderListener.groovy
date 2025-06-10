@@ -36,6 +36,6 @@ class UserPasswordEncoderListener {
     }
 
     private String encodePassword(String password) {
-        springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
+        return springSecurityService.encodePassword(password)
     }
 }
