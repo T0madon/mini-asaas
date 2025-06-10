@@ -1,5 +1,3 @@
-
-
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.mini.asaas.user.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.mini.asaas.user.UserRole'
