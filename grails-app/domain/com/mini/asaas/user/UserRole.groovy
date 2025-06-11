@@ -52,28 +52,29 @@ class UserRole implements Serializable {
     public static UserRole create(User user, Role role, boolean flush = false) {
         def instance = new UserRole(user: user, role: role)
         instance.save(flush: flush)
-        instance
+        return instance
     }
 
-    public static boolean remove(User user, Role role) {
-        if (user != null && role != null) {
-            UserRole.where { user == u && role == r }.deleteAll()
+    public static boolean remove(User user1, Role role1) {
+        if (user1 != null && role1 != null) {
+            return UserRole.where { user == user1 && role == role1 }.deleteAll()
         }
+        return false
     }
 
     public static int removeAll(User user1) {
-        user1 == null ? 0 : UserRole.where { user == user1 }.deleteAll() as int
+        return user1 == null ? 0 : UserRole.where { user == user1 }.deleteAll() as int
     }
 
     public static int removeAll(Role role1) {
-        role1 == null ? 0 : UserRole.where { role == role1 }.deleteAll() as int
+        return role1 == null ? 0 : UserRole.where { role == role1 }.deleteAll() as int
     }
 
     static constraints = {
         user nullable: false
-        role nullable: false, validator: { Role role2, UserRole ur ->
-            if (ur.user?.id) {
-                if (UserRole.exists(ur.user.id, role2.id)) {
+        role nullable: false, validator: { Role role2, UserRole userRoler ->
+            if (userRoler.user?.id) {
+                if (UserRole.exists(userRoler.user.id, role2.id)) {
                     return ['userRole.exists']
                 }
             }
