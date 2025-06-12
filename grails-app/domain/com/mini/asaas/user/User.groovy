@@ -1,6 +1,6 @@
 package com.mini.asaas.user
 
-import com.mini.asaas.Customer
+import com.mini.asaas.customer.Customer
 import com.mini.asaas.base.BasePerson
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
