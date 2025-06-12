@@ -35,14 +35,14 @@ class PayerAdapter {
 
         this.name = params.name
         this.email = params.email
-        this.cpfCnpj = StringUtils.removeNonNumeric(params.cpfCnpj as String) ?: null
-        this.postalCode = StringUtils.removeNonNumeric(params.postalCode) ?: null
+        this.cpfCnpj = params.cpfCnpj
+        this.postalCode = params.postalCode
         this.state = params.state
         this.city = params.city
         this.neighborhood = params.neighborhood
         this.address = params.address
-        this.addressNumber = StringUtils.removeNonNumeric(params.addressNumber) ?: "S/N"
+        this.addressNumber = params.addressNumber
         this.complement = params.complement
-        this.personType = PersonType.parseFromCpfCnpj(this.cpfCnpj)
+        this.personType = params.personType
     }
 }
