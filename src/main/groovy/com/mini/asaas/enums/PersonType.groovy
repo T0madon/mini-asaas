@@ -1,4 +1,4 @@
-package enums
+package com.mini.asaas.enums
 
 enum PersonType {
     LEGAL,
