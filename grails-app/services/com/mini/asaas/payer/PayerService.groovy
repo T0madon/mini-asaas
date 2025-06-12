@@ -1,18 +1,16 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.enums.PersonType
-import com.mini.asaas.utils.StringUtils
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class PayerService {
 
-    public Payer save(PayerAdapter adapter, Customer customer) {
+    public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
-        payer.customer = customer
+        payer.customer = Customer.get(1)
 
-        if (!customer) throw new NoSuchElementException("Customer não encontrado!")
+        println(payer.customer)
 
         payer = buildPayer(adapter, payer)
         payer.save(failOnError: true)
