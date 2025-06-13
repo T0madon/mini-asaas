@@ -20,6 +20,12 @@ class PayerService {
         return payer
     }
 
+    public void delete(Long id) {
+
+        Long customerId = Customer.get(1).id
+        Payer payer =
+    }
+
     private Payer buildPayer(PayerAdapter adapter, Payer payer) {
         payer.name = adapter.name
         payer.email = adapter.email
