@@ -2,13 +2,9 @@ package com.mini.asaas.repository
 
 import grails.gorm.PagedResultList
 import grails.orm.HibernateCriteriaBuilder
-import grails.web.servlet.mvc.GrailsParameterMap
-import infrastructure.dataformat.StringUtils
-import infrastructure.repository.projections.DynamicAliasSqlProjection
 import org.grails.datastore.mapping.query.api.BuildableCriteria
 import org.hibernate.LockMode
 import org.hibernate.criterion.CriteriaSpecification
-import org.hibernate.type.Type
 
 @SuppressWarnings(["UnusedMethodParameter"])
 trait Repository<DomainClass, RepositoryClass extends Repository> {
