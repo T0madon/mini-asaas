@@ -1,5 +1,6 @@
 package com.mini.asaas.payer
 
+import com.mini.asaas.utils.StringUtils
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured("permitAll")
@@ -18,6 +19,32 @@ class PayerController {
             render(status: 201, contentType: 'application/json')
         } catch (Exception exception) {
             flash.message = "Ocorreu um erro durante o cadastro, tente novamente."
+        }
+    }
+
+    @Secured("permitAll")
+    def delete() {
+        try {
+            println(params.id)
+            Long id = params.id as Long
+            if (!id) {
+                def payerByEmail = Payer.findByEmail(params.email as String)
+                if (payerByEmail) id = payerByEmail.id
+            }
+
+            if (!id) {
+                def payerByCpfCnpj = Payer.findByCpfCnpj(StringUtils.removeNonNumeric(params.cpfCnpj as String))
+                if (payerByCpfCnpj) id = payerByCpfCnpj.id
+            }
+
+            if (!id) return
+
+            payerService.delete(id)
+
+            render(status: 200, contentType: 'application/json')
+
+        } catch (Exception exception) {
+            flash.message = "Ocorreu um erro durante o delete, tente novamente."
         }
     }
 }
