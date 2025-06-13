@@ -23,10 +23,10 @@ class PayerController {
     }
 
     @Secured("permitAll")
-    def deleteOrRestore() {
+    def delete() {
         try {
+            println(params.id)
             Long id = params.id as Long
-
             if (!id) {
                 def payerByEmail = Payer.findByEmail(params.email as String)
                 if (payerByEmail) id = payerByEmail.id
@@ -39,7 +39,9 @@ class PayerController {
 
             if (!id) return
 
-            payerService.deleteOrRestore(id)
+            payerService.delete(id)
+
+            render(status: 200, contentType: 'application/json')
 
         } catch (Exception exception) {
             flash.message = "Ocorreu um erro durante o delete, tente novamente."
