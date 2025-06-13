@@ -8,10 +8,8 @@ enum PersonType {
 
     public static PersonType fromString(String value) {
         try {
-            print('estou dentro do FromString')
-            print(valueOf(value.toUpperCase()))
             return valueOf(value.toUpperCase())
-        } catch (Exception ignored) {
+        } catch (IllegalArgumentException exception) {
             return null
         }
     }

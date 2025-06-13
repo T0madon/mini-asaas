@@ -4,8 +4,8 @@ import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
 class Utils {
-    public static Map<String, String> normalizeParams(Map params) {
 
+    public static Map<String, String> normalizeParams(Map params) {
         if (params == null) return [:]
 
         Map<String, String> normalizeParams = [:]

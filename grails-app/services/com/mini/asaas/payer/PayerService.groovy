@@ -3,33 +3,24 @@ package com.mini.asaas.payer
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.enums.PersonType
 import com.mini.asaas.utils.StringUtils
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 
 @Transactional
+@GrailsCompileStatic
 class PayerService {
 
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
         payer.customer = Customer.get(1)
-
-        println(payer.customer)
-        println('vai entrar no build com payer:')
-        println(payer)
-
         payer = buildPayer(adapter, payer)
 
-        println(payer)
-
         payer.save(failOnError: true)
-
-        println('Aqui é para estar salvo')
-        println(payer)
 
         return payer
     }
 
     private Payer buildPayer(PayerAdapter adapter, Payer payer) {
-        println('entrei no buildPayer')
         payer.name = adapter.name
         payer.email = adapter.email
         payer.cpfCnpj = StringUtils.removeNonNumeric(adapter.cpfCnpj as String) ?: null

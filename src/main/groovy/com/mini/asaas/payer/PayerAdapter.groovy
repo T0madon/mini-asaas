@@ -4,7 +4,9 @@ import com.mini.asaas.customer.Customer
 import com.mini.asaas.enums.PersonType
 import com.mini.asaas.utils.StringUtils
 import com.mini.asaas.utils.Utils
+import grails.compiler.GrailsCompileStatic
 
+@GrailsCompileStatic
 class PayerAdapter {
 
     String name
