@@ -25,22 +25,9 @@ class PayerController {
     @Secured("permitAll")
     def delete() {
         try {
-            println(params.id)
             Long id = params.id as Long
-            if (!id) {
-                Payer payerByEmail = Payer.findByEmail(params.email as String)
-                if (payerByEmail) id = payerByEmail.id
-            }
-
-            if (!id) {
-                Payer payerByCpfCnpj = Payer.findByCpfCnpj(StringUtils.removeNonNumeric(params.cpfCnpj as String))
-                if (payerByCpfCnpj) id = payerByCpfCnpj.id
-            }
-
             if (!id) return
-
             payerService.delete(id)
-
             render(status: 200, contentType: 'application/json')
 
         } catch (Exception exception) {
