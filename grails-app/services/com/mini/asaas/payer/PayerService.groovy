@@ -2,21 +2,41 @@ package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.enums.PersonType
+import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.utils.StringUtils
+import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
+import org.grails.datastore.mapping.model.types.Custom
 
 @Transactional
 @GrailsCompileStatic
 class PayerService {
 
+    BusinessValidation validation
+
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
-        payer.customer = Customer.get(1)
+        Customer customer = Customer.get(1)
+
+        println("vou validar")
+        payer = validate(adapter, payer, customer)
+
+        println("Vou printar os erros")
+        println(payer.errors)
+
+        println("validei")
+        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
+
+        println("vou criar")
         payer = buildPayer(adapter, payer)
 
+        println("Agora vou salvar")
+        payer.customer = customer
         payer.save(failOnError: true)
 
+        println("É pra estar salvo")
         return payer
     }
 
@@ -35,6 +55,19 @@ class PayerService {
         payer.deleted = true
         payer.markDirty()
         payer.save(failOnError: true)
+    }
+
+    private Payer validate(PayerAdapter adapter, Payer payer, Customer customer) {
+        PayerValidator validator = new PayerValidator()
+        validator.validateAll(adapter, payer, customer)
+
+        validation = validator.validation
+
+        if (!validation.isValid()) {
+            DomainErrorUtils.addBusinessRuleErrors(payer, validation.errors)
+        }
+
+        return payer
     }
 
     private Payer buildPayer(PayerAdapter adapter, Payer payer) {
