@@ -9,13 +9,9 @@ class PayerValidator extends BaseValidator{
 
     public PayerValidator validateAll(PayerAdapter adapter, Payer payer, Customer customer) {
         if (adapter.cpfCnpj != payer.cpfCnpj) {
-            println("Entrei no if do cnpj")
-            println(adapter.cpfCnpj)
-            println(payer.cpfCnpj)
             this.validateCpfCnpj(adapter.cpfCnpj, customer)
         }
         if (adapter.email != payer.email) {
-            println("entrei no if do email")
             this.validateEmail(adapter.email, customer)
         }
 
@@ -24,15 +20,11 @@ class PayerValidator extends BaseValidator{
 
     public PayerValidator validateCpfCnpj(String cpfCnpj, Customer customer) {
         if (!CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
-            println("tem erro")
             validation.addError("invalid.cpfCnpj")
         }
-        println(cpfCnpj)
-        println(customer.id)
 
         Payer payer = PayerRepository.query([cpfCnpj: cpfCnpj, customerId: customer.id, includeDeleted: true]).get()
 
-        println("vou printar o payer " + payer)
         if (!payer) return this
 
         if (payer.deleted) {
@@ -40,7 +32,6 @@ class PayerValidator extends BaseValidator{
         } else {
             validation.addError("alreadyExistsAndView.cpfCnpj")
         }
-        println("vou printar o this " + this)
         return this
     }
 

@@ -20,23 +20,15 @@ class PayerService {
         Payer payer = new Payer()
         Customer customer = Customer.get(1)
 
-        println("vou validar")
         payer = validate(adapter, payer, customer)
 
-        println("Vou printar os erros")
-        println(payer.errors)
-
-        println("validei")
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
 
-        println("vou criar")
         payer = buildPayer(adapter, payer)
 
-        println("Agora vou salvar")
         payer.customer = customer
         payer.save(failOnError: true)
 
-        println("É pra estar salvo")
         return payer
     }
 
