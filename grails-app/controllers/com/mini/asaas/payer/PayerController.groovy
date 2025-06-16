@@ -1,6 +1,5 @@
 package com.mini.asaas.payer
 
-import com.mini.asaas.utils.StringUtils
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured("permitAll")

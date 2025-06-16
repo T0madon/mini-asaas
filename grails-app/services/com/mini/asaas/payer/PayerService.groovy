@@ -1,7 +1,7 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.enums.PersonType
+import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.utils.StringUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
@@ -21,12 +21,12 @@ class PayerService {
     }
 
     public void delete(Long id) {
-
-        Long customerId = Customer.get(1).id
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         Payer payer = PayerRepository.query([includeDeleted: true, id: id, customerId: customerId]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         payer.deleted = true
+        payer.markDirty()
         payer.save(failOnError: true)
     }
 
