@@ -28,12 +28,12 @@ class PayerController {
             println(params.id)
             Long id = params.id as Long
             if (!id) {
-                def payerByEmail = Payer.findByEmail(params.email as String)
+                Payer payerByEmail = Payer.findByEmail(params.email as String)
                 if (payerByEmail) id = payerByEmail.id
             }
 
             if (!id) {
-                def payerByCpfCnpj = Payer.findByCpfCnpj(StringUtils.removeNonNumeric(params.cpfCnpj as String))
+                Payer payerByCpfCnpj = Payer.findByCpfCnpj(StringUtils.removeNonNumeric(params.cpfCnpj as String))
                 if (payerByCpfCnpj) id = payerByCpfCnpj.id
             }
 
