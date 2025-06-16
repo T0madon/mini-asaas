@@ -22,7 +22,7 @@ class PayerService {
 
     public void delete(Long id) {
 
-        Long customerId = 1
+        Long customerId = Customer.get(1).id
         Payer payer = PayerRepository.query([includeDeleted: true, id: id, customerId: customerId]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
