@@ -1,4 +1,4 @@
-package com.mini.asaas
+package com.mini.asaas.auth
 
 import grails.plugin.springsecurity.annotation.Secured
 
