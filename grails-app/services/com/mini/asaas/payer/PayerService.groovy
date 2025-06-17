@@ -1,6 +1,7 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
+import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.PersonType
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.utils.DomainErrorUtils
@@ -33,14 +34,21 @@ class PayerService {
     }
 
     public Payer update(PayerAdapter adapter, Long id) {
-        Long customerId = Customer.get(1).id
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
+
+        payer = validate(adapter, payer, payer.customer)
+
+        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
+
+        payer = buildPayer(adapter, payer)
+
+        return payer.save(failOnError: true)
     }
 
     public void delete(Long id) {
-
-        Long customerId = Customer.get(1).id
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         Payer payer = PayerRepository.query([includeDeleted: true, id: id, customerId: customerId]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
@@ -74,6 +82,7 @@ class PayerService {
         payer.addressNumber = StringUtils.removeNonNumeric(adapter.addressNumber) ?: "S/N"
         payer.complement = adapter.complement
         payer.personType = adapter.personType
+
         return payer
     }
 }
