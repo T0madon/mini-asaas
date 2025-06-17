@@ -7,7 +7,6 @@ import org.grails.datastore.mapping.query.api.BuildableCriteria
 @GrailsCompileStatic
 class CustomerRepository implements Repository<Customer, CustomerRepository> {
 
-
     @Override
     void buildCriteria() {
         addCriteria {
