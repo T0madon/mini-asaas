@@ -36,21 +36,21 @@ class PayerService {
 
     public Payer update(PayerAdapter adapter, Long id) {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-        Payer oldPayer = PayerRepository.query([id: id, customerId: customerId]).get()
+        Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
         println("Entrei no PayerService Update\nA seguir o payer encontrado com id " + id)
         println("\nOLD PAYER\n")
-        oldPayer.properties.each {key, value ->
+        payer.properties.each {key, value ->
             println("Atributo: $key, Valor: $value")
         }
-        if (!oldPayer) throw new RuntimeException("Pagador não encontrado")
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         println("Vou validar")
-        Payer payer = validate(adapter, oldPayer, oldPayer.customer)
+        payer = validate(adapter, payer, payer.customer)
         println("Validei")
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
 
         println("Vou dar um buildPayer")
-        payer = buildPayer(adapter, oldPayer)
+        payer = buildPayer(adapter, payer)
 
         println("\nNOVO PAYER\n\n")
         payer.properties.each {key, value ->
@@ -74,13 +74,15 @@ class PayerService {
 
     private Payer validate(PayerAdapter adapter, Payer payer, Customer customer) {
         PayerValidator validator = new PayerValidator()
-        print("entrei no validateAll")
+        print("entrei no \n")
         validator.validateAll(adapter, payer, customer)
 
         validation = validator.validation
 
         if (!validation.isValid()) {
+            println("Entrou aqui no validate")
             DomainErrorUtils.addBusinessRuleErrors(payer, validation.errors)
+            throw new Exception()
         }
 
         return payer

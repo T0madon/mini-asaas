@@ -18,7 +18,7 @@ class PayerValidator extends BaseValidator{
             println("email do payer: " + payer.email)
             this.validateEmail(adapter.email, customer)
         }
-
+        println("Vou retornar do validateAll")
         return this
     }
 
