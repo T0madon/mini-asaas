@@ -21,6 +21,7 @@ class PayerService {
         Payer payer = new Payer()
         Customer customer = Customer.get(1)
 
+
         payer = validate(adapter, payer, customer)
 
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
@@ -49,7 +50,7 @@ class PayerService {
 
     public void delete(Long id) {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-        Payer payer = PayerRepository.query([includeDeleted: true, id: id, customerId: customerId]).get()
+        Payer payer = PayerRepository.query([id: id, includeDeleted: true, customerId: customerId]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         payer.deleted = true
