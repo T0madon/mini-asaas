@@ -14,7 +14,7 @@ class PayerController {
     def save() {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
-            Payer payer = payerService.save(adapter)
+            payerService.save(adapter)
             render(status: 201, contentType: 'application/json')
         } catch (Exception exception) {
             flash.message = "Ocorreu um erro durante o cadastro, tente novamente."
