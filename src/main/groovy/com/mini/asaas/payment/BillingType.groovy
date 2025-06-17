@@ -1,4 +1,4 @@
-package payment
+package com.mini.asaas.payment
 
 enum BillingType {
 

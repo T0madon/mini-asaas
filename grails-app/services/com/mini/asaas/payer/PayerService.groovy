@@ -42,6 +42,7 @@ class PayerService {
         payer.addressNumber = StringUtils.removeNonNumeric(adapter.addressNumber) ?: "S/N"
         payer.complement = adapter.complement
         payer.personType = adapter.personType
+        
         return payer
     }
 }
