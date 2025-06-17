@@ -2,14 +2,12 @@ package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
-import com.mini.asaas.enums.PersonType
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.utils.StringUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
-import org.grails.datastore.mapping.model.types.Custom
 
 @Transactional
 @GrailsCompileStatic
@@ -20,7 +18,6 @@ class PayerService {
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
         Customer customer = Customer.get(1)
-
 
         payer = validate(adapter, payer, customer)
 
@@ -34,37 +31,9 @@ class PayerService {
         return payer
     }
 
-    public Payer update(PayerAdapter adapter, Long id) {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-        Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
-        println("Entrei no PayerService Update\nA seguir o payer encontrado com id " + id)
-        println("\nOLD PAYER\n")
-        payer.properties.each {key, value ->
-            println("Atributo: $key, Valor: $value")
-        }
-        if (!payer) throw new RuntimeException("Pagador não encontrado")
-
-        println("Vou validar")
-        payer = validate(adapter, payer, payer.customer)
-        println("Validei")
-        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
-
-        println("Vou dar um buildPayer")
-        payer = buildPayer(adapter, payer)
-
-        println("\nNOVO PAYER\n\n")
-        payer.properties.each {key, value ->
-            println("Atributo: $key, Valor: $value")
-        }
-
-        payer.save(failOnError: true)
-
-        return payer
-    }
-
     public void delete(Long id) {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-        Payer payer = PayerRepository.query([id: id, includeDeleted: true, customerId: customerId]).get()
+        Payer payer = PayerRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         payer.deleted = true
@@ -74,13 +43,11 @@ class PayerService {
 
     private Payer validate(PayerAdapter adapter, Payer payer, Customer customer) {
         PayerValidator validator = new PayerValidator()
-        print("entrei no \n")
         validator.validateAll(adapter, payer, customer)
 
         validation = validator.validation
 
         if (!validation.isValid()) {
-            println("Entrou aqui no validate")
             DomainErrorUtils.addBusinessRuleErrors(payer, validation.errors)
             throw new Exception()
         }
