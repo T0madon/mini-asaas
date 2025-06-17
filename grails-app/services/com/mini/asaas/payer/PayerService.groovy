@@ -36,16 +36,30 @@ class PayerService {
 
     public Payer update(PayerAdapter adapter, Long id) {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-        Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
-        if (!payer) throw new RuntimeException("Pagador não encontrado")
+        Payer oldPayer = PayerRepository.query([id: id, customerId: customerId]).get()
+        println("Entrei no PayerService Update\nA seguir o payer encontrado com id " + id)
+        println("\nOLD PAYER\n")
+        oldPayer.properties.each {key, value ->
+            println("Atributo: $key, Valor: $value")
+        }
+        if (!oldPayer) throw new RuntimeException("Pagador não encontrado")
 
-        payer = validate(adapter, payer, payer.customer)
-
+        println("Vou validar")
+        Payer payer = validate(adapter, oldPayer, oldPayer.customer)
+        println("Validei")
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
 
-        payer = buildPayer(adapter, payer)
+        println("Vou dar um buildPayer")
+        payer = buildPayer(adapter, oldPayer)
 
-        return payer.save(failOnError: true)
+        println("\nNOVO PAYER\n\n")
+        payer.properties.each {key, value ->
+            println("Atributo: $key, Valor: $value")
+        }
+
+        payer.save(failOnError: true)
+
+        return payer
     }
 
     public void delete(Long id) {
@@ -60,6 +74,7 @@ class PayerService {
 
     private Payer validate(PayerAdapter adapter, Payer payer, Customer customer) {
         PayerValidator validator = new PayerValidator()
+        print("entrei no validateAll")
         validator.validateAll(adapter, payer, customer)
 
         validation = validator.validation

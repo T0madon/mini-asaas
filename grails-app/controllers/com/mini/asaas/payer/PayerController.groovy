@@ -28,7 +28,14 @@ class PayerController {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
             Long id = params.id as Long
-            Payer payer = payerService.update(adapter, id)
+            println("Id " + id)
+            println("Agora todos os campos do Adapter")
+            adapter.properties.each {key, value ->
+                println("Atributo: $key, Valor: $value")
+            }
+            println("FIM DOS ATRIBUTOS DO ADAPTER")
+            payerService.update(adapter, id)
+            println("Payer atualizado")
             flash.message = "Pagador atualizado com sucesso"
             flash.status = AlertType.SUCCESS.getValue()
             render(status: 201, contentType: 'application/json')
