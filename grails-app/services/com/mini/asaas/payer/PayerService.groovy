@@ -3,6 +3,7 @@ package com.mini.asaas.payer
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.user.User
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.utils.StringUtils
 import com.mini.asaas.validation.BusinessValidation
@@ -28,6 +29,13 @@ class PayerService {
         payer.customer = customer
         payer.save(failOnError: true)
 
+        return payer
+    }
+
+    public Payer show(Long id) {
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+        Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
         return payer
     }
 

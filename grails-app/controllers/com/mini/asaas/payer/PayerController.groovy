@@ -1,6 +1,5 @@
 package com.mini.asaas.payer
 
-import com.mini.asaas.utils.StringUtils
 import grails.plugin.springsecurity.annotation.Secured
 
 class PayerController {
@@ -8,6 +7,21 @@ class PayerController {
     PayerService payerService
 
     def index() {
+    }
+
+    @Secured("permitAll")
+    def show() {
+        try {
+            Long id = params.id as Long
+
+            if (!id) return redirect(action: "index")
+
+            Payer payer = payerService.show(id)
+
+            return [payer: payer]
+        } catch (Exception exception) {
+            redirect(action: "index")
+        }
     }
 
     @Secured("permitAll")

@@ -1,6 +1,7 @@
 package com.mini.asaas.enums
 
 import com.mini.asaas.utils.CpfCnpjUtils
+import com.mini.asaas.utils.MessageSourceUtils
 
 enum PersonType {
     LEGAL,
@@ -12,6 +13,10 @@ enum PersonType {
         } catch (IllegalArgumentException exception) {
             return null
         }
+    }
+
+    public String getLabel() {
+        return MessageSourceUtils.getEnumLabel(this)
     }
 
     public static PersonType parseFromCpfCnpj(String cpfCnpj) {
