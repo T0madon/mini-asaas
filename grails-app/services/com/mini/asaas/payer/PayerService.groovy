@@ -33,13 +33,32 @@ class PayerService {
         return payer
     }
 
+    public Payer update(PayerAdapter adapter, Long id) {
+        BusinessValidation validation
+
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+        Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
+
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
+
+        validate(adapter, payer, payer.customer)
+
+        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
+
+        buildPayer(adapter, payer)
+
+        payer.save(flush: true, failOnError: true)
+
+        return payer
+    }
+
     public void delete(Long id) {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         Payer payer = PayerRepository.query([customerId: customerId, id: id]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         payer.deleted = true
-        payer.save(failOnError: true)
+        payer.save(flush: true, failOnError: true)
     }
 
     private void validate(PayerAdapter adapter, Payer payer, Customer customer) {

@@ -1,5 +1,8 @@
 package com.mini.asaas.payer
 
+import com.mini.asaas.enums.AlertType
+import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.utils.StringUtils
 import grails.plugin.springsecurity.annotation.Secured
 
 class PayerController {
@@ -21,9 +24,30 @@ class PayerController {
     }
 
     @Secured("permitAll")
+    def update() {
+        try {
+            PayerAdapter adapter = new PayerAdapter(params)
+            Long id = params.id as Long
+
+            payerService.update(adapter, id)
+            flash.message = "Pagador atualizado com sucesso"
+            flash.status = AlertType.SUCCESS.getValue()
+            render(status: 201, contentType: 'application/json')
+        } catch (BusinessException error) {
+            flash.code = error.code
+            flash.message = error.getMessage()
+            flash.status = AlertType.ERROR.getValue()
+        } catch (Exception error) {
+            flash.message = "Ocorreu um erro durante o cadastro."
+            flash.status = AlertType.ERROR.getValue()
+        }
+    }
+
+    @Secured("permitAll")
     def delete() {
         try {
             Long id = params.id as Long
+
             if (!id) return
             payerService.delete(id)
             render(status: 200, contentType: 'application/json')
