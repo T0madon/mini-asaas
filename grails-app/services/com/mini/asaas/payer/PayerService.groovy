@@ -8,7 +8,6 @@ import com.mini.asaas.utils.StringUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
-import grails.validation.ValidationException
 
 @Transactional
 @GrailsCompileStatic
