@@ -49,9 +49,7 @@ class PayerController {
             Long id = params.id as Long
 
             if (!id) return
-
             payerService.delete(id)
-
             render(status: 200, contentType: 'application/json')
 
         } catch (Exception exception) {

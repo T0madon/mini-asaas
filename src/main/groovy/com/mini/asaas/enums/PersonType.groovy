@@ -15,8 +15,8 @@ enum PersonType {
     }
 
     public static PersonType parseFromCpfCnpj(String cpfCnpj) {
-        if (CpfCnpjUtils.isCPF(cpfCnpj)) return PersonType.NATURAL
-        if (CpfCnpjUtils.isCNPJ(cpfCnpj)) return PersonType.LEGAL
+        if (CpfCnpjUtils.isCpf(cpfCnpj)) return PersonType.NATURAL
+        if (CpfCnpjUtils.isCnpj(cpfCnpj)) return PersonType.LEGAL
         return null
     }
 }
