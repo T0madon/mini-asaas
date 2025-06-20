@@ -46,16 +46,25 @@ class PayerService {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
 
+        println("\nADAPTER QUE VEIO\n\n")
+        adapter.properties.each {key, value ->
+            println("Atributo: $key, Valor: $value")
+        }
+
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
+        println("Vou validar")
         validate(adapter, payer, payer.customer)
+        println("Validei")
 
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
 
+        println("Vou buildar")
         buildPayer(adapter, payer)
+        println("Buildei e vou salvar")
 
         payer.save(flush: true, failOnError: true)
-
+        println("Salvei e vou retornar")
         return payer
     }
 

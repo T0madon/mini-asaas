@@ -41,18 +41,28 @@ class PayerController {
     @Secured("permitAll")
     def update() {
         try {
+            println("Entre aqui ")
             PayerAdapter adapter = new PayerAdapter(params)
             Long id = params.id as Long
+            println("Entre aqui e o id é " + id)
+
+            println("\nADAPTER\n\n")
+            adapter.properties.each {key, value ->
+                println("Atributo: $key, Valor: $value")
+            }
 
             payerService.update(adapter, id)
+            println("Dei update no controller")
             flash.message = "Pagador atualizado com sucesso"
             flash.status = AlertType.SUCCESS.getValue()
             render(status: 201, contentType: 'application/json')
         } catch (BusinessException error) {
+            println("Exception 1")
             flash.code = error.code
             flash.message = error.getMessage()
             flash.status = AlertType.ERROR.getValue()
         } catch (Exception error) {
+            println("Exception 2")
             flash.message = "Ocorreu um erro durante o cadastro."
             flash.status = AlertType.ERROR.getValue()
         }

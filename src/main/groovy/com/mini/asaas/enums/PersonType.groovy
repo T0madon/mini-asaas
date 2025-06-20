@@ -7,6 +7,14 @@ enum PersonType {
     LEGAL,
     NATURAL
 
+    public Boolean isNatural() {
+        return this == NATURAL
+    }
+
+    public Boolean isLegal() {
+        return this == LEGAL
+    }
+
     public static PersonType fromString(String value) {
         try {
             return valueOf(value.toUpperCase())

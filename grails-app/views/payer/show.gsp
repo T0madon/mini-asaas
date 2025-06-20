@@ -33,8 +33,8 @@
 </g:if>
 
 <atlas-form-panel header="Detalhes do pagador" description="" submit-button-label=""
-                  action="${createLink(controller: "payer", action: "update", params: [id: payer.id])}"
-                  method="post">
+                  action="${createLink(controller: "payer", action: "update")}"
+                  >
     <atlas-input
             value="${payer.id}"
             name="id"
