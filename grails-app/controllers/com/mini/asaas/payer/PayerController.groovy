@@ -23,7 +23,6 @@ class PayerController {
     @Secured("permitAll")
     def delete() {
         try {
-            println(params.id)
             Long id = params.id as Long
             if (!id) return
             payerService.delete(id)
