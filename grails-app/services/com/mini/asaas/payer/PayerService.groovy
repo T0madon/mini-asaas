@@ -16,6 +16,7 @@ class PayerService {
     BusinessValidation validation
 
     public Payer save(PayerAdapter adapter) {
+
         Payer payer = new Payer()
         Customer customer = Customer.get(1)
 
