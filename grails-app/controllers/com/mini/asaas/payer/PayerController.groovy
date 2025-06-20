@@ -10,7 +10,6 @@ class PayerController {
     def index() {
     }
 
-    @Secured("permitAll")
     def save() {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
