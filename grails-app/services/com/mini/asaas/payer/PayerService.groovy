@@ -3,7 +3,9 @@ package com.mini.asaas.payer
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.DomainErrorUtils
+import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.utils.StringUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
@@ -67,17 +69,61 @@ class PayerService {
     }
 
     private void validate(PayerAdapter adapter, Payer payer, Customer customer) {
-        BusinessValidation validation
-        PayerValidator validator = new PayerValidator()
-        validator.validateAll(adapter, payer, customer)
 
-        validation = validator.validation
+        if (!adapter.name) DomainErrorUtils.addError(payer, "Campo nome vazio")
 
-        if (!validation.isValid()) {
-            DomainErrorUtils.addBusinessRuleErrors(payer, validation.errors)
-            throw new Exception()
+        if (!adapter.email) DomainErrorUtils.addError(payer, "Campo Email vazio")
+
+        if (!adapter.cpfCnpj) DomainErrorUtils.addError(payer, "O Cpf/Cnpj é obrigatório")
+
+        if (adapter.email && !EmailUtils.isValid(adapter.email)) DomainErrorUtils.addError(payer, "O email informado é inválido")
+
+        if (adapter.cpfCnpj != payer.cpfCnpj) {
+            validateCpfCnpj(adapter.cpfCnpj, customer)
         }
 
+        if (adapter.email != payer.email) {
+            validateEmail(adapter.email, customer)
+        }
+
+    }
+
+    private PayerService validateCpfCnpj(String cpfCnpj, Customer customer) {
+        BusinessValidation validation
+
+        if (!CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
+            validation.addError("invalid.cpfCnpj")
+        }
+
+        Payer payer = PayerRepository.query([cpfCnpj: cpfCnpj, customerId: customer.id, includeDeleted: true]).get()
+
+        if (!payer) return this
+
+        if (payer.deleted) {
+            validation.addError("alreadyExistsAndDeleted.cpfCnpj")
+        } else {
+            validation.addError("alreadyExistsAndView.cpfCnpj")
+        }
+        return this
+    }
+
+    private PayerService validateEmail(String email, Customer customer) {
+        BusinessValidation validation
+
+        if (!EmailUtils.isValid(email)) {
+            validation.addError("invalid.email")
+        }
+
+        Payer payer = PayerRepository.query([email: email, customerId: customer.id, includeDeleted: true]).get()
+
+        if (!payer) return this
+
+        if (payer.deleted) {
+            validation.addError("alreadyExistsAndDeleted.email")
+        } else {
+            validation.addError("alreadyExistsAndView.email")
+        }
+        return this
     }
 
     private void buildPayer(PayerAdapter adapter, Payer payer) {
