@@ -13,9 +13,8 @@ import grails.gorm.transactions.Transactional
 @GrailsCompileStatic
 class PayerService {
 
-    BusinessValidation validation
-
     public Payer save(PayerAdapter adapter) {
+        BusinessValidation validation
 
         Payer payer = new Payer()
         Customer customer = Customer.get(1)
@@ -42,6 +41,7 @@ class PayerService {
     }
 
     private Payer validate(PayerAdapter adapter, Payer payer, Customer customer) {
+        BusinessValidation validation
         PayerValidator validator = new PayerValidator()
         validator.validateAll(adapter, payer, customer)
 
