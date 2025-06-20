@@ -1,6 +1,5 @@
 package com.mini.asaas.payer
 
-import com.mini.asaas.utils.StringUtils
 import grails.plugin.springsecurity.annotation.Secured
 
 class PayerController {
@@ -14,7 +13,7 @@ class PayerController {
     def save() {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
-            Payer payer = payerService.save(adapter)
+            payerService.save(adapter)
             render(status: 201, contentType: 'application/json')
         } catch (Exception exception) {
             flash.message = "Ocorreu um erro durante o cadastro, tente novamente."
@@ -24,12 +23,10 @@ class PayerController {
     @Secured("permitAll")
     def delete() {
         try {
+            println(params.id)
             Long id = params.id as Long
-
             if (!id) return
-
             payerService.delete(id)
-
             render(status: 200, contentType: 'application/json')
 
         } catch (Exception exception) {
