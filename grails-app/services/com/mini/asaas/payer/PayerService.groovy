@@ -45,7 +45,6 @@ class PayerService {
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         payer.deleted = true
-        payer.markDirty()
         payer.save(failOnError: true)
     }
 
