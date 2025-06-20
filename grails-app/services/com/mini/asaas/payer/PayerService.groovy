@@ -2,7 +2,10 @@ package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
+import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.utils.StringUtils
+import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 
@@ -11,10 +14,18 @@ import grails.gorm.transactions.Transactional
 class PayerService {
 
     public Payer save(PayerAdapter adapter) {
+        BusinessValidation validation
+
         Payer payer = new Payer()
-        payer.customer = Customer.get(1)
+        Customer customer = Customer.get(1)
+
+        payer = validate(adapter, payer, customer)
+
+        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
+
         payer = buildPayer(adapter, payer)
 
+        payer.customer = customer
         payer.save(failOnError: true)
 
         return payer
@@ -29,6 +40,21 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
+    private Payer validate(PayerAdapter adapter, Payer payer, Customer customer) {
+        BusinessValidation validation
+        PayerValidator validator = new PayerValidator()
+        validator.validateAll(adapter, payer, customer)
+
+        validation = validator.validation
+
+        if (!validation.isValid()) {
+            DomainErrorUtils.addBusinessRuleErrors(payer, validation.errors)
+            throw new Exception()
+        }
+
+        return payer
+    }
+
     private Payer buildPayer(PayerAdapter adapter, Payer payer) {
         payer.name = adapter.name
         payer.email = adapter.email
@@ -41,7 +67,7 @@ class PayerService {
         payer.addressNumber = StringUtils.removeNonNumeric(adapter.addressNumber) ?: "S/N"
         payer.complement = adapter.complement
         payer.personType = adapter.personType
-        
+
         return payer
     }
 }

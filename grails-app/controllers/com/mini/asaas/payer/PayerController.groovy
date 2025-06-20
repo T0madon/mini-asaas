@@ -2,7 +2,6 @@ package com.mini.asaas.payer
 
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured("permitAll")
 class PayerController {
 
     PayerService payerService
@@ -24,6 +23,7 @@ class PayerController {
     @Secured("permitAll")
     def delete() {
         try {
+            println(params.id)
             Long id = params.id as Long
             if (!id) return
             payerService.delete(id)
