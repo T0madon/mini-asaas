@@ -1,8 +1,10 @@
 package com.mini.asaas
 
-import payment.BillingType
-import payment.PaymentStatus
-import utils.BaseEntity
+import com.mini.asaas.base.BaseEntity
+import com.mini.asaas.customer.Customer
+import com.mini.asaas.payer.Payer
+import com.mini.asaas.payment.BillingType
+import com.mini.asaas.payment.PaymentStatus
 
 class Payment extends BaseEntity {
 
