@@ -8,10 +8,14 @@ class PayerController {
 
     PayerService payerService
 
+    @Secured("permitAll")
     def index() {
         List<Payer> payerList = payerService.list()
         return [payerList: payerList]
     }
+
+    @Secured("permitAll")
+    def create() {}
 
     @Secured("permitAll")
     def show() {
@@ -32,10 +36,20 @@ class PayerController {
     def save() {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
-            payerService.save(adapter)
+            Payer payer = payerService.save(adapter)
             render(status: 201, contentType: 'application/json')
-        } catch (Exception exception) {
-            flash.message = "Ocorreu um erro durante o cadastro, tente novamente."
+            flash.message = "Pagador cadastrado com sucesso!"
+            flash.status = AlertType.SUCCESS.getValue()
+            redirect(action: "show", id: payer.id)
+        } catch (BusinessException e) {
+            flash.code = e.code
+            flash.message = e.getMessage()
+            flash.status = AlertType.ERROR.getValue()
+            render view: "create"
+        } catch (Exception e) {
+            flash.message = "Ocorreu um erro durante o cadastro."
+            flash.status = AlertType.ERROR.getValue()
+            render view: "create"
         }
     }
 
@@ -44,18 +58,20 @@ class PayerController {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
             Long id = params.id as Long
-
-            payerService.update(adapter, id)
+            Payer payer = payerService.update(adapter, id)
             flash.message = "Pagador atualizado com sucesso"
             flash.status = AlertType.SUCCESS.getValue()
             render(status: 201, contentType: 'application/json')
+            redirect(action: "show", id: payer.id)
         } catch (BusinessException error) {
             flash.code = error.code
             flash.message = error.getMessage()
             flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show", id: params.id)
         } catch (Exception error) {
             flash.message = "Ocorreu um erro durante o cadastro."
             flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show", id: params.id)
         }
     }
 
@@ -67,9 +83,10 @@ class PayerController {
             if (!id) return
             payerService.delete(id)
             render(status: 200, contentType: 'application/json')
-
+            redirect(action: "show", id: id)
         } catch (Exception exception) {
             flash.message = "Ocorreu um erro durante o delete, tente novamente."
+            redirect(action: "show", id: id)
         }
     }
 }
