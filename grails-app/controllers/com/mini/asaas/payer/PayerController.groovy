@@ -37,7 +37,7 @@ class PayerController {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
             Payer payer = payerService.save(adapter)
-            render(status: 201, contentType: 'application/json')
+//            render(status: 201, contentType: 'application/json')
             flash.message = "Pagador cadastrado com sucesso!"
             flash.status = AlertType.SUCCESS.getValue()
             redirect(action: "show", id: payer.id)
@@ -61,7 +61,6 @@ class PayerController {
             Payer payer = payerService.update(adapter, id)
             flash.message = "Pagador atualizado com sucesso"
             flash.status = AlertType.SUCCESS.getValue()
-            render(status: 201, contentType: 'application/json')
             redirect(action: "show", id: payer.id)
         } catch (BusinessException error) {
             flash.code = error.code
@@ -82,11 +81,10 @@ class PayerController {
 
             if (!id) return
             payerService.delete(id)
-            render(status: 200, contentType: 'application/json')
             redirect(action: "show", id: id)
         } catch (Exception exception) {
             flash.message = "Ocorreu um erro durante o delete, tente novamente."
-            redirect(action: "show", id: id)
+            redirect(action: "index")
         }
     }
 }
