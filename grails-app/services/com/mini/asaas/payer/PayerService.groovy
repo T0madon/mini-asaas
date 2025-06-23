@@ -133,6 +133,7 @@ class PayerService {
         payer.name = adapter.name
         payer.email = adapter.email
         payer.cpfCnpj = StringUtils.removeNonNumeric(adapter.cpfCnpj as String) ?: null
+        payer.phoneNumber = StringUtils.removeNonNumeric(adapter.phoneNumber) ?: null
         payer.postalCode = StringUtils.removeNonNumeric(adapter.postalCode) ?: null
         payer.state = adapter.state
         payer.city = adapter.city
