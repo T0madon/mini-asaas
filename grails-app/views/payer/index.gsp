@@ -22,6 +22,7 @@
                 <atlas-table-col>Nome</atlas-table-col>
                 <atlas-table-col>CPF/CNPJ</atlas-table-col>
                 <atlas-table-col>E-mail</atlas-table-col>
+                <atlas-table-col>Ações</atlas-table-col>
             </atlas-table-header>
 
             <atlas-table-body slot="body">
