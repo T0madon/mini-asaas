@@ -6,9 +6,6 @@ import org.springframework.context.MessageSource
 class MessageSourceUtils {
 
     public static String getMessage(String code, Object[] args, String defaultMessage) {
-//        Object bean = Holders.applicationContext.getBean("messageSource")
-//        println(bean)
-//        println(bean.getMessage(code, args, defaultMessage, Locale.getDefault()))
         MessageSource messageSource = (MessageSource) Holders.applicationContext.getBean("messageSource")
         return messageSource.getMessage(code, args, defaultMessage, Locale.getDefault())
     }

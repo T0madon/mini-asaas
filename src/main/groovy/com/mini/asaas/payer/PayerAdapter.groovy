@@ -31,8 +31,6 @@ class PayerAdapter {
 
     public PayerAdapter(Map reqParams) {
         Map<String, String> params = Utils.normalizeParams(reqParams)
-        println("Sai do normalize")
-        println(params)
         if (!params) return
 
         this.name = params.name
@@ -45,9 +43,6 @@ class PayerAdapter {
         this.address = params.address
         this.addressNumber = params.addressNumber
         this.complement = params.complement
-        println("To aqui")
-        println(params.personType)
         this.personType = PersonType.parseFromCpfCnpj(this.cpfCnpj)
-        println("Vou sair do adapter")
     }
 }
