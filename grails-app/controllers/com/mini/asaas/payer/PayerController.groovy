@@ -37,7 +37,6 @@ class PayerController {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
             Payer payer = payerService.save(adapter)
-//            render(status: 201, contentType: 'application/json')
             flash.message = "Pagador cadastrado com sucesso!"
             flash.status = AlertType.SUCCESS.getValue()
             redirect(action: "show", id: payer.id)
