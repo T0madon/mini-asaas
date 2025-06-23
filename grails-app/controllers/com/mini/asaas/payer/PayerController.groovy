@@ -9,6 +9,8 @@ class PayerController {
     PayerService payerService
 
     def index() {
+        List<Payer> payerList = payerService.list()
+        return [payerList: payerList]
     }
 
     @Secured("permitAll")

@@ -3,6 +3,7 @@ package com.mini.asaas.payer
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.user.User
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.utils.EmailUtils
@@ -63,6 +64,11 @@ class PayerService {
 
         payer.deleted = true
         payer.save(flush: true, failOnError: true)
+    }
+
+    public List<Payer> list() {
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+        return PayerRepository.query([customerId: customerId]).list()
     }
 
     private void validate(PayerAdapter adapter, Payer payer, Customer customer) {
