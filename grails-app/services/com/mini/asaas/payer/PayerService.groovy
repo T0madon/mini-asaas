@@ -38,7 +38,7 @@ class PayerService {
 
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
-        validate(adapter, payer, payer.customer)
+        validate(adapter, payer)
 
         if (payer.hasErrors()) throw new ValidationException("Falha ao atualizar o Pagador", payer.errors as String)
 
