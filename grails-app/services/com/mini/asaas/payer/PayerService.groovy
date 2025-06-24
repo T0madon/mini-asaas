@@ -28,7 +28,6 @@ class PayerService {
 
         payer.customer = customer
         payer.save(failOnError: true)
-
         return payer
     }
 
@@ -49,54 +48,10 @@ class PayerService {
 
         if (!adapter.cpfCnpj) DomainErrorUtils.addError(payer, "O Cpf/Cnpj é obrigatório")
 
+        if (adapter.cpfCnpj && !CpfCnpjUtils.isValidCpfCnpj(adapter.cpfCnpj)) DomainErrorUtils.addError(payer, "O CPF/CNPJ informado é inválido")
+
         if (adapter.email && !EmailUtils.isValid(adapter.email)) DomainErrorUtils.addError(payer, "O email informado é inválido")
 
-        if (adapter.cpfCnpj != payer.cpfCnpj) {
-            validateCpfCnpj(adapter.cpfCnpj, customer)
-        }
-
-        if (adapter.email != payer.email) {
-            validateEmail(adapter.email, customer)
-        }
-
-    }
-
-    private PayerService validateCpfCnpj(String cpfCnpj, Customer customer) {
-        BusinessValidation validation
-
-        if (!CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
-            validation.addError("invalid.cpfCnpj")
-        }
-
-        Payer payer = PayerRepository.query([cpfCnpj: cpfCnpj, customerId: customer.id, includeDeleted: true]).get()
-
-        if (!payer) return this
-
-        if (payer.deleted) {
-            validation.addError("alreadyExistsAndDeleted.cpfCnpj")
-        } else {
-            validation.addError("alreadyExistsAndView.cpfCnpj")
-        }
-        return this
-    }
-
-    private PayerService validateEmail(String email, Customer customer) {
-        BusinessValidation validation
-
-        if (!EmailUtils.isValid(email)) {
-            validation.addError("invalid.email")
-        }
-
-        Payer payer = PayerRepository.query([email: email, customerId: customer.id, includeDeleted: true]).get()
-
-        if (!payer) return this
-
-        if (payer.deleted) {
-            validation.addError("alreadyExistsAndDeleted.email")
-        } else {
-            validation.addError("alreadyExistsAndView.email")
-        }
-        return this
     }
 
     private void buildPayer(PayerAdapter adapter, Payer payer) {
