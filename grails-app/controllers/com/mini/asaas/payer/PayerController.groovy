@@ -1,11 +1,11 @@
 package com.mini.asaas.payer
 
+import com.mini.asaas.BaseController
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.utils.StringUtils
 import grails.plugin.springsecurity.annotation.Secured
 
-class PayerController {
+class PayerController extends BaseController{
 
     PayerService payerService
 
@@ -17,9 +17,10 @@ class PayerController {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
             payerService.save(adapter)
+            createFlash("Cadastro realizado!", AlertType.SUCCESS, true)
             render(status: 201, contentType: 'application/json')
         } catch (Exception exception) {
-            flash.message = "Ocorreu um erro durante o cadastro, tente novamente."
+            createFlash("Ocorreu um erro no cadastro!", AlertType.ERROR, false)
         }
     }
 
@@ -30,16 +31,12 @@ class PayerController {
             Long id = params.id as Long
 
             payerService.update(adapter, id)
-            flash.message = "Pagador atualizado com sucesso"
-            flash.status = AlertType.SUCCESS.getValue()
+            createFlash("Pagador atualizado com sucesso!", AlertType.SUCCESS, true)
             render(status: 201, contentType: 'application/json')
         } catch (BusinessException error) {
-            flash.code = error.code
-            flash.message = error.getMessage()
-            flash.status = AlertType.ERROR.getValue()
+            createFlash(error.getMessage(), AlertType.ERROR, false)
         } catch (Exception error) {
-            flash.message = "Ocorreu um erro durante o cadastro."
-            flash.status = AlertType.ERROR.getValue()
+            createFlash("Ocorreu um erro durante o cadastro.", AlertType.ERROR, false)
         }
     }
 
@@ -50,10 +47,11 @@ class PayerController {
 
             if (!id) return
             payerService.delete(id)
+            createFlash("Pagador deletado!", AlertType.SUCCESS, true)
             render(status: 200, contentType: 'application/json')
 
         } catch (Exception exception) {
-            flash.message = "Ocorreu um erro durante o delete, tente novamente."
+            createFlash("Ocorreu um erro durante o delete, tente novamente.", AlertType.ERROR, false)
         }
     }
 }
