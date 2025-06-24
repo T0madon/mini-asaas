@@ -3,6 +3,7 @@ package com.mini.asaas.payer
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.payment.PaymentStatus
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.utils.EmailUtils
@@ -11,18 +12,18 @@ import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 
+import javax.xml.bind.ValidationException
+
 @Transactional
 @GrailsCompileStatic
 class PayerService {
 
     public Payer save(PayerAdapter adapter) {
-
         Payer payer = new Payer()
         Customer customer = Customer.get(1)
+        validate(adapter, payer)
 
-        validate(adapter, payer, customer)
-
-        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
+        if (payer.hasErrors()) throw new ValidationException("Falha ao salvar novo Pagador", payer.errors as String)
 
         buildPayer(adapter, payer)
 
@@ -40,7 +41,7 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
-    private void validate(PayerAdapter adapter, Payer payer, Customer customer) {
+    private void validate(PayerAdapter adapter, Payer payer) {
 
         if (!adapter.name) DomainErrorUtils.addError(payer, "Campo nome vazio")
 
