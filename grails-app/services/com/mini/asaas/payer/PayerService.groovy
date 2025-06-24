@@ -16,14 +16,13 @@ import grails.gorm.transactions.Transactional
 class PayerService {
 
     public Payer save(PayerAdapter adapter) {
-        BusinessValidation validation
 
         Payer payer = new Payer()
         Customer customer = Customer.get(1)
 
         validate(adapter, payer, customer)
 
-        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
+        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
         buildPayer(adapter, payer)
 
