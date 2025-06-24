@@ -68,7 +68,7 @@ class PayerService {
 
     public List<Payer> list() {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-        return PayerRepository.query([customerId: customerId]).list()
+        return PayerRepository.query([customerId: customerId]).readOnly().list()
     }
 
     private void validate(PayerAdapter adapter, Payer payer, Customer customer) {
