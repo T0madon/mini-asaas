@@ -12,7 +12,6 @@ class PayerController extends BaseController{
     def index() {
     }
 
-    @Secured("permitAll")
     def save() {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
