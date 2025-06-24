@@ -11,6 +11,8 @@ import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 
+import javax.xml.bind.ValidationException
+
 @Transactional
 @GrailsCompileStatic
 class PayerService {
@@ -34,7 +36,6 @@ class PayerService {
     }
 
     public Payer update(PayerAdapter adapter, Long id) {
-        BusinessValidation validation
 
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
@@ -43,12 +44,11 @@ class PayerService {
 
         validate(adapter, payer, payer.customer)
 
-        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validation.getFirstErrorCode())
+        if (payer.hasErrors()) throw new ValidationException("Falha ao atualizar o Pagador", payer.errors as String)
 
         buildPayer(adapter, payer)
 
         payer.save(flush: true, failOnError: true)
-
         return payer
     }
 
