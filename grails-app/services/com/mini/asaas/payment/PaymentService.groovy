@@ -2,6 +2,7 @@ package com.mini.asaas.payment
 
 import com.mini.asaas.Payment.Payment
 import com.mini.asaas.customer.Customer
+import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.utils.DomainErrorUtils
 import grails.compiler.GrailsCompileStatic
@@ -25,6 +26,18 @@ class PaymentService {
         payment.customer = customer
         payment.save(failOnError: true)
         return payment
+    }
+
+    public void delete(Long id) {
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+        Payment payment = PaymentRepository.query([customerId: customerId, id: id]).get()
+
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+
+        payment.deleted = true
+        payment.status = PaymentStatus.CANCELED
+
+        payment.save(failOnError: true)
     }
 
     private void validate(PaymentAdapter adapter, Payment validatedPayment) {
