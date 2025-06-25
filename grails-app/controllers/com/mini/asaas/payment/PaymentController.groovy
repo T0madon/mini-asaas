@@ -27,6 +27,22 @@ class PaymentController extends BaseController{
     }
 
     @Secured("permitAll")
+    def update() {
+        try {
+            PaymentAdapter adapter = new PaymentAdapter(params)
+            Long id = params.id as Long
+
+            Payment payment = paymentService.update(adapter, id)
+            createFlash("Pagamento atualizado com sucesso!", AlertType.SUCCESS, true)
+            render(status: 201, contentType: 'application/json')
+        }catch (BusinessException exception) {
+            createFlash("Ocorreu um erro ao atualizar pagamento: " + exception.getMessage(), AlertType.ERROR, false)
+        } catch (Exception exception) {
+            createFlash("Ocorreu um erro ao atualizar pagamento: " + exception.getMessage(), AlertType.ERROR, false)
+        }
+    }
+
+    @Secured("permitAll")
     def delete() {
         Long id = params.id as Long
 
