@@ -2,7 +2,6 @@ package com.mini.asaas.payer
 
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured("permitAll")
 class PayerController {
 
     PayerService payerService
