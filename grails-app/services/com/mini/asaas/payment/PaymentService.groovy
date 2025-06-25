@@ -28,6 +28,22 @@ class PaymentService {
         return payment
     }
 
+    public Payment update(PaymentAdapter adapter, Long id) {
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+        Payment payment = PaymentRepository.query([id: id, customerId: customerId]).get()
+
+        if (!payment) throw new RuntimeException("Pagamento não encontrado")
+
+        validate(adapter, payment)
+
+        if (payment.hasErrors()) throw new ValidationException("Falha ao atualizar o Pagador", payment.errors as String)
+
+        buildPayment(adapter, payment)
+
+        payment.save(failOnError: true)
+        return payment
+    }
+
     public void delete(Long id) {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         Payment payment = PaymentRepository.query([customerId: customerId, id: id]).get()
