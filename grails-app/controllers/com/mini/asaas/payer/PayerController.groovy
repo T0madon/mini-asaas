@@ -1,10 +1,11 @@
 package com.mini.asaas.payer
 
+import com.mini.asaas.BaseController
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
 import grails.plugin.springsecurity.annotation.Secured
 
-class PayerController {
+class PayerController extends BaseController{
 
     PayerService payerService
 
@@ -37,17 +38,13 @@ class PayerController {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
             Payer payer = payerService.save(adapter)
-            flash.message = "Pagador cadastrado com sucesso!"
-            flash.status = AlertType.SUCCESS.getValue()
+            createFlash("Cadastro realizado!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payer.id)
-        } catch (BusinessException e) {
-            flash.code = e.code
-            flash.message = e.getMessage()
-            flash.status = AlertType.ERROR.getValue()
+        } catch (BusinessException exception) {
+            createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
             render view: "create"
-        } catch (Exception e) {
-            flash.message = "Ocorreu um erro durante o cadastro."
-            flash.status = AlertType.ERROR.getValue()
+        } catch (Exception exception) {
+            createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
             render view: "create"
         }
     }
@@ -57,18 +54,15 @@ class PayerController {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
             Long id = params.id as Long
+
             Payer payer = payerService.update(adapter, id)
-            flash.message = "Pagador atualizado com sucesso"
-            flash.status = AlertType.SUCCESS.getValue()
+            createFlash("Pagador atualizado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payer.id)
         } catch (BusinessException error) {
-            flash.code = error.code
-            flash.message = error.getMessage()
-            flash.status = AlertType.ERROR.getValue()
+            createFlash(error.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         } catch (Exception error) {
-            flash.message = "Ocorreu um erro durante o cadastro."
-            flash.status = AlertType.ERROR.getValue()
+            createFlash("Ocorreu um erro durante o cadastro.", AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         }
     }
@@ -80,9 +74,10 @@ class PayerController {
 
             if (!id) return
             payerService.delete(id)
+            createFlash("Pagador deletado!", AlertType.SUCCESS, true)
             redirect(action: "show", id: id)
         } catch (Exception exception) {
-            flash.message = "Ocorreu um erro durante o delete, tente novamente."
+            createFlash("Ocorreu um erro durante o delete, tente novamente.", AlertType.ERROR, false)
             redirect(action: "index")
         }
     }
