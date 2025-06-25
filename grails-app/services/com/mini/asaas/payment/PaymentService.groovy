@@ -30,7 +30,7 @@ class PaymentService {
         return payment
     }
 
-    private Payment validate(PaymentAdapter adapter, Payment validatedPayment) {
+    private void validate(PaymentAdapter adapter, Payment validatedPayment) {
         Payer payer = Payer.get(adapter.payerId)
 
         if (!adapter.payerId) DomainErrorUtils.addError(validatedPayment, "Campo payerId vazio")
@@ -49,7 +49,7 @@ class PaymentService {
 
         if (adapter.dueDate < new Date()) DomainErrorUtils.addError(validatedPayment, "A data de vencimento deve ser posterior à data atual")
 
-        if (!(adapter.billingType in BillingType.values())) DomainErrorUtils.addError(validatedPayment, "Tipo de cobrança inválido") as Payment
+        if (!(adapter.billingType in BillingType.values())) DomainErrorUtils.addError(validatedPayment, "Tipo de cobrança inválido")
 
     }
 
