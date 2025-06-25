@@ -2,13 +2,10 @@ package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
-import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.payment.PaymentStatus
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.utils.StringUtils
-import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 
