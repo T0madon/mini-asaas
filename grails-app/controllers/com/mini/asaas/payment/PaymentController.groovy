@@ -16,12 +16,6 @@ class PaymentController extends BaseController{
     def save() {
         try {
             PaymentAdapter adapter = new PaymentAdapter(params)
-
-            println("Recebi no ADAPTER DO CONTROLLER:\n")
-            adapter.properties.each { chave, valor ->
-                println("${chave}: ${valor}")
-            }
-
             Payment payment = paymentService.save(adapter)
             createFlash("Cadastro de pagamento realizado!", AlertType.SUCCESS, true)
             render(status: 201, contentType: 'application/json')
