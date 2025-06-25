@@ -36,7 +36,6 @@ class PaymentService {
 
         payment.deleted = true
         payment.status = PaymentStatus.CANCELED
-
         payment.save(failOnError: true)
     }
 
