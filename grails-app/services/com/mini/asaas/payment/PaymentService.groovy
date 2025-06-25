@@ -3,12 +3,9 @@ package com.mini.asaas.payment
 import com.mini.asaas.Payment.Payment
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.payer.Payer
-import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.DomainErrorUtils
-import com.mini.asaas.utils.EmailUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
-import org.h2.engine.Domain
 
 import javax.xml.bind.ValidationException
 
@@ -60,6 +57,5 @@ class PaymentService {
         payment.status = adapter.status
         payment.description = adapter.description
         payment.dueDate = adapter.dueDate
-
     }
 }
