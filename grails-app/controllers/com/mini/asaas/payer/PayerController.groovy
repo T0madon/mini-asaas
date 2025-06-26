@@ -17,10 +17,11 @@ class PayerController extends BaseController {
     def show() {
         try {
             Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
             if (!id) return redirect(action: "index")
 
-            Payer payer = payerService.show(id)
+            Payer payer = payerService.show(customerId, id)
 
             return [payer: payer]
         } catch (Exception exception) {

@@ -29,8 +29,7 @@ class PayerService {
         return payer
     }
 
-    public Payer show(Long id) {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+    public Payer show(Long customerId, Long id) {
         Payer payer = PayerRepository.query([id: id, customerId: customerId]).readOnly().get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
         return payer
