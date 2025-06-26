@@ -12,7 +12,8 @@ class PayerController extends BaseController {
 
     @Secured("permitAll")
     def index() {
-        List<Payer> payerList = payerService.list()
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+        List<Payer> payerList = payerService.list(customerId)
         return [payerList: payerList]
     }
 

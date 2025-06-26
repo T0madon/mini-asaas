@@ -59,8 +59,7 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
-    public List<Payer> list() {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+    public List<Payer> list(Long customerId) {
         return PayerRepository.query([customerId: customerId]).readOnly().list()
     }
 
