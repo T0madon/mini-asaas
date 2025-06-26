@@ -28,8 +28,7 @@ class PaymentService {
         return payment
     }
 
-    public void delete(Long id) {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+    public void delete(Long customerId, Long id) {
         Payment payment = PaymentRepository.query([customerId: customerId, id: id]).get()
 
         if (!payment) throw new RuntimeException("Cobrança não encontrada")

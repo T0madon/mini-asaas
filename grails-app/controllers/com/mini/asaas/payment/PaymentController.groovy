@@ -31,9 +31,9 @@ class PaymentController extends BaseController{
     @Secured("permitAll")
     def delete() {
         Long id = params.id as Long
-
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         try {
-            paymentService.delete(id)
+            paymentService.delete(customerId, id)
             createFlash("Pagamento deletado com sucesso!", AlertType.SUCCESS, true)
             render(status: 201, contentType: 'application/json')
         } catch (BusinessException exception) {
