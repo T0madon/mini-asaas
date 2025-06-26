@@ -13,9 +13,9 @@ import javax.xml.bind.ValidationException
 @GrailsCompileStatic
 class PaymentService {
 
-    public Payment save(PaymentSaveAdapter adapter) {
+    public Payment save(Long customerId, PaymentSaveAdapter adapter) {
         Payment payment = new Payment()
-        Customer customer = Customer.get(1)
+        Customer customer = Customer.get(customerId)
         validate(adapter, payment)
 
         if (payment.hasErrors()) throw new ValidationException("Falha ao salvar novo Pagamento", payment.errors as String)
