@@ -5,7 +5,7 @@ import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
 import grails.plugin.springsecurity.annotation.Secured
 
-class PayerController extends BaseController{
+class PayerController extends BaseController {
 
     PayerService payerService
 
