@@ -21,7 +21,7 @@ class PayerController extends BaseController {
 
             if (!id) return redirect(action: "index")
 
-            Payer payer = payerService.show(customerId, id)
+            Payer payer = payerService.findById(customerId, id)
 
             return [payer: payer]
         } catch (Exception exception) {
