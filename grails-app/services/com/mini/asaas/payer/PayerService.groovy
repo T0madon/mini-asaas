@@ -29,15 +29,13 @@ class PayerService {
         return payer
     }
 
-    public Payer show(Long id) {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+    public Payer findById(Long customerId, Long id) {
         Payer payer = PayerRepository.query([id: id, customerId: customerId]).readOnly().get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
         return payer
     }
 
-    public Payer update(PayerAdapter adapter, Long id) {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+    public Payer update(Long customerId, Long id, PayerAdapter adapter) {
         Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
 
         if (!payer) throw new RuntimeException("Pagador não encontrado")
@@ -61,8 +59,7 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
-    public List<Payer> list() {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+    public List<Payer> list(Long customerId) {
         return PayerRepository.query([customerId: customerId]).readOnly().list()
     }
 
