@@ -33,8 +33,9 @@ class PaymentController extends BaseController{
         try {
             PaymentSaveAdapter adapter = new PaymentSaveAdapter(params)
             Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-            Payment payment = paymentService.update(adapter, id)
+            Payment payment = paymentService.update(customerId, id, adapter)
             createFlash("Pagamento atualizado com sucesso!", AlertType.SUCCESS, true)
             render(status: 201, contentType: 'application/json')
         }catch (BusinessException exception) {

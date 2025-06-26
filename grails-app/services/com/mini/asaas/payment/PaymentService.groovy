@@ -28,8 +28,7 @@ class PaymentService {
         return payment
     }
 
-    public Payment update(PaymentSaveAdapter adapter, Long id) {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+    public Payment update(Long customerId, Long id, PaymentSaveAdapter adapter) {
         Payment payment = PaymentRepository.query([id: id, customerId: customerId]).get()
 
         if (!payment) throw new RuntimeException("Pagamento não encontrado")
