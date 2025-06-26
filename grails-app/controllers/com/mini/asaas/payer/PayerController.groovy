@@ -1,6 +1,7 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.BaseController
+import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
 import grails.plugin.springsecurity.annotation.Secured
@@ -22,10 +23,11 @@ class PayerController extends BaseController {
     def show() {
         try {
             Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
             if (!id) return redirect(action: "index")
 
-            Payer payer = payerService.show(id)
+            Payer payer = payerService.findById(customerId, id)
 
             return [payer: payer]
         } catch (Exception exception) {
@@ -54,8 +56,9 @@ class PayerController extends BaseController {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
             Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-            Payer payer = payerService.update(adapter, id)
+            Payer payer = payerService.update(customerId, id, adapter)
             createFlash("Pagador atualizado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payer.id)
         } catch (BusinessException error) {
