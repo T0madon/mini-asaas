@@ -15,7 +15,7 @@ class PaymentController extends BaseController{
     @Secured("permitAll")
     def save() {
         try {
-            PaymentAdapter adapter = new PaymentAdapter(params)
+            PaymentSaveAdapter adapter = new PaymentSaveAdapter(params)
             Payment payment = paymentService.save(adapter)
             createFlash("Cadastro de pagamento realizado!", AlertType.SUCCESS, true)
             render(status: 201, contentType: 'application/json')

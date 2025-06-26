@@ -13,7 +13,7 @@ import javax.xml.bind.ValidationException
 @GrailsCompileStatic
 class PaymentService {
 
-    public Payment save(PaymentAdapter adapter) {
+    public Payment save(PaymentSaveAdapter adapter) {
         Payment payment = new Payment()
         Customer customer = Customer.get(1)
         validate(adapter, payment)
@@ -27,7 +27,7 @@ class PaymentService {
         return payment
     }
 
-    private void validate(PaymentAdapter adapter, Payment validatedPayment) {
+    private void validate(PaymentSaveAdapter adapter, Payment validatedPayment) {
         Payer payer = Payer.get(adapter.payerId)
 
         if (!adapter.payerId) DomainErrorUtils.addError(validatedPayment, "Campo payerId vazio")
@@ -50,7 +50,7 @@ class PaymentService {
 
     }
 
-    private void buildPayment(PaymentAdapter adapter, Payment payment) {
+    private void buildPayment(PaymentSaveAdapter adapter, Payment payment) {
         payment.payer = Payer.get(adapter.payerId)
         payment.billingType = adapter.billingType
         payment.value = adapter.value
