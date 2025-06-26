@@ -31,7 +31,7 @@ class PaymentController extends BaseController{
     @Secured("permitAll")
     def update() {
         try {
-            PaymentSaveAdapter adapter = new PaymentSaveAdapter(params)
+            PaymentUpdateAdapter adapter = new PaymentUpdateAdapter(params)
             Long id = params.id as Long
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 

@@ -28,16 +28,21 @@ class PaymentService {
         return payment
     }
 
-    public Payment update(Long customerId, Long id, PaymentSaveAdapter adapter) {
-        Payment payment = PaymentRepository.query([id: id, customerId: customerId]).get()
+    public Payment update(Long customerId, Long id, PaymentUpdateAdapter adapter) {
+        Payment payment = PaymentRepository.query([id: adapter.id, customerId: customerId]).get()
 
         if (!payment) throw new RuntimeException("Pagamento não encontrado")
 
-        validate(adapter, payment)
+        validateUpdate(adapter, payment)
 
         if (payment.hasErrors()) throw new ValidationException("Falha ao atualizar o Pagador", payment.errors as String)
 
-        buildPayment(adapter, payment)
+        payment.payer = Payer.get(adapter.payerId)
+        payment.billingType = adapter.billingType
+        payment.value = adapter.value
+        payment.status = adapter.status
+        payment.description = adapter.description
+        payment.dueDate = adapter.dueDate
 
         payment.save(failOnError: true)
         return payment
@@ -55,6 +60,31 @@ class PaymentService {
 
     private void validate(PaymentSaveAdapter adapter, Payment validatedPayment) {
         Payer payer = Payer.get(adapter.payerId)
+
+        if (!adapter.payerId) DomainErrorUtils.addError(validatedPayment, "Campo payerId vazio")
+
+        if (!payer || payer.deleted) DomainErrorUtils.addError(validatedPayment, "Pagador Inválido")
+
+        if (!adapter.value) DomainErrorUtils.addError(validatedPayment, "Campo valor vazio")
+
+        if (adapter.value <= 0) DomainErrorUtils.addError(validatedPayment, "Valor inválido")
+
+        if (!adapter.description) DomainErrorUtils.addError(validatedPayment, "Campo descrição vazio")
+
+        if (!adapter.billingType) DomainErrorUtils.addError(validatedPayment, "Campo tipo de pagamento vazio")
+
+        if (!adapter.dueDate) DomainErrorUtils.addError(validatedPayment, "Campo data de vencimento vazio")
+
+        if (adapter.dueDate < new Date()) DomainErrorUtils.addError(validatedPayment, "A data de vencimento deve ser posterior à data atual")
+
+        if (!(adapter.billingType in BillingType.values())) DomainErrorUtils.addError(validatedPayment, "Tipo de cobrança inválido")
+
+    }
+
+    private void validateUpdate(PaymentUpdateAdapter adapter, Payment validatedPayment) {
+        Payer payer = Payer.get(adapter.payerId)
+
+        if (!adapter.id) DomainErrorUtils.addError(validatedPayment, "Campo Id vazio")
 
         if (!adapter.payerId) DomainErrorUtils.addError(validatedPayment, "Campo payerId vazio")
 
