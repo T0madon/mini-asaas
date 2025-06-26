@@ -1,4 +1,4 @@
-package com.mini.asaas
+package com.mini.asaas.Payment
 
 import com.mini.asaas.base.BaseEntity
 import com.mini.asaas.customer.Customer
