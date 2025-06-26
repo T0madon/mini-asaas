@@ -14,9 +14,9 @@ import javax.xml.bind.ValidationException
 @GrailsCompileStatic
 class PaymentService {
 
-    public Payment save(PaymentAdapter adapter) {
+    public Payment save(Long customerId, PaymentSaveAdapter adapter) {
         Payment payment = new Payment()
-        Customer customer = Customer.get(1)
+        Customer customer = Customer.get(customerId)
         validate(adapter, payment)
 
         if (payment.hasErrors()) throw new ValidationException("Falha ao salvar novo Pagamento", payment.errors as String)
@@ -28,7 +28,7 @@ class PaymentService {
         return payment
     }
 
-    public Payment update(PaymentAdapter adapter, Long id) {
+    public Payment update(PaymentSaveAdapter adapter, Long id) {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         Payment payment = PaymentRepository.query([id: id, customerId: customerId]).get()
 
@@ -44,8 +44,7 @@ class PaymentService {
         return payment
     }
 
-    public void delete(Long id) {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+    public void delete(Long customerId, Long id) {
         Payment payment = PaymentRepository.query([customerId: customerId, id: id]).get()
 
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
@@ -55,7 +54,7 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    private void validate(PaymentAdapter adapter, Payment validatedPayment) {
+    private void validate(PaymentSaveAdapter adapter, Payment validatedPayment) {
         Payer payer = Payer.get(adapter.payerId)
 
         if (!adapter.payerId) DomainErrorUtils.addError(validatedPayment, "Campo payerId vazio")
@@ -78,7 +77,7 @@ class PaymentService {
 
     }
 
-    private void buildPayment(PaymentAdapter adapter, Payment payment) {
+    private void buildPayment(PaymentSaveAdapter adapter, Payment payment) {
         payment.payer = Payer.get(adapter.payerId)
         payment.billingType = adapter.billingType
         payment.value = adapter.value

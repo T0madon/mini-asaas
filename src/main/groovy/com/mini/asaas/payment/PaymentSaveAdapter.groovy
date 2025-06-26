@@ -4,7 +4,7 @@ import com.mini.asaas.utils.BigDecimalUtils
 import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.utils.Utils
 
-class PaymentAdapter {
+class PaymentSaveAdapter {
 
     Long payerId
 
@@ -18,7 +18,7 @@ class PaymentAdapter {
 
     Date dueDate
 
-    public PaymentAdapter(Map originalParams) {
+    public PaymentSaveAdapter(Map originalParams) {
         Map<String, String> params = Utils.normalizeParams(originalParams)
         if (!params) return
         this.payerId = params.payerId as Long
