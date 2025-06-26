@@ -21,11 +21,6 @@
 <g:if test="${flash.message}">
     <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
 </g:if>
-<g:if test="${flash.code == "alreadyExistsAndDeleted.cpfCnpj" || flash.code == "alreadyExistsAndDeleted.email"}">
-    <atlas-helper message="Restaurar pagador"
-                  href="${createLink(controller: "payer", action: "restore")}">
-    </atlas-helper>
-</g:if>
 <g:if test="${flash.code == "alreadyExistsAndView.cpfCnpj" || flash.code == "alreadyExistsAndView.email"}">
     <atlas-helper message="Visualizar pagador"
                   href="${createLink(controller: "payer", action: "index")}">
@@ -41,6 +36,9 @@
             hidden>
     </atlas-input>
 
+    <atlas-button slot="actions" description="Voltar" icon="arrow-left"
+                  href="${createLink(controller: "payer", action: "index")}">
+    </atlas-button>
     <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
     <atlas-button slot="actions" description="Excluir" icon="trash" theme="danger"
                   href="${createLink(controller: "payer", action: "delete", params: [id: payer.id])}">
