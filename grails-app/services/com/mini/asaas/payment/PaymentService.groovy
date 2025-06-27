@@ -53,6 +53,7 @@ class PaymentService {
         Payment payment = PaymentRepository.query([customerId: customerId, id: id]).get()
 
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        if (!payment.status.canBeDeleted()) throw new BusinessException("Cobrança não pode ser deletada")
 
         payment.deleted = true
         payment.status = PaymentStatus.CANCELED
