@@ -97,6 +97,20 @@
                         </atlas-col>
                     </atlas-row>
 
+                    <atlas-row>
+                        <atlas-col lg="12">
+                            <atlas-masked-input
+                                    mask-alias="phone"
+                                    label="Número de Telefone"
+                                    type="tel"
+                                    name="phoneNumber"
+                                    id="phoneNumber"
+                                    value="${payer.phoneNumber}"
+                                    required>
+                            </atlas-masked-input>
+                        </atlas-col>
+                    </atlas-row>
+
                 </atlas-layout>
             </atlas-col>
 
