@@ -62,16 +62,10 @@ class PaymentService {
     }
 
     public void restore(Long customerId, Long id) {
-        println("Entrei no restore do Service")
         Payment payment = PaymentRepository.query([customerId: customerId, id: id]).get()
-        println("Vou fazer a verificação")
-        println(payment)
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
-        println("Vou fazer a verificação 1")
         if (payment.dueDate < new Date()) throw new BusinessException("A data de vencimento não pode ser uma data passada")
-        println("Vou fazer a verificação 2")
 
-        println("Vou deletar")
         payment.deleted = false
         payment.status = PaymentStatus.PENDING
 

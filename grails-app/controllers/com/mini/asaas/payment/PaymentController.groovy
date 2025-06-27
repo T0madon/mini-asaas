@@ -69,8 +69,6 @@ class PaymentController extends BaseController{
         Long id = params.id as Long
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-        println("\nid: " + id)
-
         try {
             paymentService.restore(customerId, id)
             createFlash("Pagamento restaurado com sucesso!", AlertType.SUCCESS, true)
