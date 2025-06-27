@@ -82,4 +82,21 @@ class PaymentController extends BaseController{
             render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
         }
     }
+
+    @Secured("permitAll")
+    def receive() {
+        Long id = params.id as Long
+
+        try {
+            paymentService.receive(id)
+            render(status: 201, contentType: 'application/json')
+        } catch (BusinessException exception) {
+            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+        } catch (Exception exception) {
+            log.error(exception)
+            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+        }
+    }
 }
