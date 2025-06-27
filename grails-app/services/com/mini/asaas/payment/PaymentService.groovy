@@ -49,6 +49,12 @@ class PaymentService {
         return payment
     }
 
+    public Payment findById(Long customerId, Long id) {
+        Payment payment = PaymentRepository.query([id: id, customerId: customerId, includeDeleted: true]).readOnly().get()
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        return payment
+    }
+
     public void delete(Long customerId, Long id) {
         Payment payment = PaymentRepository.query([customerId: customerId, id: id]).get()
 
