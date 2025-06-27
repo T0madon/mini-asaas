@@ -29,6 +29,21 @@ class PayerService {
         return payer
     }
 
+    public Payer update(Long customerId, Long id, PayerAdapter adapter) {
+        Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
+
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
+
+        validate(adapter, payer)
+
+        if (payer.hasErrors()) throw new ValidationException("Falha ao atualizar o Pagador", payer.errors as String)
+
+        buildPayer(adapter, payer)
+
+        payer.save(failOnError: true)
+        return payer
+    }
+
     public void delete(Long id) {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         Payer payer = PayerRepository.query([customerId: customerId, id: id]).get()
