@@ -8,6 +8,8 @@ import com.mini.asaas.payment.PaymentStatus
 
 class Payment extends BaseEntity {
 
+    String receiptId
+
     Payer payer
 
     Customer customer
@@ -25,6 +27,7 @@ class Payment extends BaseEntity {
     String description
 
     static constraints = {
+        receiptId nullable: true
         paymentDate nullable: true
         description nullable: true
     }
