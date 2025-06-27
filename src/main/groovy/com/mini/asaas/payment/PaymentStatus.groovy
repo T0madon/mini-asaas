@@ -7,4 +7,7 @@ enum PaymentStatus {
     OVERDUE,
     CANCELED
 
+    public Boolean canBeDeleted() {
+        return [OVERDUE, PENDING].contains(this)
+    }
 }
