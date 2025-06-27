@@ -4,7 +4,9 @@ import com.mini.asaas.Payment.Payment
 import com.mini.asaas.base.BasePaymentAdapter
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
+import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
+import com.mini.asaas.user.User
 import com.mini.asaas.utils.DomainErrorUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
@@ -56,6 +58,23 @@ class PaymentService {
 
         payment.deleted = true
         payment.status = PaymentStatus.CANCELED
+        payment.save(failOnError: true)
+    }
+
+    public void restore(Long customerId, Long id) {
+        println("Entrei no restore do Service")
+        Payment payment = PaymentRepository.query([customerId: customerId, id: id]).get()
+        println("Vou fazer a verificação")
+        println(payment)
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        println("Vou fazer a verificação 1")
+        if (payment.dueDate < new Date()) throw new BusinessException("A data de vencimento não pode ser uma data passada")
+        println("Vou fazer a verificação 2")
+
+        println("Vou deletar")
+        payment.deleted = false
+        payment.status = PaymentStatus.PENDING
+
         payment.save(failOnError: true)
     }
 
