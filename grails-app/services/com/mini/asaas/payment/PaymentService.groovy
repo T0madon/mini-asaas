@@ -56,7 +56,6 @@ class PaymentService {
         if (!payment.status.canBeDeleted()) throw new BusinessException("Cobrança não pode ser deletada")
 
         payment.deleted = true
-        payment.status = PaymentStatus.CANCELED
         payment.save(failOnError: true)
     }
 
