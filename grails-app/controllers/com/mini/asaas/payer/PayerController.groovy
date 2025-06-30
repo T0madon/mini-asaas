@@ -10,8 +10,15 @@ class PayerController extends BaseController {
 
     PayerService payerService
 
+    @Secured("permitAll")
     def index() {
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+        List<Payer> payerList = payerService.list(customerId)
+        return [payerList: payerList]
     }
+
+    @Secured("permitAll")
+    def create() {}
 
     @Secured("permitAll")
     def show() {
@@ -33,11 +40,15 @@ class PayerController extends BaseController {
     def save() {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
-            payerService.save(adapter)
+            Payer payer = payerService.save(adapter)
             createFlash("Cadastro realizado!", AlertType.SUCCESS, true)
-            render(status: 201, contentType: 'application/json')
+            redirect(action: "show", id: payer.id)
+        } catch (BusinessException exception) {
+            createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
+            render view: "create"
         } catch (Exception exception) {
-            createFlash("Ocorreu um erro no cadastro!", AlertType.ERROR, false)
+            createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
+            render view: "create"
         }
     }
 
@@ -48,13 +59,15 @@ class PayerController extends BaseController {
             Long id = params.id as Long
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-            payerService.update(customerId, id, adapter)
+            Payer payer = payerService.update(customerId, id, adapter)
             createFlash("Pagador atualizado com sucesso!", AlertType.SUCCESS, true)
-            render(status: 201, contentType: 'application/json')
+            redirect(action: "show", id: payer.id)
         } catch (BusinessException error) {
             createFlash(error.getMessage(), AlertType.ERROR, false)
+            redirect(action: "show", id: params.id)
         } catch (Exception error) {
             createFlash("Ocorreu um erro durante o cadastro.", AlertType.ERROR, false)
+            redirect(action: "show", id: params.id)
         }
     }
 
@@ -66,10 +79,10 @@ class PayerController extends BaseController {
             if (!id) return
             payerService.delete(id)
             createFlash("Pagador deletado!", AlertType.SUCCESS, true)
-            render(status: 200, contentType: 'application/json')
-
+            redirect(action: "show", id: id)
         } catch (Exception exception) {
             createFlash("Ocorreu um erro durante o delete, tente novamente.", AlertType.ERROR, false)
+            redirect(action: "index")
         }
     }
 }

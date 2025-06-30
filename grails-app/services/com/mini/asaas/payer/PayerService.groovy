@@ -59,6 +59,10 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
+    public List<Payer> list(Long customerId) {
+        return PayerRepository.query([customerId: customerId]).readOnly().list()
+    }
+
     private void validate(PayerAdapter adapter, Payer payer) {
 
         if (!adapter.name) DomainErrorUtils.addError(payer, "Campo nome vazio")
