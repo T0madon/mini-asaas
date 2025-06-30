@@ -43,6 +43,6 @@ class PayerAdapter {
         this.address = params.address
         this.addressNumber = params.addressNumber
         this.complement = params.complement
-        this.personType = params.personType
+        this.personType = PersonType.parseFromCpfCnpj(this.cpfCnpj)
     }
 }

@@ -13,6 +13,23 @@ class PayerController extends BaseController {
     def index() {
     }
 
+    @Secured("permitAll")
+    def show() {
+        try {
+            Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+
+            if (!id) return redirect(action: "index")
+
+            Payer payer = payerService.findById(customerId, id)
+
+            return [payer: payer]
+        } catch (Exception exception) {
+            redirect(action: "index")
+        }
+    }
+
+    @Secured("permitAll")
     def save() {
         try {
             PayerAdapter adapter = new PayerAdapter(params)

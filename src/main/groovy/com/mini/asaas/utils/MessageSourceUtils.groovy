@@ -1,12 +1,13 @@
 package com.mini.asaas.utils
 
 import grails.util.Holders
+import org.springframework.context.MessageSource
 
 class MessageSourceUtils {
 
     public static String getMessage(String code, Object[] args, String defaultMessage) {
-        Object bean = Holders.applicationContext.getBean("messageSource")
-        return bean.getMessage(code, args, defaultMessage, Locale.getDefault())
+        MessageSource messageSource = (MessageSource) Holders.applicationContext.getBean("messageSource")
+        return messageSource.getMessage(code, args, defaultMessage, Locale.getDefault())
     }
 
     public static String getMessage(String code) {
