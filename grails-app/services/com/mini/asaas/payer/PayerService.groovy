@@ -51,9 +51,8 @@ class PayerService {
         return payer
     }
 
-    public void deleteOrRestore(Long id) {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-        Payer payer = PayerRepository.query([customerId: customerId, id: id]).get()
+    public void deleteOrRestore(Long customerId, Long id) {
+        Payer payer = PayerRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         payer.deleted = !payer.deleted

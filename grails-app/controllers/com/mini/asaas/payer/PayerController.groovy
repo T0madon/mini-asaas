@@ -82,11 +82,12 @@ class PayerController extends BaseController {
     def deleteOrRestore() {
         try {
             Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
             if (!id) return
-            payerService.deleteOrRestore(id)
-            createFlash("Pagador deletado!", AlertType.SUCCESS, true)
-            redirect(action: "show", id: id)
+            payerService.deleteOrRestore(customerId, id)
+            createFlash("Operação realizada com sucesso!", AlertType.SUCCESS, true)
+            redirect(action: "index")
         } catch (Exception exception) {
             createFlash("Ocorreu um erro durante o delete, tente novamente.", AlertType.ERROR, false)
             redirect(action: "index")

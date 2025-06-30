@@ -16,6 +16,13 @@
                     href="${createLink(controller: "payer", action: "create")}"
                     slot="actions">
             </atlas-button>
+            <atlas-button
+                    icon="refresh"
+                    theme="danger"
+                    description="Restaurar pagador"
+                    href="${createLink(controller: "payer", action: "restore")}"
+                    slot="actions">
+            </atlas-button>
         </atlas-toolbar>
         <atlas-table has-actions>
             <atlas-table-header slot="header">
