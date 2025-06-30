@@ -21,6 +21,13 @@ class PayerController extends BaseController {
     def create() {}
 
     @Secured("permitAll")
+    def restore() {
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+        List<Payer> payerList = payerService.listForRestoration(customerId)
+        return [payerList: payerList]
+    }
+
+    @Secured("permitAll")
     def show() {
         try {
             Long id = params.id as Long
@@ -72,12 +79,12 @@ class PayerController extends BaseController {
     }
 
     @Secured("permitAll")
-    def delete() {
+    def deleteOrRestore() {
         try {
             Long id = params.id as Long
 
             if (!id) return
-            payerService.delete(id)
+            payerService.deleteOrRestore(id)
             createFlash("Pagador deletado!", AlertType.SUCCESS, true)
             redirect(action: "show", id: id)
         } catch (Exception exception) {

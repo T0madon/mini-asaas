@@ -35,7 +35,7 @@
                             <atlas-button-group>
                                 <atlas-button icon="pencil" type="ghost" size="sm"></atlas-button>
                                 <atlas-button icon="trash" type="ghost" size="sm" theme="danger"
-                                              href="${createLink(controller: "payer", action: "delete", params: [id: payer.id])}"></atlas-button>
+                                              href="${createLink(controller: "payer", action: "deleteOrRestore", params: [id: payer.id])}"></atlas-button>
                             </atlas-button-group>
                         </atlas-table-col>
                     </atlas-table-row>
