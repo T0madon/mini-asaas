@@ -88,6 +88,22 @@
                         </span>
                     </g:hasErrors>
                 </atlas-col>
+                <atlas-col lg="4">
+                    <atlas-masked-input
+                            mask-alias="phone"
+                            label="Número de Telefone"
+                            type="tel"
+                            name="phoneNumber"
+                            id="phoneNumber"
+                            value="${params.phoneNumber}"
+                            required>
+                    </atlas-masked-input>
+                    <g:hasErrors bean="${errors}" field="phoneNumber">
+                        <span class="form--error">
+                            <g:renderErrors bean="${errors}" field="phoneNumber" />
+                        </span>
+                    </g:hasErrors>
+                </atlas-col>
             </atlas-row>
 
             <g:render template="/templates/address-group" model="${[address: address, opened: false]}"/>
