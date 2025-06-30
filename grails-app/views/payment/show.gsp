@@ -15,7 +15,7 @@
 </g:if>
 
 <atlas-form-panel header="Detalhes da cobrança" description="" submit-button-label=""
-                  action="${createLink(controller: "payment", action: "update", params: [id: payment.id])}">
+                  action="${createLink(controller: "payment", action: "update")}">
     <atlas-input
             value="${payment.id}"
             name="id"
@@ -88,12 +88,12 @@
 
         <atlas-row>
             <atlas-col lg="6">
-                <atlas-datepicker
+                <atlas-date-picker
                         label="Data de vencimento"
                         value="${DateFormatUtils.format(payment.dueDate)}"
                         name="dueDate"
                         required>
-                </atlas-datepicker>
+                </atlas-date-picker>
             </atlas-col>
             <atlas-col lg="6">
                 <atlas-select
