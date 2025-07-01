@@ -1,6 +1,7 @@
 package com.mini.asaas.payment
 
 import com.mini.asaas.Payment.Payment
+import com.mini.asaas.base.BasePaymentAdapter
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.exceptions.BusinessException
@@ -18,6 +19,7 @@ class PaymentService {
     public Payment save(Long customerId, PaymentSaveAdapter adapter) {
         Payment payment = new Payment()
         Customer customer = Customer.get(customerId)
+
         validate(adapter, payment)
 
         if (payment.hasErrors()) throw new ValidationException("Falha ao salvar novo Pagamento", payment.errors as String)
@@ -25,6 +27,25 @@ class PaymentService {
         buildPayment(adapter, payment)
 
         payment.customer = customer
+        payment.save(failOnError: true)
+        return payment
+    }
+
+    public Payment update(Long customerId, PaymentUpdateAdapter adapter) {
+        Payment payment = PaymentRepository.query([id: adapter.id, customerId: customerId]).get()
+        if (!payment) throw new RuntimeException("Pagamento não encontrado")
+
+        validateUpdate(adapter, payment)
+
+        if (payment.hasErrors()) throw new ValidationException("Falha ao atualizar o Pagador", payment.errors as String)
+
+        payment.payer = Payer.get(adapter.payerId)
+        payment.billingType = adapter.billingType
+        payment.value = adapter.value
+        payment.status = adapter.status
+        payment.description = adapter.description
+        payment.dueDate = adapter.dueDate
+
         payment.save(failOnError: true)
         return payment
     }
@@ -39,7 +60,14 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    private void validate(PaymentSaveAdapter adapter, Payment validatedPayment) {
+    private void validateUpdate(PaymentUpdateAdapter adapter, Payment validatedPayment) {
+        validate(adapter, validatedPayment)
+
+        if (!adapter.id) DomainErrorUtils.addError(validatedPayment, "Campo Id vazio")
+
+    }
+
+    private void validate(BasePaymentAdapter adapter, Payment validatedPayment) {
         Payer payer = Payer.get(adapter.payerId)
 
         if (!adapter.payerId) DomainErrorUtils.addError(validatedPayment, "Campo payerId vazio")
