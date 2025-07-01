@@ -7,7 +7,7 @@
 </head>
 
 <body page-title="Lista de pagadores ativos">
-<atlas-panel>
+<atlas-panel header="Lista de pagadores ativos">
     <g:if test="${payerList}">
         <atlas-toolbar>
             <atlas-button
@@ -62,6 +62,7 @@
                     slot="button"></atlas-button>
         </atlas-empty-state>
     </g:else>
+    <g:render template="/templates/pages" model="${[total: total, limitPage: limitPage]}" />
 </atlas-panel>
 </body>
 </html>

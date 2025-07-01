@@ -59,12 +59,12 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
-    public List<Payer> list(Long customerId) {
-        return PayerRepository.query([customerId: customerId]).readOnly().list()
+    public List<Payer> list(Long customerId, Integer max, Integer offset) {
+        return PayerRepository.query([customerId: customerId]).readOnly().list([max: max, offset: offset])
     }
 
-    public List<Payer> listForRestoration(Long customerId) {
-        return PayerRepository.query([customerId: customerId, deletedOnly: true]).list()
+    public List<Payer> listForRestoration(Long customerId, Integer max, Integer offset) {
+        return PayerRepository.query([customerId: customerId, deletedOnly: true]).readOnly().list([max: max, offset: offset])
     }
 
     private void validate(PayerAdapter adapter, Payer payer) {

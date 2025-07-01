@@ -8,6 +8,9 @@
 
 <body>
 <atlas-panel header="Lista de pagadores inativos">
+    <atlas-button slot="actions" description="Pagadores Ativos" icon="arrow-left"
+                  href="${createLink(controller: "payer", action: "index")}">
+    </atlas-button>
     <g:if test="${ payerList }">
         <atlas-table has-actions>
             <atlas-table-header slot="header">
@@ -44,6 +47,7 @@
             ></atlas-button>
         </atlas-empty-state>
     </g:else>
+    <g:render template="/templates/pages" model="${[total: total, limitPage: limitPage]}" />
 </atlas-panel>
 </body>
 </html>

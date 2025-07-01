@@ -13,8 +13,13 @@ class PayerController extends BaseController {
     @Secured("permitAll")
     def index() {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-        List<Payer> payerList = payerService.list(customerId)
-        return [payerList: payerList]
+
+        Integer limitPage = getLimitPerPage()
+        Integer offsetPage = getOffset()
+        Long total = PayerRepository.query().readOnly().count()
+
+        List<Payer> payerList = payerService.list(customerId, limitPage, offsetPage)
+        return [payerList: payerList, total: total, limitPage: limitPage]
     }
 
     @Secured("permitAll")
@@ -23,8 +28,13 @@ class PayerController extends BaseController {
     @Secured("permitAll")
     def restore() {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-        List<Payer> payerList = payerService.listForRestoration(customerId)
-        return [payerList: payerList]
+
+        Integer limitPage = getLimitPerPage()
+        Integer offsetPage = getOffset()
+        Long total = PayerRepository.query([deletedOnly: true]).readOnly().count()
+
+        List<Payer> payerList = payerService.listForRestoration(customerId, limitPage, offsetPage)
+        return [payerList: payerList, total: total, limitPage: limitPage]
     }
 
     @Secured("permitAll")
