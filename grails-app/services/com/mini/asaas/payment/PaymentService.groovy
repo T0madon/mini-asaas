@@ -19,7 +19,7 @@ class PaymentService {
         Payment payment = new Payment()
         Customer customer = Customer.get(customerId)
 
-        validateSave(adapter, payment)
+        validate(adapter, payment)
 
         if (payment.hasErrors()) throw new ValidationException("Falha ao salvar novo Pagamento", payment.errors as String)
 
@@ -86,17 +86,13 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    private static void validateSave(PaymentSaveAdapter adapter, Payment validatedPayment) {
-        validateCommonData(adapter, validatedPayment)
+    private void validateUpdate(PaymentUpdateAdapter adapter, Payment validatedPayment) {
+        validate(adapter, validatedPayment)
 
-    }
-
-    private static void validateUpdate(PaymentUpdateAdapter adapter, Payment validatedPayment) {
-        validateCommonData(adapter, validatedPayment)
         if (!adapter.id) DomainErrorUtils.addError(validatedPayment, "Campo Id vazio")
     }
 
-    private static void validateCommonData(BasePaymentAdapter adapter, Payment validatedPayment) {
+    private void validate(BasePaymentAdapter adapter, Payment validatedPayment) {
         Payer payer = Payer.get(adapter.payerId)
 
         if (!adapter.payerId) DomainErrorUtils.addError(validatedPayment, "Campo payerId vazio")
@@ -117,7 +113,7 @@ class PaymentService {
 
     }
 
-    private static void buildPayment(PaymentSaveAdapter adapter, Payment payment) {
+    private void buildPayment(PaymentSaveAdapter adapter, Payment payment) {
         payment.payer = Payer.get(adapter.payerId)
         payment.billingType = adapter.billingType
         payment.value = adapter.value
