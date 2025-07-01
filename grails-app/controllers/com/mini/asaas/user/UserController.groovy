@@ -14,18 +14,15 @@ class UserController {
     }
     @Secured(['permitAll'])
     def create() {
-        println "exibir formulario"
         render view: 'signUp'
     }
     
-    //parametros como string
     @Secured(['permitAll'])
     def save(String email, String password,
              String customerName, String, String customerCpfCnpj,
              String customerPostalCode, String customerState, String customerCity,
              String customerNeighborhood, String customerAddress, String customerAddressNumber,
              String customerComplement, String customerPersonTypeString) {
-            println "salvar usuario"
 
         try {
             def personType = PersonType.fromString(customerPersonTypeString)
@@ -39,7 +36,6 @@ class UserController {
             )
 
             flash.message = "Usuário cadastrado com sucesso!"
-            println "uUsuário cadastrado com sucesso"
             redirect(controller: 'login')
 
         } catch (Exception exception) {

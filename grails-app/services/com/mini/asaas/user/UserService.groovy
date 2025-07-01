@@ -46,8 +46,7 @@ class UserService {
         user.personType = personType
         
         user.save(flush: true, failOnError: true)
-        println "User [${user.username}] User ID: ${user.id}"
-
+        
         return user
     }
 }
