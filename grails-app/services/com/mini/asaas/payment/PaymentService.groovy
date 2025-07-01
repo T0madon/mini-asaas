@@ -2,6 +2,8 @@ package com.mini.asaas.payment
 
 import com.mini.asaas.Payment.Payment
 import com.mini.asaas.customer.Customer
+import com.mini.asaas.customer.CustomerRepository
+import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.utils.DomainErrorUtils
 import grails.compiler.GrailsCompileStatic
@@ -25,6 +27,16 @@ class PaymentService {
         payment.customer = customer
         payment.save(failOnError: true)
         return payment
+    }
+
+    public void delete(Long customerId, Long id) {
+        Payment payment = PaymentRepository.query([customerId: customerId, id: id]).get()
+
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        if (!payment.status.canBeDeleted()) throw new BusinessException("Cobrança não pode ser deletada")
+
+        payment.deleted = true
+        payment.save(failOnError: true)
     }
 
     private void validate(PaymentSaveAdapter adapter, Payment validatedPayment) {
