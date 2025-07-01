@@ -3,10 +3,8 @@ package com.mini.asaas.payment
 import com.mini.asaas.Payment.Payment
 import com.mini.asaas.base.BasePaymentAdapter
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
-import com.mini.asaas.user.User
 import com.mini.asaas.utils.DomainErrorUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
@@ -21,7 +19,7 @@ class PaymentService {
         Payment payment = new Payment()
         Customer customer = Customer.get(customerId)
 
-        validateSave(adapter, payment)
+        validate(adapter, payment)
 
         if (payment.hasErrors()) throw new ValidationException("Falha ao salvar novo Pagamento", payment.errors as String)
 
@@ -72,19 +70,14 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    private void validateSave(PaymentSaveAdapter adapter, Payment validatedPayment) {
-        validateCommonData(adapter, validatedPayment)
-
-    }
-
     private void validateUpdate(PaymentUpdateAdapter adapter, Payment validatedPayment) {
-        validateCommonData(adapter, validatedPayment)
+        validate(adapter, validatedPayment)
 
         if (!adapter.id) DomainErrorUtils.addError(validatedPayment, "Campo Id vazio")
 
     }
 
-    private void validateCommonData(BasePaymentAdapter adapter, Payment validatedPayment) {
+    private void validate(BasePaymentAdapter adapter, Payment validatedPayment) {
         Payer payer = Payer.get(adapter.payerId)
 
         if (!adapter.payerId) DomainErrorUtils.addError(validatedPayment, "Campo payerId vazio")
