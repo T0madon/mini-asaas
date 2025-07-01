@@ -5,6 +5,7 @@ import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.Payment.Payment
+import com.mini.asaas.user.User
 import com.mini.asaas.utils.DomainErrorUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
@@ -75,6 +76,11 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
+    public List<Payment> list(Long customerId, List<String> statusFilterList, Integer max, Integer offset) {
+        Map queryParams = [customerId: customerId, includeDeleted: true, "status[in]": statusFilterList]
+        return PaymentRepository.query(queryParams).readOnly().list([max: max, offset: offset])
+    }
+
     public void receive(Long id) {
         Payment payment = PaymentRepository.get(id)
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
@@ -102,8 +108,6 @@ class PaymentService {
         if (!adapter.value) DomainErrorUtils.addError(validatedPayment, "Campo valor vazio")
 
         if (adapter.value <= 0) DomainErrorUtils.addError(validatedPayment, "Valor inválido")
-
-        if (!adapter.description) DomainErrorUtils.addError(validatedPayment, "Campo descrição vazio")
 
         if (!adapter.billingType) DomainErrorUtils.addError(validatedPayment, "Campo tipo de pagamento vazio}")
 

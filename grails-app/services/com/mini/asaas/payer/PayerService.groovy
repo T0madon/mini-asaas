@@ -59,6 +59,10 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
+    public List<Payer> list(Long customerId) {
+        return PayerRepository.query([customerId: customerId]).readOnly().list()
+    }
+
     public List<Payer> list(Long customerId, Integer max, Integer offset) {
         return PayerRepository.query([customerId: customerId]).readOnly().list([max: max, offset: offset])
     }

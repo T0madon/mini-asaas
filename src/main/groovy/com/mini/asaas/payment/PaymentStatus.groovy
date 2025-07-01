@@ -27,4 +27,8 @@ enum PaymentStatus {
         if (type == "Recebida") return RECEIVED
         if (type == "AVencida") return OVERDUE
     }
+
+    public static List<String> getAllNames() {
+        return values().collect { it.name() }
+    }
 }

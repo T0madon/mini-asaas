@@ -22,6 +22,10 @@
             hidden>
     </atlas-input>
 
+    <atlas-button slot="actions" description="Lista de Cobranças" icon="arrow-left"
+                  href="${createLink(controller: "payment", action: "index")}">
+    </atlas-button>
+
     <g:if test="${payment.status.canBeReceived()}">
         <atlas-button slot="actions" description="Receber" icon="money" theme="success"
                       href="${createLink(controller: "payment", action: "receive", params: [id: payment.id])}">
