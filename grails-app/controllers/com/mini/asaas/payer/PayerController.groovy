@@ -89,17 +89,33 @@ class PayerController extends BaseController {
     }
 
     @Secured("permitAll")
-    def deleteOrRestore() {
+    def delete() {
         try {
             Long id = params.id as Long
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
             if (!id) return
-            payerService.deleteOrRestore(customerId, id)
+            payerService.delete(customerId, id)
             createFlash("Operação realizada com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "index")
         } catch (Exception exception) {
             createFlash("Ocorreu um erro durante o delete, tente novamente.", AlertType.ERROR, false)
+            redirect(action: "index")
+        }
+    }
+
+    @Secured("permitAll")
+    def restored() {
+        try {
+            Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+
+            if (!id) return
+            payerService.restore(customerId, id)
+            createFlash("Operação realizada com sucesso!", AlertType.SUCCESS, true)
+            redirect(action: "index")
+        } catch (Exception exception) {
+            createFlash("Ocorreu um erro durante a restauração, tente novamente.", AlertType.ERROR, false)
             redirect(action: "index")
         }
     }
