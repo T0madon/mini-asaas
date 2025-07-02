@@ -27,7 +27,7 @@
                         <atlas-table-col>${payer.email}</atlas-table-col>
                         <atlas-table-col>
                             <atlas-button icon="refresh" type="ghost" size="sm" theme="danger"
-                                          href="${createLink(controller: "payer", action: "deleteOrRestore", params: [id: payer.id])}">
+                                          href="${createLink(controller: "payer", action: "restored", params: [id: payer.id])}">
                             </atlas-button>
                         </atlas-table-col>
                     </atlas-table-row>
