@@ -7,7 +7,6 @@ class OverduePaymentJob {
     PaymentService paymentService
 
     static triggers = {
-        simple repeatInterval: 1000l
         cron name: 'ProcessOverduePaymentJobTrigger', cronExpression: "0 0 0 * * ?"
     }
 
