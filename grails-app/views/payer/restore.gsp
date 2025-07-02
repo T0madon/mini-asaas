@@ -39,7 +39,7 @@
         <atlas-empty-state
                 illustration="schedule-user-avatar"
                 header="Sem pagadores inativos">
-            Aqui você pode vizualizar os pagadores que foram deletados.
+            Aqui você pode visualizar os pagadores que foram deletados.
             <atlas-button
                     description="Pagadores ativos"
                     href="${createLink(controller: "payer", action: "index")}"
