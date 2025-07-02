@@ -62,7 +62,6 @@ class PaymentService {
     public void restore(Long customerId, Long id) {
         Payment payment = PaymentRepository.query([deletedOnly: true, customerId: customerId, id: id]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
-        if (payment.dueDate < new Date()) throw new BusinessException("A data de vencimento não pode ser uma data passada")
 
         payment.deleted = false
         payment.status = PaymentStatus.PENDING
