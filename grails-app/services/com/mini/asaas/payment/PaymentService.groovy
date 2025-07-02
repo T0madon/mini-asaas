@@ -65,7 +65,7 @@ class PaymentService {
     }
 
     public void restore(Long customerId, Long id) {
-        Payment payment = PaymentRepository.query([deletedOnly: true, customerId: customerId, id: id]).get()
+        Payment payment = PaymentRepository.query([customerId: customerId, id: id, deletedOnly: true]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
 
         payment.deleted = false
