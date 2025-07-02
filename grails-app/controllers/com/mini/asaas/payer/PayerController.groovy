@@ -16,7 +16,7 @@ class PayerController extends BaseController {
 
         Integer limitPage = getLimitPerPage()
         Integer offsetPage = getOffset()
-        Long total = PayerRepository.query().readOnly().count()
+        Long total = PayerRepository.query([customerId: customerId]).readOnly().count()
 
         List<Payer> payerList = payerService.list(customerId, limitPage, offsetPage)
         return [payerList: payerList, total: total, limitPage: limitPage]
@@ -33,7 +33,7 @@ class PayerController extends BaseController {
         Integer offsetPage = getOffset()
         Long total = PayerRepository.query([deletedOnly: true]).readOnly().count()
 
-        List<Payer> payerList = payerService.listForRestoration(customerId, limitPage, offsetPage)
+        List<Payer> payerList = payerService.listDeleted(customerId, limitPage, offsetPage)
         return [payerList: payerList, total: total, limitPage: limitPage]
     }
 
