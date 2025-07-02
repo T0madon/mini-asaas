@@ -19,8 +19,6 @@ class PaymentController extends BaseController{
             Long id = params.id as Long
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-            if (!id) return render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
-
             Payment payment = paymentService.findById(customerId, id)
 
             return [payment: payment]

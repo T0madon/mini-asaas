@@ -67,7 +67,6 @@ class PaymentService {
     public void restore(Long customerId, Long id) {
         Payment payment = PaymentRepository.query([deletedOnly: true, customerId: customerId, id: id]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
-        if (payment.dueDate < new Date()) throw new BusinessException("A data de vencimento não pode ser uma data passada")
 
         payment.deleted = false
         payment.status = PaymentStatus.PENDING
@@ -105,7 +104,7 @@ class PaymentService {
 
         if (!adapter.description) DomainErrorUtils.addError(validatedPayment, "Campo descrição vazio")
 
-        if (!adapter.billingType) DomainErrorUtils.addError(validatedPayment, "Campo tipo de pagamento vazio}")
+        if (!adapter.billingType) DomainErrorUtils.addError(validatedPayment, "Campo tipo de pagamento vazio")
 
         if (adapter.dueDate && adapter.dueDate < new Date()) DomainErrorUtils.addError(validatedPayment, "A data de vencimento deve ser posterior à data atual")
 
