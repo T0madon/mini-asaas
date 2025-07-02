@@ -5,5 +5,7 @@ import com.mini.asaas.customer.Customer
 
 class Payer extends BasePerson {
 
+    String phoneNumber
+
     Customer customer
 }

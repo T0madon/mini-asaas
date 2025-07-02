@@ -13,6 +13,8 @@ class PayerAdapter {
 
     String cpfCnpj
 
+    String phoneNumber
+
     String postalCode
 
     String state
@@ -36,6 +38,7 @@ class PayerAdapter {
         this.name = params.name
         this.email = params.email
         this.cpfCnpj = params.cpfCnpj
+        this.phoneNumber = params.phoneNumber
         this.postalCode = params.postalCode
         this.state = params.state
         this.city = params.city
@@ -43,6 +46,6 @@ class PayerAdapter {
         this.address = params.address
         this.addressNumber = params.addressNumber
         this.complement = params.complement
-        this.personType = params.personType
+        this.personType = PersonType.parseFromCpfCnpj(this.cpfCnpj)
     }
 }
