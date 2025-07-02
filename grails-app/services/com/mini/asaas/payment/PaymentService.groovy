@@ -104,7 +104,7 @@ class PaymentService {
 
         if (!adapter.description) DomainErrorUtils.addError(validatedPayment, "Campo descrição vazio")
 
-        if (!adapter.billingType) DomainErrorUtils.addError(validatedPayment, "Campo tipo de pagamento vazio}")
+        if (!adapter.billingType) DomainErrorUtils.addError(validatedPayment, "Campo tipo de pagamento vazio")
 
         if (adapter.dueDate && adapter.dueDate < new Date()) DomainErrorUtils.addError(validatedPayment, "A data de vencimento deve }ser posterior à data atual")
 
