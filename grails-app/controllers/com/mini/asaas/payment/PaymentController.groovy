@@ -96,13 +96,13 @@ class PaymentController extends BaseController{
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
             paymentService.delete(customerId, id)
             createFlash("Pagamento deletado com sucesso!", AlertType.SUCCESS, true)
-            render(status: 201, contentType: 'application/json')
+            redirect(action: "index")
         } catch (BusinessException exception) {
             createFlash("Ocorreu um erro ao deletar: " + exception.getMessage(), AlertType.ERROR, false)
-            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+            redirect(action: "index")
         } catch (Exception exception) {
             createFlash("Ocorreu um erro ao deletar: " + exception.getMessage(), AlertType.ERROR, false)
-            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+            redirect(action: "index")
         }
     }
 
@@ -114,14 +114,14 @@ class PaymentController extends BaseController{
         try {
             paymentService.restore(customerId, id)
             createFlash("Pagamento restaurado com sucesso!", AlertType.SUCCESS, true)
-            render(status: 201, contentType: 'application/json')
+            redirect(action: "index")
         } catch (BusinessException exception) {
             createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
-            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+            redirect(action: "index")
         } catch (Exception exception) {
             log.error(exception)
             createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
-            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+            redirect(action: "index")
         }
     }
 
