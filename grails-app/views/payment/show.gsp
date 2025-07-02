@@ -118,9 +118,13 @@
                 <atlas-input
                         label="Status"
                         value="${payment.status.getLabel()}"
-                        name="status"
                         required
                         readonly>
+                </atlas-input>
+                <atlas-input
+                        name="status"
+                        value="${payment.status.name()}"
+                        hidden>
                 </atlas-input>
             </atlas-col>
             <atlas-col lg="6">

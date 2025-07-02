@@ -65,7 +65,7 @@ class PayerService {
         return PayerRepository.query([customerId: customerId]).readOnly().list([max: max, offset: offset])
     }
 
-    public List<Payer> listForRestoration(Long customerId, Integer max, Integer offset) {
+    public List<Payer> listDeleted(Long customerId, Integer max, Integer offset) {
         return PayerRepository.query([customerId: customerId, deletedOnly: true]).readOnly().list([max: max, offset: offset])
     }
 

@@ -21,13 +21,6 @@ enum PaymentStatus {
         return [PENDING].contains(this)
     }
 
-    public static convertStatus(type) {
-        if (type == "Aguardando pagamento") return PENDING
-        if (type == "Cancelada") return CANCELED
-        if (type == "Recebida") return RECEIVED
-        if (type == "AVencida") return OVERDUE
-    }
-
     public static List<String> getAllNames() {
         return values().collect { it.name() }
     }

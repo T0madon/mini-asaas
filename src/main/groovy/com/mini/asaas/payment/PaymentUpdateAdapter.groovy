@@ -18,7 +18,7 @@ class PaymentUpdateAdapter extends BasePaymentAdapter {
         this.value = BigDecimalUtils.fromFormattedString(params.value)
         this.description = params.description
         this.billingType = BillingType.convert(params.billingType)
-        this.status = PaymentStatus.convertStatus(params.status)
+        this.status = params.status as PaymentStatus
         this.dueDate = DateFormatUtils.parseDateFromString(params.dueDate)
     }
 }
