@@ -1,47 +1,40 @@
 package com.mini.asaas.user
 
-import com.mini.asaas.customer.Customer
-import com.mini.asaas.enums.PersonType
-import com.mini.asaas.user.User
+import com.mini.asaas.customer.adapters.CustomerAdapter
+import com.mini.asaas.customer.CustomerService
+import com.mini.asaas.user.adapters.SaveUserAdapter
+import grails.compiler.GrailsCompileStatic
+import grails.converters.JSON 
 import grails.plugin.springsecurity.annotation.Secured
 
-
+@GrailsCompileStatic
+@Secured(['permitAll'])
 class UserController {
 
-    UserService userService
-    def index() {
-        redirect action: 'create'
-    }
-    @Secured(['permitAll'])
-    def create() {
+    CustomerService customerService
+
+    public def create() {
         render view: 'signUp'
     }
-    
-    @Secured(['permitAll'])
-    def save(String email, String password,
-             String customerName, String, String customerCpfCnpj,
-             String customerPostalCode, String customerState, String customerCity,
-             String customerNeighborhood, String customerAddress, String customerAddressNumber,
-             String customerComplement, String customerPersonTypeString) {
+
+    public def save() {
+
+        def jsonData = request.JSON
+        def jsonDataAsMap = jsonData as Map
+
+        def customerAdapter = new CustomerAdapter(jsonDataAsMap)
+        def userAdapter = new SaveUserAdapter(jsonDataAsMap)
 
         try {
-            def personType = PersonType.fromString(customerPersonTypeString)
+            customerService.createAccount(customerAdapter, userAdapter)
+            render(status: 201, contentType: 'application/json') {
+                [status: "SUCCESS", message: "Conta criada com sucesso!"]
+            }
 
-            User user = userService.registerUser(
-                email, password,
-                customerName, customerCpfCnpj,
-                customerPostalCode, customerState, customerCity,
-                customerNeighborhood, customerAddress, customerAddressNumber,
-                customerComplement, personType
-            )
-
-            flash.message = "Usuário cadastrado com sucesso!"
-            redirect(controller: 'login')
-
-        } catch (Exception exception) {
-            flash.message = "Erro no cadastro: ${exception.message}"
-            redirect(action: 'create', params: params)
-
+        } catch (Exception e) {
+            render(status: 400, contentType: 'application/json') {
+                [status: "ERROR", message: "Erro no cadastro: ${e.message}"]
+            }
         }
     }
 }
