@@ -10,7 +10,7 @@ class UserSaveAdapter {
 
     String password
 
-    public SaveUserAdapter(Map originalParams) {
+    public UserSaveAdapter(Map originalParams) {
         Map<String, String> params = Utils.normalizeParams(originalParams)
         if (!params) return
         this.email = params.email
