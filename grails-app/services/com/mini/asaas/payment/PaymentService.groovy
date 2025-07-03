@@ -3,7 +3,6 @@ package com.mini.asaas.payment
 import com.mini.asaas.Payment.Payment
 import com.mini.asaas.base.BasePaymentAdapter
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.utils.DomainErrorUtils
@@ -57,6 +56,16 @@ class PaymentService {
         if (!payment.status.canBeDeleted()) throw new BusinessException("Cobrança não pode ser deletada")
 
         payment.deleted = true
+        payment.save(failOnError: true)
+    }
+
+    public void restore(Long customerId, Long id) {
+        Payment payment = PaymentRepository.query([customerId: customerId, id: id, deletedOnly: true]).get()
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+
+        payment.deleted = false
+        payment.status = PaymentStatus.PENDING
+
         payment.save(failOnError: true)
     }
 
