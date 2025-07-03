@@ -1,7 +1,7 @@
 package com.mini.asaas.customer
 
-import com.mini.asaas.customer.adapters.CustomerAdapter
-import com.mini.asaas.user.adapters.SaveUserAdapter
+import com.mini.asaas.customer.adapters.CustomerSaveAdapter
+import com.mini.asaas.user.adapters.UserSaveAdapter
 import com.mini.asaas.user.UserService
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
@@ -12,16 +12,15 @@ class CustomerService {
 
     UserService userService 
 
-    public Customer createAccount(CustomerAdapter customerAdapter, SaveUserAdapter userAdapter) {
+    public Customer createAccount(CustomerSaveAdapter customerAdapter, UserSaveAdapter userAdapter) {
         Customer customer = buildCustomer(customerAdapter, userAdapter)
-
         customer.save(failOnError: true)
         
         userService.createUserForCustomer(userAdapter, customer)
         return customer
     }
 
-    private Customer buildCustomer(CustomerAdapter customerAdapter, SaveUserAdapter userAdapter) {
+    private Customer buildCustomer(CustomerSaveAdapter customerAdapter, UserSaveAdapter userAdapter) {
         return new Customer(
             name: customerAdapter.name,
             email: userAdapter.email, 

@@ -1,7 +1,7 @@
 package com.mini.asaas.user
 
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.user.adapters.SaveUserAdapter
+import com.mini.asaas.user.adapters.UserSaveAdapter
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 
@@ -9,7 +9,7 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class UserService {
 
-    public User createUserForCustomer(SaveUserAdapter adapter, Customer customer) {
+    public User createUserForCustomer(UserSaveAdapter adapter, Customer customer) {
         
         def user = new User(
             username: adapter.email,

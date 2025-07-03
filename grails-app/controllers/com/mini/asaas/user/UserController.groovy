@@ -1,8 +1,8 @@
 package com.mini.asaas.user
 
-import com.mini.asaas.customer.adapters.CustomerAdapter
+import com.mini.asaas.customer.adapters.CustomerSaveAdapter
 import com.mini.asaas.customer.CustomerService
-import com.mini.asaas.user.adapters.SaveUserAdapter
+import com.mini.asaas.user.adapters.UserSaveAdapter
 import grails.compiler.GrailsCompileStatic
 import grails.converters.JSON 
 import grails.plugin.springsecurity.annotation.Secured
@@ -22,8 +22,8 @@ class UserController {
         def jsonData = request.JSON
         def jsonDataAsMap = jsonData as Map
 
-        def customerAdapter = new CustomerAdapter(jsonDataAsMap)
-        def userAdapter = new SaveUserAdapter(jsonDataAsMap)
+        CustomerSaveAdapter customerAdapter = new CustomerSaveAdapter(jsonDataAsMap)
+        UserSaveAdapter userAdapter = new UserSaveAdapter(jsonDataAsMap)
 
         try {
             customerService.createAccount(customerAdapter, userAdapter)
