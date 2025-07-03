@@ -11,7 +11,7 @@ class UserService {
 
     public User createUserForCustomer(UserSaveAdapter adapter, Customer customer) {
         
-        def user = new User(
+        User user = new User(
             username: adapter.email,
             password: adapter.password,
             customer: customer

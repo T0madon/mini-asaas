@@ -13,14 +13,13 @@ class UserController {
 
     CustomerService customerService
 
-    public def create() {
+    def create() {
         render view: 'signUp'
     }
 
-    public def save() {
-
-        def jsonData = request.JSON
-        def jsonDataAsMap = jsonData as Map
+    def save() {
+        Object jsonData = request.JSON
+        Map jsonDataAsMap = jsonData as Map
 
         CustomerSaveAdapter customerAdapter = new CustomerSaveAdapter(jsonDataAsMap)
         UserSaveAdapter userAdapter = new UserSaveAdapter(jsonDataAsMap)
