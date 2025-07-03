@@ -14,6 +14,9 @@ class PaymentController extends BaseController{
     def index() { }
 
     @Secured("permitAll")
+    def show() { }
+
+    @Secured("permitAll")
     def save() {
         try {
             PaymentSaveAdapter adapter = new PaymentSaveAdapter(params)
@@ -46,9 +49,9 @@ class PaymentController extends BaseController{
 
     @Secured("permitAll")
     def delete() {
-        Long id = params.id as Long
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
         try {
+            Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
             paymentService.delete(customerId, id)
             createFlash("Pagamento deletado com sucesso!", AlertType.SUCCESS, true)
             render(status: 201, contentType: 'application/json')
@@ -57,6 +60,42 @@ class PaymentController extends BaseController{
             render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
         } catch (Exception exception) {
             createFlash("Ocorreu um erro ao deletar: " + exception.getMessage(), AlertType.ERROR, false)
+            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+        }
+    }
+
+    @Secured("permitAll")
+    def restore() {
+        Long id = params.id as Long
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+
+        try {
+            paymentService.restore(customerId, id)
+            createFlash("Pagamento restaurado com sucesso!", AlertType.SUCCESS, true)
+            render(status: 201, contentType: 'application/json')
+        } catch (BusinessException exception) {
+            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+        } catch (Exception exception) {
+            log.error(exception)
+            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+        }
+    }
+
+    @Secured("permitAll")
+    def receive() {
+        Long id = params.id as Long
+
+        try {
+            paymentService.receive(id)
+            render(status: 201, contentType: 'application/json')
+        } catch (BusinessException exception) {
+            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+        } catch (Exception exception) {
+            log.error(exception)
+            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
             render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
         }
     }
