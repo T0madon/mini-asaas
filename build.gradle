@@ -58,7 +58,7 @@ dependencies {
     implementation "org.grails.plugins:events"
     implementation "org.grails.plugins:gsp"
     implementation "org.grails.plugins:quartz:3.0.0"
-    implementation "org.grails.plugins:mail:4.0.0"
+    implementation "org.grails.plugins:mail:3.0.0"
     implementation 'me.paulschwarz:spring-dotenv:3.0.0'
     implementation "org.grails.plugins:spring-security-core:5.2.1"
     profile "org.grails.profiles:web"

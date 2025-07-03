@@ -2,6 +2,7 @@ package com.mini.asaas.payment
 
 import com.mini.asaas.base.BasePaymentAdapter
 import com.mini.asaas.customer.Customer
+import com.mini.asaas.email.EmailService
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.Payment.Payment
@@ -16,6 +17,8 @@ import javax.xml.bind.ValidationException
 @GrailsCompileStatic
 class PaymentService {
 
+    EmailService emailService
+
     public Payment save(Long customerId, PaymentSaveAdapter adapter) {
         Payment payment = new Payment()
         Customer customer = Customer.get(customerId)
@@ -28,6 +31,8 @@ class PaymentService {
 
         payment.customer = customer
         payment.save(failOnError: true)
+        emailService.emailPaymentCreated(payment)
+
         return payment
     }
 
@@ -64,6 +69,7 @@ class PaymentService {
         payment.deleted = true
         payment.status = PaymentStatus.CANCELED
         payment.save(failOnError: true)
+        emailService.emailPaymentDeleted(payment)
     }
 
     public void restore(Long customerId, Long id) {
@@ -88,6 +94,7 @@ class PaymentService {
 
         payment.status = PaymentStatus.RECEIVED
         payment.paymentDate = new Date()
+        emailService.emailPaymentReceive(payment)
 
         payment.save(failOnError: true)
     }
@@ -106,6 +113,7 @@ class PaymentService {
                     Payment payment = PaymentRepository.get(id)
                     payment.status = PaymentStatus.OVERDUE
                     payment.save(failOnError: true)
+                    emailService.emailPaymentOverdue(payment)
                 } catch (Exception exception) {
                     return("Exceção: " + exception)
                 }
