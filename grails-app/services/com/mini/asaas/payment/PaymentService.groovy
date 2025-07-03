@@ -1,10 +1,10 @@
 package com.mini.asaas.payment
 
-import com.mini.asaas.Payment.Payment
 import com.mini.asaas.base.BasePaymentAdapter
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
+import com.mini.asaas.Payment.Payment
 import com.mini.asaas.utils.DomainErrorUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
@@ -69,6 +69,17 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
+    public void receive(Long id) {
+        Payment payment = PaymentRepository.get(id)
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        if (!payment.status.canBeReceived()) throw new BusinessException("Apenas cobranças com status 'Aguardando pagamento' podem ser recebidas")
+
+        payment.status = PaymentStatus.RECEIVED
+        payment.paymentDate = new Date()
+
+        payment.save(failOnError: true)
+    }
+
     private void validateUpdate(PaymentUpdateAdapter adapter, Payment validatedPayment) {
         validate(adapter, validatedPayment)
 
@@ -107,4 +118,5 @@ class PaymentService {
         payment.description = adapter.description
         payment.dueDate = adapter.dueDate
     }
+
 }
