@@ -22,7 +22,7 @@ class PaymentController extends BaseController{
 
         Integer limitPage = getLimitPerPage()
         Integer offsetPage = getOffset()
-        Long total = PaymentRepository.query().readOnly().count()
+        Long total = PaymentRepository.query(customerId: customerId).readOnly().count()
 
         if (params.status && params.status instanceof String) {
             statusFilterList = (params.status as String).split(",")
