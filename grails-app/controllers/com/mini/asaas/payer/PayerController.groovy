@@ -14,7 +14,7 @@ class PayerController extends BaseController {
     def index() {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-        Integer limitPage = getLimitPerPage()
+        Integer limitPage = getDefaultLimitPerPage()
         Integer offsetPage = getOffset()
         Long total = PayerRepository.query([customerId: customerId]).readOnly().count()
 
@@ -29,7 +29,7 @@ class PayerController extends BaseController {
     def restore() {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-        Integer limitPage = getLimitPerPage()
+        Integer limitPage = getDefaultLimitPerPage()
         Integer offsetPage = getOffset()
         Long total = PayerRepository.query([customerId:customerId, deletedOnly: true]).readOnly().count()
 
