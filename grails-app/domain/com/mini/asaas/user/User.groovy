@@ -1,7 +1,6 @@
 package com.mini.asaas.user
 
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.base.BasePerson
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import grails.compiler.GrailsCompileStatic
@@ -9,7 +8,7 @@ import grails.compiler.GrailsCompileStatic
 @GrailsCompileStatic
 @EqualsAndHashCode(includes='username')
 @ToString(includes='username', includeNames=true, includePackage=false)
-class User extends BasePerson implements Serializable {
+class User {
 
     private static final long serialVersionUID = 1
 
