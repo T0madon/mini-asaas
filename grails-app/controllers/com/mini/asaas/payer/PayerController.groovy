@@ -12,14 +12,18 @@ class PayerController extends BaseController {
 
     @Secured("permitAll")
     def index() {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+        try {
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-        Integer limitPage = getDefaultLimitPerPage()
-        Integer offsetPage = getOffset()
-        Long total = PayerRepository.query([customerId: customerId]).readOnly().count()
+            Integer limitPage = getDefaultLimitPerPage()
+            Integer offsetPage = getOffset()
+            Long total = PayerRepository.query([customerId: customerId]).readOnly().count()
 
-        List<Payer> payerList = payerService.list(customerId, limitPage, offsetPage)
-        return [payerList: payerList, total: total, limitPage: limitPage]
+            List<Payer> payerList = payerService.list(customerId, limitPage, offsetPage)
+            return [payerList: payerList, total: total, limitPage: limitPage]
+        } catch (Exception exception) {
+            throw new RuntimeException("Exception: " + exception)
+        }
     }
 
     @Secured("permitAll")
@@ -27,14 +31,19 @@ class PayerController extends BaseController {
 
     @Secured("permitAll")
     def restore() {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+        try {
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-        Integer limitPage = getDefaultLimitPerPage()
-        Integer offsetPage = getOffset()
-        Long total = PayerRepository.query([customerId:customerId, deletedOnly: true]).readOnly().count()
+            Integer limitPage = getDefaultLimitPerPage()
+            Integer offsetPage = getOffset()
+            Long total = PayerRepository.query([customerId:customerId, deletedOnly: true]).readOnly().count()
 
-        List<Payer> payerList = payerService.listDeleted(customerId, limitPage, offsetPage)
-        return [payerList: payerList, total: total, limitPage: limitPage]
+            List<Payer> payerList = payerService.listDeleted(customerId, limitPage, offsetPage)
+            return [payerList: payerList, total: total, limitPage: limitPage]
+        } catch (Exception exception) {
+            throw new RuntimeException("Excpetion: " + exception)
+            redirect(action: "index")
+        }
     }
 
     @Secured("permitAll")
