@@ -17,10 +17,10 @@ class PaymentController extends BaseController{
 
     @Secured("permitAll")
     def index() {
-        List<String> statusFilterList = [];
+        List<String> statusFilterList = []
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-        Integer limitPage = getLimitPerPage()
+        Integer limitPage = getDefaultLimitPerPage()
         Integer offsetPage = getOffset()
         Long total = PaymentRepository.query(customerId: customerId).readOnly().count()
 
