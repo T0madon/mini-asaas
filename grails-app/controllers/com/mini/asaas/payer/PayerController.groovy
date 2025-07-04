@@ -30,7 +30,7 @@ class PayerController extends BaseController {
     def create() {}
 
     @Secured("permitAll")
-    def restore() {
+    def showDeleted() {
         try {
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
