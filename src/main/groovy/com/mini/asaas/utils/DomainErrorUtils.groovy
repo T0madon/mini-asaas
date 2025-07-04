@@ -1,9 +1,11 @@
 package com.mini.asaas.utils
 
 import com.mini.asaas.validation.BusinessRuleError
+import grails.compiler.GrailsCompileStatic
 import org.grails.datastore.gorm.GormEntity
 import org.springframework.validation.ObjectError
 
+@GrailsCompileStatic
 class DomainErrorUtils {
 
     public static GormEntity addError(GormEntity entity, String message) {
