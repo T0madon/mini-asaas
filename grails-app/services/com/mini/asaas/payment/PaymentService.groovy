@@ -107,7 +107,7 @@ class PaymentService {
                     payment.status = PaymentStatus.OVERDUE
                     payment.save(failOnError: true)
                 } catch (Exception exception) {
-                    return("Exceção: " + exception)
+                    throw new RuntimeException("Exceção: " + exception)
                 }
             }
         }
