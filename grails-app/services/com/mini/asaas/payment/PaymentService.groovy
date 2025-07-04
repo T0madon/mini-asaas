@@ -61,6 +61,7 @@ class PaymentService {
         if (!payment.status.canBeDeleted()) throw new BusinessException("Cobrança não pode ser deletada")
 
         payment.deleted = true
+        payment.status = PaymentStatus.CANCELED
         payment.save(failOnError: true)
     }
 
@@ -72,6 +73,11 @@ class PaymentService {
         payment.status = PaymentStatus.PENDING
 
         payment.save(failOnError: true)
+    }
+
+    public List<Payment> list(Long customerId, List<String> statusFilterList, Integer max, Integer offset) {
+        Map queryParams = [customerId: customerId, includeDeleted: true, "status[in]": statusFilterList]
+        return PaymentRepository.query(queryParams).readOnly().list([max: max, offset: offset])
     }
 
     public void receive(Long id) {
@@ -101,8 +107,6 @@ class PaymentService {
         if (!adapter.value) DomainErrorUtils.addError(validatedPayment, "Campo valor vazio")
 
         if (adapter.value <= 0) DomainErrorUtils.addError(validatedPayment, "Valor inválido")
-
-        if (!adapter.description) DomainErrorUtils.addError(validatedPayment, "Campo descrição vazio")
 
         if (!adapter.billingType) DomainErrorUtils.addError(validatedPayment, "Campo tipo de pagamento vazio")
 
