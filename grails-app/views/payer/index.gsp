@@ -7,13 +7,20 @@
 </head>
 
 <body page-title="Lista de pagadores ativos">
-<atlas-panel>
+<atlas-panel header="Lista de pagadores ativos">
     <g:if test="${payerList}">
         <atlas-toolbar>
             <atlas-button
                     icon="plus"
                     description="Adicionar pagador"
                     href="${createLink(controller: "payer", action: "create")}"
+                    slot="actions">
+            </atlas-button>
+            <atlas-button
+                    icon="refresh"
+                    theme="danger"
+                    description="Restaurar pagador"
+                    href="${createLink(controller: "payer", action: "showDeleted")}"
                     slot="actions">
             </atlas-button>
         </atlas-toolbar>
@@ -55,6 +62,7 @@
                     slot="button"></atlas-button>
         </atlas-empty-state>
     </g:else>
+    <g:render template="/templates/pages" model="${[total: total, limitPage: limitPage]}" />
 </atlas-panel>
 </body>
 </html>

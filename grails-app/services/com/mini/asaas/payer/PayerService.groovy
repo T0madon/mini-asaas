@@ -2,6 +2,7 @@ package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
+import com.mini.asaas.user.User
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.utils.EmailUtils
@@ -50,8 +51,7 @@ class PayerService {
         return payer
     }
 
-    public void delete(Long id) {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+    public void delete(Long customerId, Long id) {
         Payer payer = PayerRepository.query([customerId: customerId, id: id]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
@@ -59,8 +59,20 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
-    public List<Payer> list(Long customerId) {
-        return PayerRepository.query([customerId: customerId]).readOnly().list()
+    public void restore(Long customerId, Long id) {
+        Payer payer = PayerRepository.query([customerId: customerId, id: id, includeDeleted: true]).get()
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
+
+        payer.deleted = false
+        payer.save(failOnError: true)
+    }
+
+    public List<Payer> list(Long customerId, Integer max, Integer offset) {
+        return PayerRepository.query([customerId: customerId]).readOnly().list([max: max, offset: offset])
+    }
+
+    public List<Payer> listDeleted(Long customerId, Integer max, Integer offset) {
+        return PayerRepository.query([customerId: customerId, deletedOnly: true]).readOnly().list([max: max, offset: offset])
     }
 
     private void validate(PayerAdapter adapter, Payer payer) {

@@ -106,7 +106,7 @@ class PaymentService {
 
         if (!adapter.billingType) DomainErrorUtils.addError(validatedPayment, "Campo tipo de pagamento vazio")
 
-        if (adapter.dueDate && adapter.dueDate < new Date()) DomainErrorUtils.addError(validatedPayment, "A data de vencimento deve }ser posterior à data atual")
+        if (adapter.dueDate && adapter.dueDate < new Date()) DomainErrorUtils.addError(validatedPayment, "A data de vencimento deve ser posterior à data atual")
 
         if (!(adapter.billingType in BillingType.values())) DomainErrorUtils.addError(validatedPayment, "Tipo de cobrança inválido")
 
