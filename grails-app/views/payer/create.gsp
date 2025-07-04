@@ -24,7 +24,7 @@
 <g:if
         test="${flash.code == "alreadyExistsAndDeleted.cpfCnpj" || flash.code == "alreadyExistsAndDeleted.email"}">
     <atlas-helper message="Deletar pagador"
-                  href="${createLink(controller: "payer", action: "deleteOrRestore", params: [cpfCnpj: params.cpfCnpj, email: params.email])}">
+                  href="${createLink(controller: "payer", action: "delete", params: [cpfCnpj: params.cpfCnpj, email: params.email])}">
     </atlas-helper>
 </g:if>
 <g:if test="${flash.code == "alreadyExistsAndView.cpfCnpj" || flash.code == "alreadyExistsAndView.email"}">
