@@ -12,24 +12,24 @@ class BaseController {
         flash.success = success
     }
 
-    protected Integer getLimitPerPage() {
-        Integer defaultLimitPerPage = 10
+    protected Integer getDefaultLimitPerPage() {
+        final Integer defaultLimitPerPage = 10
 
-        return getDefaultLimitPerPage(defaultLimitPerPage)
+        return getLimitPerPage(defaultLimitPerPage)
     }
 
     protected Integer getOffset() {
 
         if (params.containsKey("page")) {
             Integer currentPage = Integer.valueOf(params.page as Integer ?: 1)
-            return (currentPage - 1) * getLimitPerPage()
+            return (currentPage - 1) * getDefaultLimitPerPage()
         }
 
         if (params.offset == 'undefined') params.offset = null
         return Integer.valueOf(params.offset as Integer ?: 0)
     }
 
-    private Integer getDefaultLimitPerPage(Integer limitPerPage) {
+    private Integer getLimitPerPage(Integer limitPerPage) {
         if (params.containsKey("itemsPerPage")) {
             String itemsPerPage = params.itemsPerPage?.toString()
             if (!itemsPerPage?.isNumber()) params.itemsPerPage = null
