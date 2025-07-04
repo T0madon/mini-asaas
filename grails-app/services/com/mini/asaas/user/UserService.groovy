@@ -10,7 +10,6 @@ import grails.gorm.transactions.Transactional
 class UserService {
 
     public User createUserForCustomer(UserSaveAdapter adapter, Customer customer) {
-        
         User user = new User(
             username: adapter.email,
             password: adapter.password,
