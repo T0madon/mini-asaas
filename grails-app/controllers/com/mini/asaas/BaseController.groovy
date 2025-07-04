@@ -19,7 +19,6 @@ class BaseController {
     }
 
     protected Integer getOffset() {
-
         if (params.containsKey("page")) {
             Integer currentPage = Integer.valueOf(params.page as Integer ?: 1)
             return (currentPage - 1) * getDefaultLimitPerPage()

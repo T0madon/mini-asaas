@@ -20,7 +20,7 @@
                     icon="refresh"
                     theme="danger"
                     description="Restaurar pagador"
-                    href="${createLink(controller: "payer", action: "restore")}"
+                    href="${createLink(controller: "payer", action: "showDeleted")}"
                     slot="actions">
             </atlas-button>
         </atlas-toolbar>
