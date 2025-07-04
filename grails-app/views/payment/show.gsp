@@ -38,7 +38,7 @@
         </atlas-button>
     </g:if>
 
-    <g:if test="${payment.deleted}">
+    <g:if test="${payment.deleted || payment.status == PaymentStatus.CANCELED || payment.status == PaymentStatus.OVERDUE}">
         <atlas-button slot="actions" description="Restaurar" icon="refresh" theme="danger"
                       href="${createLink(controller: "payment", action: "restore", params: [id: payment.id])}">
         </atlas-button>
