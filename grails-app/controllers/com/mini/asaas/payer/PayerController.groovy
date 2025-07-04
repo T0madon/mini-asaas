@@ -14,7 +14,7 @@ class PayerController extends BaseController {
     def index() {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-        Integer limitPage = getLimitPerPage()
+        Integer limitPage = getDefaultLimitPerPage()
         Integer offsetPage = getOffset()
         Long total = PayerRepository.query([customerId: customerId]).readOnly().count()
 
@@ -29,9 +29,9 @@ class PayerController extends BaseController {
     def restore() {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-        Integer limitPage = getLimitPerPage()
+        Integer limitPage = getDefaultLimitPerPage()
         Integer offsetPage = getOffset()
-        Long total = PayerRepository.query([deletedOnly: true]).readOnly().count()
+        Long total = PayerRepository.query([customerId:customerId, deletedOnly: true]).readOnly().count()
 
         List<Payer> payerList = payerService.listDeleted(customerId, limitPage, offsetPage)
         return [payerList: payerList, total: total, limitPage: limitPage]
@@ -110,7 +110,6 @@ class PayerController extends BaseController {
             Long id = params.id as Long
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
-            if (!id) return
             payerService.restore(customerId, id)
             createFlash("Operação realizada com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "index")
