@@ -26,7 +26,7 @@
             <atlas-button
                     icon="plus"
                     description="Criar cobrança"
-                    href="${createLink(controller: "payment", action: "create")}"
+                    href="${createLink(controller: "createPayment", action: "index")}"
                     slot="actions">
             </atlas-button>
         </atlas-toolbar>
@@ -63,7 +63,7 @@
             <atlas-button
                     icon="plus"
                     description="Criar cobrança"
-                    href="${createLink(controller: "payment", action: "create")}"
+                    href="${createLink(controller: "createPayment", action: "index")}"
                     slot="button"></atlas-button>
         </atlas-empty-state>
     </g:else>
