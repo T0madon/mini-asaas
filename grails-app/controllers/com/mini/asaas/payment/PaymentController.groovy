@@ -35,14 +35,6 @@ class PaymentController extends BaseController{
     }
 
     @Secured("permitAll")
-    def create() {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-
-        List<Payer> payerList = payerService.list(customerId)
-        return [payerList: payerList]
-    }
-
-    @Secured("permitAll")
     def show() {
         try {
             Long id = params.id as Long
