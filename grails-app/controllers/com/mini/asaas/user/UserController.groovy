@@ -19,7 +19,6 @@ class UserController {
 
     def save() {
         try {
-            Object jsonData = request.JSON
             Map jsonDataAsMap = jsonData as Map
             CustomerSaveAdapter customerAdapter = new CustomerSaveAdapter(jsonDataAsMap)
             UserSaveAdapter userAdapter = new UserSaveAdapter(jsonDataAsMap)
