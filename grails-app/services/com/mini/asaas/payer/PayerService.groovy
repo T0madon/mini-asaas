@@ -15,11 +15,17 @@ import javax.xml.bind.ValidationException
 class PayerService {
 
     public Payer save(PayerAdapter adapter) {
+        println("Entrei para salvar")
         Payer payer = new Payer()
         Customer customer = Customer.get(1)
-        validate(adapter, payer)
+        println("Vou validar")
+        validate(customer.id, adapter, payer)
+        println("Validei")
 
-        if (payer.hasErrors()) throw new ValidationException("Falha ao salvar novo Pagador", payer.errors as String)
+        if (payer.hasErrors()) {
+            def errorMessages = payer.errors.allErrors.collect { it.defaultMessage }
+            throw new ValidationException(" Falha ao cadastrar pagador: " + errorMessages.join("; "))
+        }
 
         buildPayer(adapter, payer)
 
@@ -39,9 +45,9 @@ class PayerService {
 
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
-        validate(adapter, payer)
+        validate(customerId, adapter, payer)
 
-        if (payer.hasErrors()) throw new ValidationException("Falha ao atualizar o Pagador", payer.errors as String)
+        if (payer.hasErrors()) throw new ValidationException(" Falha ao atualizar o Pagador " + payer.errors)
 
         buildPayer(adapter, payer)
 
@@ -77,7 +83,17 @@ class PayerService {
         return PayerRepository.query([customerId: customerId, deletedOnly: true]).readOnly().list([max: max, offset: offset])
     }
 
-    private void validate(PayerAdapter adapter, Payer payer) {
+    private void validate(Long customerId, PayerAdapter adapter, Payer payer) {
+
+        String searchedCpfCnpj = StringUtils.removeNonNumeric(adapter.cpfCnpj as String) ?: null
+
+        if (PayerRepository.query([customerId: customerId, cpfCnpj: searchedCpfCnpj]).readOnly().get()) {
+            DomainErrorUtils.addError(payer, "O cpf/cnpj informado já existe")
+        }
+
+        if (PayerRepository.query([customerId: customerId, email: adapter.email]).readOnly().get()) {
+            DomainErrorUtils.addError(payer, "O email informado já existe")
+        }
 
         if (!adapter.name) DomainErrorUtils.addError(payer, "Campo nome vazio")
 

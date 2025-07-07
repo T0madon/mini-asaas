@@ -19,7 +19,11 @@
 
 <body>
 <g:if test="${flash.message}">
-    <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
+    <atlas-alert
+            type="${flash.success ? 'success' : 'error'}"
+            message="${flash.message}"
+            class="js-atlas-alert"
+    ></atlas-alert>
 </g:if>
 <g:if
         test="${flash.code == "alreadyExistsAndDeleted.cpfCnpj" || flash.code == "alreadyExistsAndDeleted.email"}">
@@ -46,11 +50,6 @@
                             value="${params.name}"
                             required>
                     </atlas-input>
-                    <g:hasErrors bean="${errors}" field="name">
-                        <span class="form--error">
-                            <g:renderErrors bean="${errors}" field="name" />
-                        </span>
-                    </g:hasErrors>
                 </atlas-col>
                 <atlas-col lg="6">
                     <atlas-masked-input
@@ -63,11 +62,6 @@
                             value="${params.email}"
                             required>
                     </atlas-masked-input>
-                    <g:hasErrors bean="${errors}" field="email">
-                        <span class="form--error">
-                            <g:renderErrors bean="${errors}" field="email" />
-                        </span>
-                    </g:hasErrors>
                 </atlas-col>
             </atlas-row>
 
@@ -82,11 +76,6 @@
                             value="${params.cpfCnpj}"
                             required>
                     </atlas-masked-input>
-                    <g:hasErrors bean="${errors}" field="cpfCnpj">
-                        <span class="form--error">
-                            <g:renderErrors bean="${errors}" field="cpfCnpj" />
-                        </span>
-                    </g:hasErrors>
                 </atlas-col>
                 <atlas-col lg="4">
                     <atlas-masked-input
@@ -98,11 +87,6 @@
                             value="${params.phoneNumber}"
                             required>
                     </atlas-masked-input>
-                    <g:hasErrors bean="${errors}" field="phoneNumber">
-                        <span class="form--error">
-                            <g:renderErrors bean="${errors}" field="phoneNumber" />
-                        </span>
-                    </g:hasErrors>
                 </atlas-col>
             </atlas-row>
 
