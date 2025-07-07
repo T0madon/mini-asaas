@@ -4,6 +4,7 @@ import com.mini.asaas.BaseController
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
+import grails.gorm.PagedResultList
 import grails.plugin.springsecurity.annotation.Secured
 
 class PayerController extends BaseController {
@@ -17,9 +18,10 @@ class PayerController extends BaseController {
 
             Integer limitPage = getDefaultLimitPerPage()
             Integer offsetPage = getOffset()
-            Long total = PayerRepository.query([customerId: customerId]).readOnly().count()
 
-            List<Payer> payerList = payerService.list(customerId, limitPage, offsetPage)
+            PagedResultList<Payer> payerList = payerService.list(customerId, limitPage, offsetPage)
+            Long total = payerList.getTotalCount()
+
             return [payerList: payerList, total: total, limitPage: limitPage]
         } catch (Exception exception) {
             throw new RuntimeException("Exception: " + exception)
