@@ -14,8 +14,6 @@ class PaymentController extends BaseController{
 
     PaymentService paymentService
 
-    PayerService payerService
-
     @Secured("permitAll")
     def index() {
         List<String> statusFilterList = []
