@@ -115,7 +115,8 @@ class PaymentService {
                     payment.save(failOnError: true)
                     emailService.emailPaymentOverdue(payment)
                 } catch (Exception exception) {
-                    throw new RuntimeException("Exceção: " + exception)
+                    log.error("Erro ao processar pagamento", exception)
+                    throw new RuntimeException("Erro ao processar pagamento!" + exception)
                 }
             }
         }
