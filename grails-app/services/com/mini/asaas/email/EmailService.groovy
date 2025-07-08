@@ -1,17 +1,15 @@
 package com.mini.asaas.email
 
 import com.mini.asaas.Payment.Payment
+import com.mini.asaas.utils.MessageSourceUtils
 import com.mini.asaas.utils.StringUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 import grails.plugins.mail.MailService
-import org.springframework.context.MessageSource
 
 @GrailsCompileStatic
 @Transactional
 class EmailService {
-
-    MessageSource messageSource
 
     MailService mailService
 
@@ -20,22 +18,19 @@ class EmailService {
         String value = StringUtils.fromBigDecimal(payment.value)
         String payerName = payment.payer.name
 
-        String subject = messageSource.getMessage(
+        String subject = MessageSourceUtils.getMessage(
                 'email.payment.created.subject',
-                [payment.id] as Object[],
-                Locale.getDefault()
+                [payment.id] as Object[]
         )
 
-        String actionMessage = messageSource.getMessage(
+        String actionMessage = MessageSourceUtils.getMessage(
                 'email.payment.created.action',
-                null,
-                Locale.getDefault()
+                null
         )
 
-        String body = messageSource.getMessage(
+        String body = MessageSourceUtils.getMessage(
                 'email.payment.created.body',
-                [value, payerName] as Object[],
-                Locale.getDefault()
+                [value, payerName] as Object[]
         )
 
         Map<String, String> model = [
@@ -55,22 +50,19 @@ class EmailService {
         String value = StringUtils.fromBigDecimal(payment.value)
         String payerName = payment.payer.name
 
-        String subject = messageSource.getMessage(
+        String subject = MessageSourceUtils.getMessage(
                 'email.payment.receive.subject',
-                [payment.id] as Object[],
-                Locale.getDefault()
+                [payment.id] as Object[]
         )
 
-        String actionMessage = messageSource.getMessage(
+        String actionMessage = MessageSourceUtils.getMessage(
                 'email.payment.receive.action',
-                null,
-                Locale.getDefault()
+                null
         )
 
-        String body = messageSource.getMessage(
+        String body = MessageSourceUtils.getMessage(
                 'email.payment.receive.body',
-                [value, payerName] as Object[],
-                Locale.getDefault()
+                [value, payerName] as Object[]
         )
 
         Map<String, String> model = [
@@ -90,22 +82,19 @@ class EmailService {
         String value = StringUtils.fromBigDecimal(payment.value)
         String payerName = payment.payer.name
 
-        String subject = messageSource.getMessage(
+        String subject = MessageSourceUtils.getMessage(
                 'email.payment.deleted.subject',
-                [payment.id] as Object[],
-                Locale.getDefault()
+                [payment.id] as Object[]
         )
 
-        String actionMessage = messageSource.getMessage(
+        String actionMessage = MessageSourceUtils.getMessage(
                 'email.payment.deleted.action',
-                null,
-                Locale.getDefault()
+                null
         )
 
-        String body = messageSource.getMessage(
+        String body = MessageSourceUtils.getMessage(
                 'email.payment.deleted.body',
-                [value, payerName] as Object[],
-                Locale.getDefault()
+                [value, payerName] as Object[]
         )
 
         Map<String, String> model = [
@@ -125,22 +114,19 @@ class EmailService {
         String value = StringUtils.fromBigDecimal(payment.value)
         String payerName = payment.payer.name
 
-        String subject = messageSource.getMessage(
+        String subject = MessageSourceUtils.getMessage(
                 'email.payment.overdue.subject',
-                [payment.id] as Object[],
-                Locale.getDefault()
+                [payment.id] as Object[]
         )
 
-        String actionMessage = messageSource.getMessage(
+        String actionMessage = MessageSourceUtils.getMessage(
                 'email.payment.overdue.action',
-                null,
-                Locale.getDefault()
+                null
         )
 
-        String body = messageSource.getMessage(
+        String body = MessageSourceUtils.getMessage(
                 'email.payment.overdue.body',
-                [value, payerName] as Object[],
-                Locale.getDefault()
+                [value, payerName] as Object[]
         )
 
         Map<String, String> model = [
