@@ -91,10 +91,10 @@ class PayerController extends BaseController {
             createFlash("Pagador atualizado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payer.id)
         } catch (BusinessException error) {
-            createFlash(error.getMessage(), AlertType.ERROR, false)
+            createFlash("Ocorreu um erro ao atualizar!" + error.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
-        } catch (Exception error) {
-            createFlash("Ocorreu um erro durante o cadastro.", AlertType.ERROR, false)
+        } catch (Exception exception) {
+            createFlash("Ocorreu um erro ao atualizar!" + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         }
     }

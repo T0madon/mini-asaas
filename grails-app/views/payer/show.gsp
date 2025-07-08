@@ -19,7 +19,11 @@
 
 <body>
 <g:if test="${flash.message}">
-    <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
+    <atlas-alert
+            type="${flash.success ? 'success' : 'error'}"
+            message="${flash.message}"
+            class="js-atlas-alert"
+    ></atlas-alert>
 </g:if>
 <g:if test="${flash.code == "alreadyExistsAndView.cpfCnpj" || flash.code == "alreadyExistsAndView.email"}">
     <atlas-helper message="Visualizar pagador"

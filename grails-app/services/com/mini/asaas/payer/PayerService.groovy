@@ -23,7 +23,7 @@ class PayerService {
         println("Validei")
 
         if (payer.hasErrors()) {
-            def errorMessages = payer.errors.allErrors.collect { it.defaultMessage }
+            List<String> errorMessages = payer.errors.allErrors.collect { it.defaultMessage }
             throw new ValidationException(" Falha ao cadastrar pagador: " + errorMessages.join("; "))
         }
 
@@ -47,7 +47,10 @@ class PayerService {
 
         validate(customerId, adapter, payer)
 
-        if (payer.hasErrors()) throw new ValidationException(" Falha ao atualizar o Pagador " + payer.errors)
+        if (payer.hasErrors()) {
+            List<String> errorMessages = payer.errors.allErrors.collect { it.defaultMessage }
+            throw new ValidationException(" Falha ao atualizar pagador: " + errorMessages.join("; "))
+        }
 
         buildPayer(adapter, payer)
 
@@ -87,13 +90,31 @@ class PayerService {
 
         String searchedCpfCnpj = StringUtils.removeNonNumeric(adapter.cpfCnpj as String) ?: null
 
-        if (PayerRepository.query([customerId: customerId, cpfCnpj: searchedCpfCnpj]).readOnly().get()) {
+        Payer existingWithCpfCnpj = PayerRepository.query([
+                customerId: customerId,
+                cpfCnpj: searchedCpfCnpj
+        ]).readOnly().get()
+
+        Payer existingWithEmail = PayerRepository.query([
+                customerId: customerId,
+                email: adapter.email
+        ]).readOnly().get()
+
+        if (existingWithCpfCnpj && existingWithCpfCnpj.id != payer.id) {
             DomainErrorUtils.addError(payer, "O cpf/cnpj informado já existe")
         }
 
-        if (PayerRepository.query([customerId: customerId, email: adapter.email]).readOnly().get()) {
+        if (existingWithEmail && existingWithEmail.id != payer.id) {
             DomainErrorUtils.addError(payer, "O email informado já existe")
         }
+
+//        if (PayerRepository.query([customerId: customerId, cpfCnpj: searchedCpfCnpj]).readOnly().get()) {
+//            DomainErrorUtils.addError(payer, "O cpf/cnpj informado já existe")
+//        }
+
+//        if (PayerRepository.query([customerId: customerId, email: adapter.email]).readOnly().get()) {
+//            DomainErrorUtils.addError(payer, "O email informado já existe")
+//        }
 
         if (!adapter.name) DomainErrorUtils.addError(payer, "Campo nome vazio")
 
