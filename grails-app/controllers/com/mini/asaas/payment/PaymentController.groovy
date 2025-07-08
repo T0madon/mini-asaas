@@ -55,7 +55,7 @@ class PaymentController extends BaseController{
             createFlash("Cadastro de pagamento realizado!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payment.id)
         } catch (BusinessException exception) {
-            createFlash("Ocorreu um erro no cadastro do pagamento: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Ocorreu um erro no cadastro do pagamento! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "create", params: params)
         } catch (Exception exception) {
             createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
@@ -72,10 +72,10 @@ class PaymentController extends BaseController{
             createFlash("Pagamento atualizado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payment.id)
         } catch (BusinessException exception) {
-            createFlash("Ocorreu um erro ao atualizar pagamento: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Ocorreu um erro ao atualizar pagamento! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         } catch (Exception exception) {
-            createFlash("Ocorreu um erro ao atualizar pagamento: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Ocorreu um erro ao atualizar pagamento! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         }
     }
@@ -89,10 +89,10 @@ class PaymentController extends BaseController{
             createFlash("Pagamento deletado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "index")
         } catch (BusinessException exception) {
-            createFlash("Ocorreu um erro ao deletar: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Ocorreu um erro ao deletar! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "index")
         } catch (Exception exception) {
-            createFlash("Ocorreu um erro ao deletar: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Ocorreu um erro ao deletar! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "index")
         }
     }
@@ -106,10 +106,10 @@ class PaymentController extends BaseController{
             createFlash("Pagamento restaurado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "index")
         } catch (BusinessException exception) {
-            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Houve um erro! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "index")
         } catch (Exception exception) {
-            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Houve um erro! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "index")
         }
     }
@@ -122,11 +122,11 @@ class PaymentController extends BaseController{
             paymentService.receive(id)
             redirect(action: "show", id: params.id)
         } catch (BusinessException exception) {
-            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Houve um erro! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         } catch (Exception exception) {
             log.error(exception)
-            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Houve um erro! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         }
     }
@@ -140,7 +140,7 @@ class PaymentController extends BaseController{
             return [payment: payment]
         } catch (Exception exception) {
             log.error(exception)
-            createFlash("Houve um erro ao visualizar o comprovante: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Houve um erro ao visualizar o comprovante! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: id)
         }
     }

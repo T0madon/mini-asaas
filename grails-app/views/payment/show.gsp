@@ -11,7 +11,11 @@
 
 <body>
 <g:if test="${flash.message}">
-    <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
+    <atlas-alert
+            type="${flash.success ? 'success' : 'error'}"
+            message="${flash.message}"
+            class="js-atlas-alert"
+    ></atlas-alert>
 </g:if>
 
 <atlas-form-panel header="Detalhes da cobrança" description="" submit-button-label=""

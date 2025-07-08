@@ -25,7 +25,10 @@ class PaymentService {
 
         validate(adapter, payment)
 
-        if (payment.hasErrors()) throw new ValidationException("Falha ao salvar novo Pagamento", payment.errors as String)
+        if (payment.hasErrors()) {
+            List<String> errorMessages = payment.errors.allErrors.collect { it.defaultMessage }
+            throw new ValidationException(" Falha ao atualizar pagamento: " + errorMessages.join("; "))
+        }
 
         buildPayment(adapter, payment)
 
@@ -41,7 +44,10 @@ class PaymentService {
         if (!payment) throw new RuntimeException("Pagamento não encontrado")
         validateUpdate(adapter, payment)
 
-        if (payment.hasErrors()) throw new ValidationException("Falha ao atualizar o Pagador", payment.errors as String)
+        if (payment.hasErrors()) {
+            List<String> errorMessages = payment.errors.allErrors.collect { it.defaultMessage }
+            throw new ValidationException(" Falha ao atualizar pagamento: " + errorMessages.join("; "))
+        }
 
         payment.payer = Payer.get(adapter.payerId)
         payment.billingType = adapter.billingType
