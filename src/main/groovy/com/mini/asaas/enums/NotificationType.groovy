@@ -12,7 +12,7 @@ enum NotificationType {
 
     public static NotificationType convert(String notification) {
         try {
-            if (notification instanceof String)
+            return (notification instanceof String ? notification.toUpperCase() : notification) as NotificationType
         } catch (Exception exception) {
             return null
         }
