@@ -116,7 +116,7 @@ class PayerController extends BaseController {
     }
 
     @Secured("permitAll")
-    def restored() {
+    def restore() {
         try {
             Long id = params.id as Long
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
