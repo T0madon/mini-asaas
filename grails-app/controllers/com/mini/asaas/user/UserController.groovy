@@ -18,7 +18,7 @@ class UserController {
         render view: 'signUp'
     }
 
-    @Secred(['permitAll'])
+    @Secured(['permitAll'])
     def save() {
         CustomerSaveAdapter customerAdapter = new CustomerSaveAdapter(params)
         UserSaveAdapter userAdapter = new UserSaveAdapter(params)
