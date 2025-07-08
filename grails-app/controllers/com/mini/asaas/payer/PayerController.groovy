@@ -4,6 +4,7 @@ import com.mini.asaas.BaseController
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
+import grails.gorm.PagedResultList
 import grails.plugin.springsecurity.annotation.Secured
 
 class PayerController extends BaseController {
@@ -12,13 +13,40 @@ class PayerController extends BaseController {
 
     @Secured("permitAll")
     def index() {
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-        List<Payer> payerList = payerService.list(customerId)
-        return [payerList: payerList]
+        try {
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+
+            Integer limitPage = getDefaultLimitPerPage()
+            Integer offsetPage = getOffset()
+
+            PagedResultList<Payer> payerList = payerService.list(customerId, limitPage, offsetPage)
+            Long total = payerList.getTotalCount()
+
+            return [payerList: payerList, total: total, limitPage: limitPage]
+        } catch (Exception exception) {
+            throw new RuntimeException("Exception: " + exception)
+        }
     }
 
     @Secured("permitAll")
     def create() {}
+
+    @Secured("permitAll")
+    def showDeleted() {
+        try {
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+
+            Integer limitPage = getDefaultLimitPerPage()
+            Integer offsetPage = getOffset()
+            Long total = PayerRepository.query([customerId:customerId, deletedOnly: true]).readOnly().count()
+
+            List<Payer> payerList = payerService.listDeleted(customerId, limitPage, offsetPage)
+            return [payerList: payerList, total: total, limitPage: limitPage]
+        } catch (Exception exception) {
+            throw new RuntimeException("Excpetion: " + exception)
+            redirect(action: "index")
+        }
+    }
 
     @Secured("permitAll")
     def show() {
@@ -75,13 +103,29 @@ class PayerController extends BaseController {
     def delete() {
         try {
             Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
             if (!id) return
-            payerService.delete(id)
-            createFlash("Pagador deletado!", AlertType.SUCCESS, true)
-            redirect(action: "show", id: id)
+            payerService.delete(customerId, id)
+            createFlash("Operação realizada com sucesso!", AlertType.SUCCESS, true)
+            redirect(action: "index")
         } catch (Exception exception) {
             createFlash("Ocorreu um erro durante o delete, tente novamente.", AlertType.ERROR, false)
+            redirect(action: "index")
+        }
+    }
+
+    @Secured("permitAll")
+    def restore() {
+        try {
+            Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+
+            payerService.restore(customerId, id)
+            createFlash("Operação realizada com sucesso!", AlertType.SUCCESS, true)
+            redirect(action: "index")
+        } catch (Exception exception) {
+            createFlash("Ocorreu um erro durante a restauração, tente novamente.", AlertType.ERROR, false)
             redirect(action: "index")
         }
     }
