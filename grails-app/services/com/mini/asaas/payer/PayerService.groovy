@@ -15,12 +15,9 @@ import javax.xml.bind.ValidationException
 class PayerService {
 
     public Payer save(PayerAdapter adapter) {
-        println("Entrei para salvar")
         Payer payer = new Payer()
         Customer customer = Customer.get(1)
-        println("Vou validar")
         validate(customer.id, adapter, payer)
-        println("Validei")
 
         if (payer.hasErrors()) {
             List<String> errorMessages = payer.errors.allErrors.collect { it.defaultMessage }
