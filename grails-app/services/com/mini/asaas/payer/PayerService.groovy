@@ -1,8 +1,6 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.customer.CustomerRepository
-import com.mini.asaas.user.User
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.utils.EmailUtils
@@ -65,6 +63,10 @@ class PayerService {
 
         payer.deleted = false
         payer.save(failOnError: true)
+    }
+
+    public List<Payer> list(Long customerId) {
+        return PayerRepository.query([customerId: customerId]).readOnly().list()
     }
 
     public List<Payer> list(Long customerId, Integer max, Integer offset) {

@@ -5,13 +5,33 @@ import com.mini.asaas.Payment.Payment
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.payer.Payer
+import com.mini.asaas.payer.PayerService
 import grails.plugin.springsecurity.annotation.Secured
 
 class PaymentController extends BaseController{
 
     PaymentService paymentService
 
-    def index() { }
+    PayerService payerService
+
+    @Secured("permitAll")
+    def index() {
+        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+
+        Integer limitPage = getDefaultLimitPerPage()
+        Integer offsetPage = getOffset()
+        Long total = PaymentRepository.query(customerId: customerId).readOnly().count()
+        List<String> statusFilterList = []
+
+        if (params.status && params.status instanceof String) {
+            statusFilterList = (params.status as String).split(",")
+        }
+        if (statusFilterList.isEmpty()) statusFilterList = PaymentStatus.getAllNames()
+
+        List<Payment> paymentList = paymentService.list(customerId, statusFilterList, limitPage, offsetPage)
+        return [paymentList: paymentList, total: total, limitPage: limitPage]
+    }
 
     @Secured("permitAll")
     def show() {
@@ -34,11 +54,13 @@ class PaymentController extends BaseController{
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
             Payment payment = paymentService.save(customerId, adapter)
             createFlash("Cadastro de pagamento realizado!", AlertType.SUCCESS, true)
-            render(status: 201, contentType: 'application/json')
+            redirect(action: "show", id: payment.id)
         } catch (BusinessException exception) {
             createFlash("Ocorreu um erro no cadastro do pagamento: " + exception.getMessage(), AlertType.ERROR, false)
+            redirect(action: "create", params: params)
         } catch (Exception exception) {
             createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
+            redirect(action: "create", params: params)
         }
     }
 
@@ -66,13 +88,13 @@ class PaymentController extends BaseController{
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
             paymentService.delete(customerId, id)
             createFlash("Pagamento deletado com sucesso!", AlertType.SUCCESS, true)
-            render(status: 201, contentType: 'application/json')
+            redirect(action: "index")
         } catch (BusinessException exception) {
             createFlash("Ocorreu um erro ao deletar: " + exception.getMessage(), AlertType.ERROR, false)
-            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+            redirect(action: "index")
         } catch (Exception exception) {
             createFlash("Ocorreu um erro ao deletar: " + exception.getMessage(), AlertType.ERROR, false)
-            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+            redirect(action: "index")
         }
     }
 
@@ -84,14 +106,14 @@ class PaymentController extends BaseController{
         try {
             paymentService.restore(customerId, id)
             createFlash("Pagamento restaurado com sucesso!", AlertType.SUCCESS, true)
-            render(status: 201, contentType: 'application/json')
+            redirect(action: "index")
         } catch (BusinessException exception) {
             createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
-            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+            redirect(action: "index")
         } catch (Exception exception) {
             log.error(exception)
             createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
-            render(status: 400, contentType: 'application/json', text: '{"erro": "Requisição Inválida"}')
+            redirect(action: "index")
         }
     }
 
