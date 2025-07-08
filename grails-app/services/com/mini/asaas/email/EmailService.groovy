@@ -150,7 +150,7 @@ class EmailService {
                 html(args.html as Map)
             }
         } catch (Exception exception) {
-            throw new RuntimeException("Houve um erro: " + exception)
+            throw new RuntimeException("Houve um erro ao enviar o email: " + exception)
         }
     }
 
