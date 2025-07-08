@@ -5,6 +5,8 @@ import org.springframework.context.MessageSource
 
 class MessageSourceUtils {
 
+    MessageSource messageSource
+
     public static String getMessage(String code, Object[] args, String defaultMessage) {
         MessageSource messageSource = (MessageSource) Holders.applicationContext.getBean("messageSource")
         return messageSource.getMessage(code, args, defaultMessage, Locale.getDefault())
@@ -14,8 +16,8 @@ class MessageSourceUtils {
         getMessage(code, null, "")
     }
 
-    public static String getMessage(String code, Object[] args) {
-        getMessage(code, args, "")
+    public String getMessage(String code, Object[] args) {
+        return messageSource.getMessage(code, args, Locale.getDefault())
     }
 
     public static String getEnumLabel(Enum enumValue) {

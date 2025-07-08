@@ -38,7 +38,7 @@ class EmailService {
                 Locale.getDefault()
         )
 
-        def model = [
+        Map<String, String> model = [
                 actionMessage: actionMessage,
                 body: body
         ]
@@ -73,7 +73,7 @@ class EmailService {
                 Locale.getDefault()
         )
 
-        def model = [
+        Map<String, String> model = [
                 actionMessage: actionMessage,
                 body: body
         ]
@@ -108,7 +108,7 @@ class EmailService {
                 Locale.getDefault()
         )
 
-        def model = [
+        Map<String, String> model = [
                 actionMessage: actionMessage,
                 body: body
         ]
@@ -143,7 +143,7 @@ class EmailService {
                 Locale.getDefault()
         )
 
-        def model = [
+        Map<String, String> model = [
                 actionMessage: actionMessage,
                 body: body
         ]
@@ -164,7 +164,7 @@ class EmailService {
                 html(args.html as Map)
             }
         } catch (Exception exception) {
-            throw new Exception(exception)
+            throw new RuntimeException("Houve um erro: " + exception)
         }
     }
 
