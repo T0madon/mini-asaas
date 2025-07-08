@@ -5,8 +5,6 @@ import com.mini.asaas.Payment.Payment
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.payer.Payer
-import com.mini.asaas.payer.PayerService
 import grails.gorm.PagedResultList
 import grails.plugin.springsecurity.annotation.Secured
 
@@ -16,11 +14,11 @@ class PaymentController extends BaseController{
 
     @Secured("permitAll")
     def index() {
-        List<String> statusFilterList = []
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 
         Integer limitPage = getDefaultLimitPerPage()
         Integer offsetPage = getOffset()
+        List<String> statusFilterList = []
 
         if (params.status && params.status instanceof String) {
             statusFilterList = (params.status as String).split(",")
