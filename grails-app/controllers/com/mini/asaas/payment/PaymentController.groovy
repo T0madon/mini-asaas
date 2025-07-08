@@ -100,10 +100,9 @@ class PaymentController extends BaseController{
 
     @Secured("permitAll")
     def restore() {
-        Long id = params.id as Long
-        Long customerId = CustomerRepository.query([id: 1]).column("id").get()
-
         try {
+            Long id = params.id as Long
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
             paymentService.restore(customerId, id)
             createFlash("Pagamento restaurado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "index")
@@ -111,7 +110,6 @@ class PaymentController extends BaseController{
             createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "index")
         } catch (Exception exception) {
-            log.error(exception)
             createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "index")
         }
