@@ -1,6 +1,7 @@
 package com.mini.asaas.notification
 
 import com.mini.asaas.customer.Customer
+import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.NotificationType
 import com.mini.asaas.utils.MessageSourceUtils
 import grails.compiler.GrailsCompileStatic
@@ -10,8 +11,8 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class NotificationService {
 
-    public Notification create(Object[] subject, Object[] body, Customer customer, NotificationType type) {
-        Notification notification = buildNotification(subject, body, customer, type)
+    public Notification create(Object[] subject, Object[] body, Customer customer, NotificationType type, Long paymentId) {
+        Notification notification = buildNotification(subject, body, customer, type, paymentId)
 
         notification.save(failOnError: true)
         return notification
@@ -21,7 +22,7 @@ class NotificationService {
         return NotificationRepository.query([customerId: customerId]).readOnly().list([max: max, offset: offset])
     }
 
-    private Notification buildNotification(Object[] subject, Object[] body, Customer customer, NotificationType type) {
+    private Notification buildNotification(Object[] subject, Object[] body, Customer customer, NotificationType type, Long paymentId) {
         Notification notification = new Notification()
 
         String types = type.toString().split("_")
@@ -42,6 +43,7 @@ class NotificationService {
         notification.body = bodyNotification
         notification.type = type
         notification.customer = customer
+        notification.paymentId = paymentId
 
         return notification
     }

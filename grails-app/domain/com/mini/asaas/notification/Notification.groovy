@@ -1,5 +1,6 @@
 package com.mini.asaas.notification
 
+import com.mini.asaas.Payment.Payment
 import com.mini.asaas.base.BaseEntity
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.enums.NotificationType
@@ -13,4 +14,6 @@ class Notification extends BaseEntity {
     NotificationType type
 
     Customer customer
+
+    Long paymentId
 }

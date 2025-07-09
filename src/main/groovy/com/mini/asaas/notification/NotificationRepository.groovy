@@ -17,6 +17,10 @@ class NotificationRepository implements Repository<Notification, NotificationRep
             if (search.containsKey("customerId")) {
                 eq("customer.id", search.customerId)
             }
+
+            if (search.containsKey("paymentId")) {
+                eq("payment.id", search.paymentId)
+            }
         }
     }
 
@@ -29,7 +33,8 @@ class NotificationRepository implements Repository<Notification, NotificationRep
     List<String> listAllowedFilters() {
         return [
                 "type",
-                "customerId"
+                "customerId",
+                "paymentId"
         ]
     }
 }
