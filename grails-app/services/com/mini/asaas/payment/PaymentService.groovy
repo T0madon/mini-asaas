@@ -3,7 +3,9 @@ package com.mini.asaas.payment
 import com.mini.asaas.base.BasePaymentAdapter
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.email.EmailService
+import com.mini.asaas.enums.NotificationType
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.notification.NotificationService
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.Payment.Payment
 import com.mini.asaas.utils.DateFormatUtils
@@ -18,6 +20,8 @@ import javax.xml.bind.ValidationException
 class PaymentService {
 
     EmailService emailService
+
+    NotificationService notificationService
 
     public Payment save(Long customerId, PaymentSaveAdapter adapter) {
         Payment payment = new Payment()
@@ -36,6 +40,13 @@ class PaymentService {
         payment.save(failOnError: true)
         emailService.emailPaymentCreated(payment)
 
+        notificationService.create(
+                [payment.id] as Object[],
+                [payment.value, payment.payer.name] as Object[],
+                payment.customer,
+                NotificationType.PAYMENT_CREATED,
+                payment.id,
+        )
         return payment
     }
 
@@ -76,6 +87,13 @@ class PaymentService {
         payment.status = PaymentStatus.CANCELED
         payment.save(failOnError: true)
         emailService.emailPaymentDeleted(payment)
+        notificationService.create(
+                [payment.id] as Object[],
+                [payment.value, payment.payer.name] as Object[],
+                payment.customer,
+                NotificationType.PAYMENT_DELETED,
+                payment.id,
+        )
     }
 
     public void restore(Long customerId, Long id) {
@@ -101,6 +119,13 @@ class PaymentService {
         payment.status = PaymentStatus.RECEIVED
         payment.paymentDate = new Date()
         emailService.emailPaymentReceive(payment)
+        notificationService.create(
+                [payment.id] as Object[],
+                [payment.value, payment.payer.name] as Object[],
+                payment.customer,
+                NotificationType.PAYMENT_RECEIVED,
+                payment.id,
+        )
 
         payment.save(failOnError: true)
     }
@@ -120,6 +145,13 @@ class PaymentService {
                     payment.status = PaymentStatus.OVERDUE
                     payment.save(failOnError: true)
                     emailService.emailPaymentOverdue(payment)
+                    notificationService.create(
+                            [payment.id] as Object[],
+                            [payment.value, payment.payer.name, payment.dueDate] as Object[],
+                            payment.customer,
+                            NotificationType.PAYMENT_OVERDUE,
+                            payment.id,
+                    )
                 } catch (Exception exception) {
                     log.error("Erro ao processar pagamento", exception)
                     throw new RuntimeException("Erro ao processar pagamento!" + exception)

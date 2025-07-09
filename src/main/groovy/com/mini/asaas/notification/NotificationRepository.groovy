@@ -19,7 +19,7 @@ class NotificationRepository implements Repository<Notification, NotificationRep
             }
 
             if (search.containsKey("paymentId")) {
-                eq("payment.id", search.paymentId)
+                eq("paymentId", search.paymentId)
             }
         }
     }

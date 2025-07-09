@@ -1,19 +1,25 @@
 package com.mini.asaas.notification
 
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.NotificationType
-import com.mini.asaas.user.User
-import com.mini.asaas.utils.MessageSourceUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
+import org.springframework.context.MessageSource
 
 @GrailsCompileStatic
 @Transactional
 class NotificationService {
 
+    MessageSource messageSource
+
     public Notification create(Object[] subject, Object[] body, Customer customer, NotificationType type, Long paymentId) {
         Notification notification = buildNotification(subject, body, customer, type, paymentId)
+
+        Notification lastUpdateNotification = NotificationRepository.query([
+                paymentId: paymentId
+        ]).get()
+
+        if (lastUpdateNotification) lastUpdateNotification.deleted = true
 
         notification.save(failOnError: true)
         return notification
@@ -26,18 +32,20 @@ class NotificationService {
     private Notification buildNotification(Object[] subject, Object[] body, Customer customer, NotificationType type, Long paymentId) {
         Notification notification = new Notification()
 
-        String types = type.toString().split("_")
+        String[] types = type.toString().split("_")
         String domain = types[0].toLowerCase()
         String status = types[1].toLowerCase()
 
-        String subjectNotification = MessageSourceUtils.getMessage(
-                'notify.' + domain + "." + status + '.subject',
+        String subjectNotification = messageSource.getMessage(
+                'notify.' + domain + '.' + status + '.subject',
                 subject,
+                Locale.getDefault()
         )
 
-        String bodyNotification = MessageSourceUtils.getMessage(
-                'notify.' + domain + "." + status + '.body',
+        String bodyNotification = messageSource.getMessage(
+                'notify.' + domain + '.' + status + '.body',
                 body,
+                Locale.getDefault()
         )
 
         notification.subject = subjectNotification

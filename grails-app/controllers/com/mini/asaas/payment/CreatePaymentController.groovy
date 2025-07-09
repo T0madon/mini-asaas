@@ -6,11 +6,11 @@ import com.mini.asaas.payer.Payer
 import com.mini.asaas.payer.PayerService
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured("permitAll")
 class CreatePaymentController extends BaseController{
 
     PayerService payerService
 
+    @Secured("permitAll")
     def index() {
         Long customerId = CustomerRepository.query([id: 1]).column("id").get()
 

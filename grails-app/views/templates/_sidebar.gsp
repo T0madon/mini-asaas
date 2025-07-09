@@ -55,6 +55,3 @@
         </atlas-sidebar-menu-item>
     </atlas-sidebar-menu>
 </atlas-sidebar>
-
-%{--                href="${createLink(controller: "notification", action: "list")}"--}%
-%{--            ${ controllerName == "notification" && actionName == "list" ? "active" : "" }--}%
