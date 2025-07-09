@@ -1,22 +1,6 @@
 <%@ page import="java.time.LocalDateTime; java.time.format.DateTimeFormatter; com.mini.asaas.utils.StringUtils" contentType="text/html;charset=UTF-8" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-%{--<html>--}%
-%{--<head>--}%
-%{--    <title>Cobrança ${actionMessage}!</title>--}%
-%{--</head>--}%
-
-%{--<body>--}%
-%{--    <h1>Mini-Asaas</h1>--}%
-%{--    <h2>Olá! Uma nova ação de cobrança ocorreu!</h2>--}%
-%{--    <p>--}%
-%{--        Uma cobrança foi <strong>${actionMessage}</strong>! Detalhes:--}%
-%{--    </p>--}%
-%{--    <p>--}%
-%{--        ${body}--}%
-%{--    </p>--}%
-%{--</body>--}%
-%{--</html>--}%
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR">
 <head>

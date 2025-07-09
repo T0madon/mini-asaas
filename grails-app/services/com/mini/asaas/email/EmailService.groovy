@@ -14,7 +14,6 @@ class EmailService {
     MailService mailService
 
     public void emailPaymentCreated(Payment payment) {
-
         String value = StringUtils.fromBigDecimal(payment.value)
         String payerName = payment.payer.name
 
