@@ -1,3 +1,4 @@
+<%@ page import="com.mini.asaas.utils.DateFormatUtils" %>
 <%
     Map status = [
             PAYMENT_CREATED: 'success',
@@ -15,10 +16,10 @@
 %>
 
 <atlas-notification-center-card
-        href="${createLink(controller: 'payment', action: 'show', params: notification.paymentId)}"
+        href="${createLink(controller: 'payment', action: 'show', id: notification.paymentId)}"
         header="${notification.subject}"
         icon="${icons."${notification.type}"}"
-        date="${notification.dateCreated}"
+        date="${DateFormatUtils.format(notification.dateCreated)}"
         status="${status."${notification.type}"}"
 >
     ${notification.body}

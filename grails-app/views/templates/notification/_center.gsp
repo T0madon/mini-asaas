@@ -16,7 +16,7 @@
                         icon="alert-circle"
                         header="Sem notificações"
                 >
-                    Aqui você pode visualizar as notificações do sistema.
+                    Aqui aparecerão as notificações do sistema.
                 </atlas-empty-state>
             </g:else>
         </atlas-notification-center-group>

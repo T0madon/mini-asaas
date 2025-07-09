@@ -50,9 +50,11 @@
         <atlas-sidebar-menu-item
                 icon="bell"
                 text="Notificações"
-                href="${createLink(controller: "notification", action: "list")}"
-            ${ controllerName == "notification" && actionName == "list" ? "active" : "" }
+                data-atlas-offcanvas="notification-center"
         >
         </atlas-sidebar-menu-item>
     </atlas-sidebar-menu>
 </atlas-sidebar>
+
+%{--                href="${createLink(controller: "notification", action: "list")}"--}%
+%{--            ${ controllerName == "notification" && actionName == "list" ? "active" : "" }--}%

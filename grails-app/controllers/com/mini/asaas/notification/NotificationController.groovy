@@ -19,12 +19,9 @@ class NotificationController extends BaseController {
             Integer offsetPage = getOffset()
 
             List<Notification> notifications = notificationService.list(customerId, limitPage, offsetPage)
-            println("Vou dar o render ambíguo agora")
-//            return ([template: '/templates/notification/center', model: [notifications: notifications]])
-            return notifications
 
+            render(template: '/templates/notification/center', model: [notifications: notifications])
         } catch (Exception exception) {
-            println("Deu erro")
             createFlash("Ocorreu um erro ao mostrar as notificações!" + exception.getMessage(), AlertType.ERROR, false)
         }
     }

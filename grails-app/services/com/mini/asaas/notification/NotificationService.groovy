@@ -3,6 +3,7 @@ package com.mini.asaas.notification
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.NotificationType
+import com.mini.asaas.user.User
 import com.mini.asaas.utils.MessageSourceUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional

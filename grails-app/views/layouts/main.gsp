@@ -25,9 +25,12 @@
             </atlas-page-header>
 
             <atlas-page-content slot="content" class="js-atlas-content">
+                <g:render template='/templates/notification/center' />
                 <g:layoutBody />
             </atlas-page-content>
         </atlas-page>
     </atlas-screen>
+<asset:javascript src="application.js"/>
+<asset:javascript src="notification/ListNotificationController.js"/>
 </body>
 </html> 
