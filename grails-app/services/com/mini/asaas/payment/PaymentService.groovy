@@ -5,6 +5,7 @@ import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.Payment.Payment
+import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
@@ -89,6 +90,28 @@ class PaymentService {
         payment.paymentDate = new Date()
 
         payment.save(failOnError: true)
+    }
+
+    public void setPaymentOverdue() {
+        Map params = [
+                "dueDate[lt]": DateFormatUtils.getDateWithoutTime(),
+                status       : PaymentStatus.PENDING
+        ]
+
+        List<Long> paymentIdList = PaymentRepository.query(params).column("id").list()
+
+        for (Long id : paymentIdList) {
+            Payment.withNewTransaction { status ->
+                try {
+                    Payment payment = PaymentRepository.get(id)
+                    payment.status = PaymentStatus.OVERDUE
+                    payment.save(failOnError: true)
+                } catch (Exception exception) {
+                    log.error("Erro ao processar pagamento", exception)
+                    throw new RuntimeException("Erro ao processar pagamento!" + exception)
+                }
+            }
+        }
     }
 
     private void validateUpdate(PaymentUpdateAdapter adapter, Payment validatedPayment) {

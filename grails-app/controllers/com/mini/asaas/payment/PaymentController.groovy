@@ -5,15 +5,12 @@ import com.mini.asaas.Payment.Payment
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.payer.Payer
-import com.mini.asaas.payer.PayerService
+import grails.gorm.PagedResultList
 import grails.plugin.springsecurity.annotation.Secured
 
 class PaymentController extends BaseController{
 
     PaymentService paymentService
-
-    PayerService payerService
 
     @Secured("permitAll")
     def index() {
@@ -21,7 +18,6 @@ class PaymentController extends BaseController{
 
         Integer limitPage = getDefaultLimitPerPage()
         Integer offsetPage = getOffset()
-        Long total = PaymentRepository.query(customerId: customerId).readOnly().count()
         List<String> statusFilterList = []
 
         if (params.status && params.status instanceof String) {
@@ -29,7 +25,8 @@ class PaymentController extends BaseController{
         }
         if (statusFilterList.isEmpty()) statusFilterList = PaymentStatus.getAllNames()
 
-        List<Payment> paymentList = paymentService.list(customerId, statusFilterList, limitPage, offsetPage)
+        PagedResultList<Payment> paymentList = paymentService.list(customerId, statusFilterList, limitPage, offsetPage)
+        Long total = paymentList.getTotalCount()
         return [paymentList: paymentList, total: total, limitPage: limitPage]
     }
 
