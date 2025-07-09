@@ -84,7 +84,6 @@ class PayerService {
     }
 
     private void validate(Long customerId, PayerAdapter adapter, Payer payer) {
-
         String searchedCpfCnpj = StringUtils.removeNonNumeric(adapter.cpfCnpj as String) ?: null
 
         Payer existingWithCpfCnpj = PayerRepository.query([
@@ -104,14 +103,6 @@ class PayerService {
         if (existingWithEmail && existingWithEmail.id != payer.id) {
             DomainErrorUtils.addError(payer, "O email informado já existe")
         }
-
-//        if (PayerRepository.query([customerId: customerId, cpfCnpj: searchedCpfCnpj]).readOnly().get()) {
-//            DomainErrorUtils.addError(payer, "O cpf/cnpj informado já existe")
-//        }
-
-//        if (PayerRepository.query([customerId: customerId, email: adapter.email]).readOnly().get()) {
-//            DomainErrorUtils.addError(payer, "O email informado já existe")
-//        }
 
         if (!adapter.name) DomainErrorUtils.addError(payer, "Campo nome vazio")
 

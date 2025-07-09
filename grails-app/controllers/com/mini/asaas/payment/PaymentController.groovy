@@ -4,7 +4,6 @@ import com.mini.asaas.BaseController
 import com.mini.asaas.Payment.Payment
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
-import com.mini.asaas.exceptions.BusinessException
 import grails.gorm.PagedResultList
 import grails.plugin.springsecurity.annotation.Secured
 
@@ -52,9 +51,6 @@ class PaymentController extends BaseController{
             Payment payment = paymentService.save(customerId, adapter)
             createFlash("Cadastro de pagamento realizado!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payment.id)
-        } catch (BusinessException exception) {
-            createFlash("Ocorreu um erro no cadastro do pagamento! " + exception.getMessage(), AlertType.ERROR, false)
-            redirect(action: "create", params: params)
         } catch (Exception exception) {
             createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "create", params: params)
@@ -69,9 +65,6 @@ class PaymentController extends BaseController{
             Payment payment = paymentService.update(customerId, adapter)
             createFlash("Pagamento atualizado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payment.id)
-        } catch (BusinessException exception) {
-            createFlash("Ocorreu um erro ao atualizar pagamento! " + exception.getMessage(), AlertType.ERROR, false)
-            redirect(action: "show", id: params.id)
         } catch (Exception exception) {
             createFlash("Ocorreu um erro ao atualizar pagamento! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
@@ -85,9 +78,6 @@ class PaymentController extends BaseController{
             Long customerId = CustomerRepository.query([id: 1]).column("id").get()
             paymentService.delete(customerId, id)
             createFlash("Pagamento deletado com sucesso!", AlertType.SUCCESS, true)
-            redirect(action: "index")
-        } catch (BusinessException exception) {
-            createFlash("Ocorreu um erro ao deletar! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "index")
         } catch (Exception exception) {
             createFlash("Ocorreu um erro ao deletar! " + exception.getMessage(), AlertType.ERROR, false)
@@ -103,9 +93,6 @@ class PaymentController extends BaseController{
             paymentService.restore(customerId, id)
             createFlash("Pagamento restaurado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "index")
-        } catch (BusinessException exception) {
-            createFlash("Houve um erro! " + exception.getMessage(), AlertType.ERROR, false)
-            redirect(action: "index")
         } catch (Exception exception) {
             createFlash("Houve um erro! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "index")
@@ -118,9 +105,6 @@ class PaymentController extends BaseController{
 
         try {
             paymentService.receive(id)
-            redirect(action: "show", id: params.id)
-        } catch (BusinessException exception) {
-            createFlash("Houve um erro! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         } catch (Exception exception) {
             log.error(exception)
