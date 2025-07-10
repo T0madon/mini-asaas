@@ -21,8 +21,8 @@
                 method="post" 
                 action="${createLink(controller: 'user', action: 'save')}">
 
-                <g:render template="templates/stepOne"/>
-                <g:render template="templates/stepTwo"/>
+                <g:render template="templates/identityStep"/>
+                <g:render template="templates/addressStep"/>
                 
             </atlas-form>
         </section>
