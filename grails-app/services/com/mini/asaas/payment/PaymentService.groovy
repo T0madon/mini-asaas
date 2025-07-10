@@ -44,6 +44,7 @@ class PaymentService {
                 [payment.value, payment.payer.name] as Object[],
                 payment.customer,
                 NotificationType.PAYMENT_CREATED,
+                "created",
                 payment.id,
         )
         return payment
@@ -90,6 +91,7 @@ class PaymentService {
                 [payment.value, payment.payer.name] as Object[],
                 payment.customer,
                 NotificationType.PAYMENT_DELETED,
+                "deleted",
                 payment.id,
         )
     }
@@ -122,6 +124,7 @@ class PaymentService {
                 [payment.value, payment.payer.name] as Object[],
                 payment.customer,
                 NotificationType.PAYMENT_RECEIVED,
+                "received",
                 payment.id,
         )
 
@@ -148,6 +151,7 @@ class PaymentService {
                             [payment.value, payment.payer.name, payment.dueDate] as Object[],
                             payment.customer,
                             NotificationType.PAYMENT_OVERDUE,
+                            "overdue",
                             payment.id,
                     )
                 } catch (Exception exception) {
