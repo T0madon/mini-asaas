@@ -19,7 +19,10 @@
         </atlas-text>
       </atlas-layout>
 
-      <atlas-form method="post" action="${createLink(controller:'auth', action:'login')}">
+      <atlas-form method="post" action="${createLink(controller:'auth', action:'authenticate')}">
+        <g:if test="${flash.message}">
+            <atlas-alert type="${flash.type?.getValue() ?: 'error'}" message="${flash.message}" closable></atlas-alert>
+        </g:if>
         <atlas-layout gap="4">
           <atlas-masked-input
             label="E-mail" name="email" type="email" placeholder="Informe seu e-mail" size="sm" value="${params.email}" required>
@@ -29,7 +32,7 @@
           </atlas-password-input>
         </atlas-layout>
         <atlas-button
-          theme="success" description="Acessar conta" type="filled" size="sm" submit="" block>
+          theme="success" description="Acessar conta" type="filled" size="sm" submit="" block="">
         </atlas-button>
       </atlas-form>
 
@@ -37,7 +40,7 @@
         Ainda não possui uma conta?
       </atlas-text>
 
-      <atlas-button class="button_create" type="outlined" size="sm" theme="secondary" description="Criar conta">
+      <atlas-button class="button_create" type="outlined" size="sm" theme="secondary" description="Criar conta" href="/user/create">
       </atlas-button>
     </section>
 
