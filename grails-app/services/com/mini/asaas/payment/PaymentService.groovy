@@ -28,7 +28,6 @@ class PaymentService {
         if (payment.hasErrors()) {
             throw new ValidationException(" Falha ao realizar operação no pagamento: ", payment.errors)
         }
-        println("Não pode mostrar aqui")
         buildPayment(adapter, payment)
 
         payment.customer = customer

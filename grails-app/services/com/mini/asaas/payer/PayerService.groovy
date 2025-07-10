@@ -7,8 +7,7 @@ import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.utils.StringUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
-
-import javax.xml.bind.ValidationException
+import grails.validation.ValidationException
 
 @Transactional
 @GrailsCompileStatic
@@ -20,8 +19,7 @@ class PayerService {
         validate(customer.id, adapter, payer)
 
         if (payer.hasErrors()) {
-            List<String> errorMessages = payer.errors.allErrors.collect { it.defaultMessage }
-            throw new ValidationException(" Falha ao cadastrar pagador: " + errorMessages.join("; "))
+            throw new ValidationException(" Falha ao cadastrar pagador: ", payer.errors)
         }
 
         buildPayer(adapter, payer)
@@ -45,8 +43,7 @@ class PayerService {
         validate(customerId, adapter, payer)
 
         if (payer.hasErrors()) {
-            List<String> errorMessages = payer.errors.allErrors.collect { it.defaultMessage }
-            throw new ValidationException(" Falha ao atualizar pagador: " + errorMessages.join("; "))
+            throw new ValidationException(" Falha ao atualizar pagador: ", payer.errors)
         }
 
         buildPayer(adapter, payer)
