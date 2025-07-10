@@ -86,21 +86,27 @@ class PayerService {
     private void validate(Long customerId, PayerAdapter adapter, Payer payer) {
         String searchedCpfCnpj = StringUtils.removeNonNumeric(adapter.cpfCnpj as String) ?: null
 
-        Payer existingWithCpfCnpj = PayerRepository.query([
+        Map<String, Object> queryCpfCnpj = [
                 customerId: customerId,
                 cpfCnpj: searchedCpfCnpj
-        ]).readOnly().get()
+        ] as Map<String, Object>
 
-        Payer existingWithEmail = PayerRepository.query([
-                customerId: customerId,
-                email: adapter.email
-        ]).readOnly().get()
+        if (payer.id) queryCpfCnpj."id[ne]" = payer.id
+        Boolean existingWithCpfCnpj = PayerRepository.query(queryCpfCnpj).exists()
 
-        if (existingWithCpfCnpj && existingWithCpfCnpj.id != payer.id) {
+        if (existingWithCpfCnpj) {
             DomainErrorUtils.addError(payer, "O cpf/cnpj informado já existe")
         }
 
-        if (existingWithEmail && existingWithEmail.id != payer.id) {
+        Map<String, Object> queryEmail = [
+                customerId: customerId,
+                email: adapter.email
+        ] as Map<String, Object>
+
+        if (payer.id) queryEmail."id[ne]" = payer.id
+        Boolean existingWithEmail = PayerRepository.query(queryEmail).exists()
+
+        if (existingWithEmail) {
             DomainErrorUtils.addError(payer, "O email informado já existe")
         }
 
