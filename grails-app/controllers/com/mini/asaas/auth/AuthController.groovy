@@ -28,7 +28,7 @@ class AuthController {
             redirect action: 'login'
         } catch (Exception exception) {
             exception.printStackTrace()
-            flash.message = "Erro ao autenticar"
+            flash.message = "Ocorreu um erro inesperado"
             flash.status = AlertType.ERROR
             redirect action: 'login'    
         }
