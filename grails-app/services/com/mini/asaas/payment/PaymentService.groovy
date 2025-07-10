@@ -34,7 +34,7 @@ class PaymentService {
 
         payment.customer = customer
         payment.save(failOnError: true)
-        emailService.emailPaymentCreated(payment)
+        emailService.notifyPaymentCreated(payment)
 
         return payment
     }
@@ -75,7 +75,7 @@ class PaymentService {
         payment.deleted = true
         payment.status = PaymentStatus.CANCELED
         payment.save(failOnError: true)
-        emailService.emailPaymentDeleted(payment)
+        emailService.notifyPaymentDeleted(payment)
     }
 
     public void restore(Long customerId, Long id) {
@@ -100,7 +100,7 @@ class PaymentService {
 
         payment.status = PaymentStatus.RECEIVED
         payment.paymentDate = new Date()
-        emailService.emailPaymentReceive(payment)
+        emailService.notifyPaymentReceive(payment)
 
         payment.save(failOnError: true)
     }
@@ -119,7 +119,7 @@ class PaymentService {
                     Payment payment = PaymentRepository.get(id)
                     payment.status = PaymentStatus.OVERDUE
                     payment.save(failOnError: true)
-                    emailService.emailPaymentOverdue(payment)
+                    emailService.notifyPaymentOverdue(payment)
                 } catch (Exception exception) {
                     log.error("Erro ao processar pagamento", exception)
                     throw new RuntimeException("Erro ao processar pagamento!" + exception)
