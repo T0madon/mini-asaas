@@ -25,4 +25,15 @@ class NotificationController extends BaseController {
             createFlash("Ocorreu um erro ao mostrar as notificações!" + exception.getMessage(), AlertType.ERROR, false)
         }
     }
+
+    @Secured("permitAll")
+    def deleteAll() {
+        try {
+            Long customerId = CustomerRepository.query([id: 1]).column("id").get()
+            notificationService.deleteAll(customerId)
+            redirect(controller: "payment", action: "index")
+        } catch (Exception exception) {
+            createFlash("Ocorreu um erro ao marcar as notificações como lidas! " + exception.getMessage(), AlertType.ERROR, false)
+        }
+    }
 }

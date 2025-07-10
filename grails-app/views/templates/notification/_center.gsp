@@ -21,4 +21,15 @@
             </g:else>
         </atlas-notification-center-group>
     </atlas-layout>
+
+    <atlas-button
+            slot="actions"
+            description="Marcar todas como lidas"
+            block
+            type="ghost"
+            icon="double-check"
+            size="sm"
+            href="${createLink(controller: "notification", action: "deleteAll")}"
+    >
+    </atlas-button>
 </atlas-offcanvas>
