@@ -12,8 +12,8 @@ import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
 
-import javax.xml.bind.ValidationException
 
 @Transactional
 @GrailsCompileStatic
@@ -30,15 +30,14 @@ class PaymentService {
         validate(adapter, payment)
 
         if (payment.hasErrors()) {
-            List<String> errorMessages = payment.errors.allErrors.collect { it.defaultMessage }
-            throw new ValidationException(" Falha ao atualizar pagamento: " + errorMessages.join("; "))
+            throw new ValidationException(" Falha ao realizar operação no pagamento: ", payment.errors)
         }
 
         buildPayment(adapter, payment)
 
         payment.customer = customer
         payment.save(failOnError: true)
-        emailService.emailPaymentCreated(payment)
+        emailService.notifyPaymentCreated(payment)
 
         notificationService.create(
                 [payment.id] as Object[],
@@ -56,8 +55,7 @@ class PaymentService {
         validateUpdate(adapter, payment)
 
         if (payment.hasErrors()) {
-            List<String> errorMessages = payment.errors.allErrors.collect { it.defaultMessage }
-            throw new ValidationException(" Falha ao atualizar pagamento: " + errorMessages.join("; "))
+            throw new ValidationException(" Falha ao atualizar pagamento: ", payment.errors)
         }
 
         payment.payer = Payer.get(adapter.payerId)
@@ -86,7 +84,7 @@ class PaymentService {
         payment.deleted = true
         payment.status = PaymentStatus.CANCELED
         payment.save(failOnError: true)
-        emailService.emailPaymentDeleted(payment)
+        emailService.notifyPaymentDeleted(payment)
         notificationService.create(
                 [payment.id] as Object[],
                 [payment.value, payment.payer.name] as Object[],
@@ -118,7 +116,7 @@ class PaymentService {
 
         payment.status = PaymentStatus.RECEIVED
         payment.paymentDate = new Date()
-        emailService.emailPaymentReceive(payment)
+        emailService.notifyPaymentReceive(payment)
         notificationService.create(
                 [payment.id] as Object[],
                 [payment.value, payment.payer.name] as Object[],
@@ -144,7 +142,7 @@ class PaymentService {
                     Payment payment = PaymentRepository.get(id)
                     payment.status = PaymentStatus.OVERDUE
                     payment.save(failOnError: true)
-                    emailService.emailPaymentOverdue(payment)
+                    emailService.notifyPaymentOverdue(payment)
                     notificationService.create(
                             [payment.id] as Object[],
                             [payment.value, payment.payer.name, payment.dueDate] as Object[],

@@ -13,7 +13,7 @@ class EmailService {
 
     MailService mailService
 
-    public void emailPaymentCreated(Payment payment) {
+    public void notifyPaymentCreated(Payment payment) {
         String value = StringUtils.fromBigDecimal(payment.value)
         String payerName = payment.payer.name
 
@@ -44,7 +44,7 @@ class EmailService {
         )
     }
 
-    public void emailPaymentReceive(Payment payment) {
+    public void notifyPaymentReceive(Payment payment) {
 
         String value = StringUtils.fromBigDecimal(payment.value)
         String payerName = payment.payer.name
@@ -76,7 +76,7 @@ class EmailService {
         )
     }
 
-    public void emailPaymentDeleted(Payment payment) {
+    public void notifyPaymentDeleted(Payment payment) {
 
         String value = StringUtils.fromBigDecimal(payment.value)
         String payerName = payment.payer.name
@@ -108,7 +108,7 @@ class EmailService {
         )
     }
 
-    public void emailPaymentOverdue(Payment payment) {
+    public void notifyPaymentOverdue(Payment payment) {
 
         String value = StringUtils.fromBigDecimal(payment.value)
         String payerName = payment.payer.name

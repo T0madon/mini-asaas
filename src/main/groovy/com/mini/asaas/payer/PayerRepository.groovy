@@ -1,6 +1,7 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.repository.Repository
+import com.mini.asaas.utils.Utils
 import grails.compiler.GrailsCompileStatic
 import org.grails.datastore.mapping.query.api.BuildableCriteria
 
@@ -22,6 +23,10 @@ class PayerRepository implements Repository<Payer, PayerRepository> {
                 eq("email", search.email)
             }
 
+            if (search.containsKey("id[ne]")) {
+                ne("id", Utils.toLong(search."id[ne]"))
+            }
+
         }
 
     }
@@ -36,7 +41,8 @@ class PayerRepository implements Repository<Payer, PayerRepository> {
         return [
                 "cpfCnpj",
                 "email",
-                "customerId"
+                "customerId",
+                "id[ne]"
         ]
     }
 }

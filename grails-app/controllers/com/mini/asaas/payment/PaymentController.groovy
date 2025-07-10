@@ -6,6 +6,7 @@ import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
 import grails.gorm.PagedResultList
 import grails.plugin.springsecurity.annotation.Secured
+import grails.validation.ValidationException
 
 class PaymentController extends BaseController{
 
@@ -51,9 +52,12 @@ class PaymentController extends BaseController{
             Payment payment = paymentService.save(customerId, adapter)
             createFlash("Cadastro de pagamento realizado!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payment.id)
+        } catch (ValidationException validationException) {
+            createFlash(validationException.errors.allErrors.defaultMessage.join("; "), AlertType.ERROR, false)
+            redirect(controller: "createPayment", action: "index", params: params)
         } catch (Exception exception) {
             createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
-            redirect(action: "create", params: params)
+            redirect(controller: "createPayment", action: "index", params: params)
         }
     }
 
@@ -65,6 +69,9 @@ class PaymentController extends BaseController{
             Payment payment = paymentService.update(customerId, adapter)
             createFlash("Pagamento atualizado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payment.id)
+        } catch (ValidationException validationException) {
+            createFlash(validationException.errors.allErrors.defaultMessage.join("; "), AlertType.ERROR, false)
+            redirect(action: "show", id: params.id)
         } catch (Exception exception) {
             createFlash("Ocorreu um erro ao atualizar pagamento! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
