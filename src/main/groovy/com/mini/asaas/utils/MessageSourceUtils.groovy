@@ -15,7 +15,8 @@ class MessageSourceUtils {
     }
 
     public static String getMessage(String code, Object[] args) {
-        getMessage(code, args, "")
+        MessageSource messageSource = (MessageSource) Holders.applicationContext.getBean("messageSource")
+        return messageSource.getMessage(code, args, Locale.getDefault())
     }
 
     public static String getEnumLabel(Enum enumValue) {
