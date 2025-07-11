@@ -1,5 +1,7 @@
 package com.mini.asaas.notification
 
+import com.mini.asaas.Payment.Payment
+import com.mini.asaas.enums.NotificationType
 import com.mini.asaas.utils.MessageSourceUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
@@ -8,8 +10,8 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class NotificationService {
 
-    public Notification createNotificationPaymentCreated(Map args) {
-        NotificationAdapter adapter = new NotificationAdapter(args)
+    public Notification createNotificationPaymentCreated(Payment payment, NotificationType type) {
+        NotificationAdapter adapter = new NotificationAdapter(payment, type)
 
         String subjectNotification = MessageSourceUtils.getMessage(
                 'notify.payment.created.subject',
@@ -24,7 +26,7 @@ class NotificationService {
         Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
 
         Notification lastUpdateNotification = NotificationRepository.query([
-                paymentId: args.paymentId
+                paymentId: notification.paymentId
         ]).get()
 
         if (lastUpdateNotification) lastUpdateNotification.deleted = true
@@ -33,8 +35,8 @@ class NotificationService {
         return notification
     }
 
-    public Notification createNotificationPaymentDeleted(Map args) {
-        NotificationAdapter adapter = new NotificationAdapter(args)
+    public Notification createNotificationPaymentDeleted(Payment payment, NotificationType type) {
+        NotificationAdapter adapter = new NotificationAdapter(payment, type)
 
         String subjectNotification = MessageSourceUtils.getMessage(
                 'notify.payment.deleted.subject',
@@ -49,7 +51,7 @@ class NotificationService {
         Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
 
         Notification lastUpdateNotification = NotificationRepository.query([
-                paymentId: args.paymentId
+                paymentId: notification.paymentId
         ]).get()
 
         if (lastUpdateNotification) lastUpdateNotification.deleted = true
@@ -58,8 +60,8 @@ class NotificationService {
         return notification
     }
 
-    public Notification createNotificationPaymentReceived(Map args) {
-        NotificationAdapter adapter = new NotificationAdapter(args)
+    public Notification createNotificationPaymentReceived(Payment payment, NotificationType type) {
+        NotificationAdapter adapter = new NotificationAdapter(payment, type)
 
         String subjectNotification = MessageSourceUtils.getMessage(
                 'notify.payment.received.subject',
@@ -74,7 +76,7 @@ class NotificationService {
         Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
 
         Notification lastUpdateNotification = NotificationRepository.query([
-                paymentId: args.paymentId
+                paymentId: notification.paymentId
         ]).get()
 
         if (lastUpdateNotification) lastUpdateNotification.deleted = true
@@ -83,8 +85,8 @@ class NotificationService {
         return notification
     }
 
-    public Notification createNotificationPaymentOverdue(Map args) {
-        NotificationAdapter adapter = new NotificationAdapter(args)
+    public Notification createNotificationPaymentOverdue(Payment payment, NotificationType type) {
+        NotificationAdapter adapter = new NotificationAdapter(payment, type)
 
         String subjectNotification = MessageSourceUtils.getMessage(
                 'notify.payment.overdue.subject',
@@ -99,7 +101,7 @@ class NotificationService {
         Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
 
         Notification lastUpdateNotification = NotificationRepository.query([
-                paymentId: args.paymentId
+                paymentId: notification.paymentId
         ]).get()
 
         if (lastUpdateNotification) lastUpdateNotification.deleted = true

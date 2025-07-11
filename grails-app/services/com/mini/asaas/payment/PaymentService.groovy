@@ -38,17 +38,7 @@ class PaymentService {
         payment.customer = customer
         payment.save(failOnError: true)
         emailService.notifyPaymentCreated(payment)
-
-        Map<String, Object> notificationArgs = [
-                subject: [payment.id] as Object[],
-                body: [payment.value, payment.payer.name] as Object[],
-                customer: payment.customer,
-                type: NotificationType.PAYMENT_CREATED,
-                paymentId: payment.id
-
-        ] as Map<String, Object>
-
-        notificationService.createNotificationPaymentCreated(notificationArgs)
+        notificationService.createNotificationPaymentCreated(payment, NotificationType.PAYMENT_CREATED)
 
         return payment
     }
@@ -89,17 +79,7 @@ class PaymentService {
         payment.status = PaymentStatus.CANCELED
         payment.save(failOnError: true)
         emailService.notifyPaymentDeleted(payment)
-
-        Map<String, Object> notificationArgs = [
-                subject: [payment.id] as Object[],
-                body: [payment.value, payment.payer.name] as Object[],
-                customer: payment.customer,
-                type: NotificationType.PAYMENT_DELETED,
-                paymentId: payment.id
-
-        ] as Map<String, Object>
-
-        notificationService.createNotificationPaymentDeleted(notificationArgs)
+        notificationService.createNotificationPaymentDeleted(payment, NotificationType.PAYMENT_DELETED)
     }
 
     public void restore(Long customerId, Long id) {
@@ -125,17 +105,7 @@ class PaymentService {
         payment.status = PaymentStatus.RECEIVED
         payment.paymentDate = new Date()
         emailService.notifyPaymentReceive(payment)
-
-        Map<String, Object> notificationArgs = [
-                subject: [payment.id] as Object[],
-                body: [payment.value, payment.payer.name] as Object[],
-                customer: payment.customer,
-                type: NotificationType.PAYMENT_RECEIVED,
-                paymentId: payment.id
-
-        ] as Map<String, Object>
-
-        notificationService.createNotificationPaymentReceived(notificationArgs)
+        notificationService.createNotificationPaymentReceived(payment, NotificationType.PAYMENT_RECEIVED)
 
         payment.save(failOnError: true)
     }
@@ -155,17 +125,7 @@ class PaymentService {
                     payment.status = PaymentStatus.OVERDUE
                     payment.save(failOnError: true)
                     emailService.notifyPaymentOverdue(payment)
-
-                    Map<String, Object> notificationArgs = [
-                            subject: [payment.id] as Object[],
-                            body: [payment.value, payment.payer.name, payment.dueDate] as Object[],
-                            customer: payment.customer,
-                            type: NotificationType.PAYMENT_OVERDUE,
-                            paymentId: payment.id
-
-                    ] as Map<String, Object>
-
-                    notificationService.createNotificationPaymentOverdue(notificationArgs)
+                    notificationService.createNotificationPaymentOverdue(payment, NotificationType.PAYMENT_OVERDUE)
                 } catch (Exception exception) {
                     log.error("Erro ao processar pagamento", exception)
                     throw new RuntimeException("Erro ao processar pagamento!" + exception)

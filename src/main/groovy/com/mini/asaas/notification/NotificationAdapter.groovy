@@ -1,5 +1,6 @@
 package com.mini.asaas.notification
 
+import com.mini.asaas.Payment.Payment
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.enums.NotificationType
 import grails.compiler.GrailsCompileStatic
@@ -15,18 +16,15 @@ class NotificationAdapter {
 
     NotificationType type
 
-    String status
-
     Long paymentId
 
-    public NotificationAdapter(Map args) {
+    public NotificationAdapter(Payment payment, NotificationType type) {
 
-        this.subject = args.subject as Object[]
-        this.body = args.body as Object[]
-        this.customer = args.customer as Customer
-        this.type = args.type as NotificationType
-        this.status = args.status
-        this.paymentId = args.paymentId as Long
+        this.subject = [payment.id]
+        this.body = [payment.value, payment.payer.name]
+        this.customer = payment.customer
+        this.type = type
+        this.paymentId = payment.id
     }
 
 }
