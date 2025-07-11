@@ -23,15 +23,7 @@ class NotificationService {
                 adapter.body as Object[]
         )
 
-        Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
-
-        Notification lastUpdateNotification = NotificationRepository.query([
-                paymentId: notification.paymentId
-        ]).get()
-
-        if (lastUpdateNotification) lastUpdateNotification.deleted = true
-
-        notification.save(failOnError: true)
+        Notification notification = persistNotification(adapter, subjectNotification, bodyNotification)
         return notification
     }
 
@@ -48,15 +40,7 @@ class NotificationService {
                 adapter.body as Object[]
         )
 
-        Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
-
-        Notification lastUpdateNotification = NotificationRepository.query([
-                paymentId: notification.paymentId
-        ]).get()
-
-        if (lastUpdateNotification) lastUpdateNotification.deleted = true
-
-        notification.save(failOnError: true)
+        Notification notification = persistNotification(adapter, subjectNotification, bodyNotification)
         return notification
     }
 
@@ -73,15 +57,7 @@ class NotificationService {
                 adapter.body as Object[]
         )
 
-        Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
-
-        Notification lastUpdateNotification = NotificationRepository.query([
-                paymentId: notification.paymentId
-        ]).get()
-
-        if (lastUpdateNotification) lastUpdateNotification.deleted = true
-
-        notification.save(failOnError: true)
+        Notification notification = persistNotification(adapter, subjectNotification, bodyNotification)
         return notification
     }
 
@@ -98,15 +74,7 @@ class NotificationService {
                 adapter.body as Object[]
         )
 
-        Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
-
-        Notification lastUpdateNotification = NotificationRepository.query([
-                paymentId: notification.paymentId
-        ]).get()
-
-        if (lastUpdateNotification) lastUpdateNotification.deleted = true
-
-        notification.save(failOnError: true)
+        Notification notification = persistNotification(adapter, subjectNotification, bodyNotification)
         return notification
     }
 
@@ -127,6 +95,20 @@ class NotificationService {
 
     public List<Notification> list(Long customerId, Integer max, Integer offset) {
         return NotificationRepository.query([customerId: customerId]).readOnly().list([max: max, offset: offset])
+    }
+
+    private Notification persistNotification(NotificationAdapter adapter, String subjectNotification, String bodyNotification) {
+        Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
+
+        Notification lastUpdateNotification = NotificationRepository.query([
+                paymentId: notification.paymentId
+        ]).get()
+
+        if (lastUpdateNotification) lastUpdateNotification.deleted = true
+
+        notification.save(failOnError: true)
+
+        return notification
     }
 
     private Notification buildNotification(NotificationAdapter adapter, String subjectNotification, String bodyNotification) {
