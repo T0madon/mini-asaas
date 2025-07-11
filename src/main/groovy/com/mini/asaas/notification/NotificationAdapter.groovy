@@ -19,14 +19,14 @@ class NotificationAdapter {
 
     Long paymentId
 
-    public NotificationAdapter(Object[] subject, Object[] body, Customer customer, NotificationType type, String status, Long paymentId) {
+    public NotificationAdapter(Map args) {
 
-        this.subject = subject
-        this.body = body
-        this.customer = customer
-        this.type = type
-        this.status = status
-        this.paymentId = paymentId
+        this.subject = args.subject as Object[]
+        this.body = args.body as Object[]
+        this.customer = args.customer as Customer
+        this.type = args.type as NotificationType
+        this.status = args.status
+        this.paymentId = args.paymentId as Long
     }
 
 }

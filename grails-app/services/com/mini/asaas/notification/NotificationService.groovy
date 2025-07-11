@@ -1,29 +1,105 @@
 package com.mini.asaas.notification
 
-import com.mini.asaas.Payment.Payment
-import com.mini.asaas.customer.Customer
-import com.mini.asaas.enums.NotificationType
-import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.payment.PaymentRepository
-import com.mini.asaas.payment.PaymentStatus
 import com.mini.asaas.utils.MessageSourceUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
-import org.springframework.context.MessageSource
 
 @GrailsCompileStatic
 @Transactional
 class NotificationService {
 
-    MessageSource messageSource
+    public Notification createNotificationPaymentCreated(Map args) {
+        NotificationAdapter adapter = new NotificationAdapter(args)
 
-    public Notification create(Object[] subject, Object[] body, Customer customer, NotificationType type, String status, Long paymentId) {
-        NotificationAdapter adapter = new NotificationAdapter(subject, body, customer, type, status, paymentId)
-        Notification notification = buildNotification(adapter)
-//        Notification notification = buildNotification(subject, body, customer, type, status, paymentId)
+        String subjectNotification = MessageSourceUtils.getMessage(
+                'notify.payment.created.subject',
+                adapter.subject as Object[]
+        )
+
+        String bodyNotification = MessageSourceUtils.getMessage(
+                'notify.payment.created.body',
+                adapter.body as Object[]
+        )
+
+        Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
 
         Notification lastUpdateNotification = NotificationRepository.query([
-                paymentId: paymentId
+                paymentId: args.paymentId
+        ]).get()
+
+        if (lastUpdateNotification) lastUpdateNotification.deleted = true
+
+        notification.save(failOnError: true)
+        return notification
+    }
+
+    public Notification createNotificationPaymentDeleted(Map args) {
+        NotificationAdapter adapter = new NotificationAdapter(args)
+
+        String subjectNotification = MessageSourceUtils.getMessage(
+                'notify.payment.deleted.subject',
+                adapter.subject as Object[]
+        )
+
+        String bodyNotification = MessageSourceUtils.getMessage(
+                'notify.payment.deleted.body',
+                adapter.body as Object[]
+        )
+
+        Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
+
+        Notification lastUpdateNotification = NotificationRepository.query([
+                paymentId: args.paymentId
+        ]).get()
+
+        if (lastUpdateNotification) lastUpdateNotification.deleted = true
+
+        notification.save(failOnError: true)
+        return notification
+    }
+
+    public Notification createNotificationPaymentReceived(Map args) {
+        NotificationAdapter adapter = new NotificationAdapter(args)
+
+        String subjectNotification = MessageSourceUtils.getMessage(
+                'notify.payment.received.subject',
+                adapter.subject as Object[]
+        )
+
+        String bodyNotification = MessageSourceUtils.getMessage(
+                'notify.payment.received.body',
+                adapter.body as Object[]
+        )
+
+        Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
+
+        Notification lastUpdateNotification = NotificationRepository.query([
+                paymentId: args.paymentId
+        ]).get()
+
+        if (lastUpdateNotification) lastUpdateNotification.deleted = true
+
+        notification.save(failOnError: true)
+        return notification
+    }
+
+    public Notification createNotificationPaymentOverdue(Map args) {
+        NotificationAdapter adapter = new NotificationAdapter(args)
+
+        String subjectNotification = MessageSourceUtils.getMessage(
+                'notify.payment.overdue.subject',
+                adapter.subject as Object[]
+        )
+
+        String bodyNotification = MessageSourceUtils.getMessage(
+                'notify.payment.overdue.body',
+                adapter.body as Object[]
+        )
+
+        Notification notification = buildNotification(adapter, subjectNotification, bodyNotification)
+
+        Notification lastUpdateNotification = NotificationRepository.query([
+                paymentId: args.paymentId
         ]).get()
 
         if (lastUpdateNotification) lastUpdateNotification.deleted = true
@@ -51,18 +127,8 @@ class NotificationService {
         return NotificationRepository.query([customerId: customerId]).readOnly().list([max: max, offset: offset])
     }
 
-    private Notification buildNotification(NotificationAdapter adapter) {
+    private Notification buildNotification(NotificationAdapter adapter, String subjectNotification, String bodyNotification) {
         Notification notification = new Notification()
-
-        String subjectNotification = MessageSourceUtils.getMessage(
-                'notify.payment.' + adapter.status + '.subject',
-                adapter.subject as Object[]
-        )
-
-        String bodyNotification = MessageSourceUtils.getMessage(
-                'notify.payment.' + adapter.status + '.body',
-                adapter.body as Object[]
-        )
 
         notification.subject = subjectNotification
         notification.body = bodyNotification

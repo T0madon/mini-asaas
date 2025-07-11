@@ -39,14 +39,17 @@ class PaymentService {
         payment.save(failOnError: true)
         emailService.notifyPaymentCreated(payment)
 
-        notificationService.create(
-                [payment.id] as Object[],
-                [payment.value, payment.payer.name] as Object[],
-                payment.customer,
-                NotificationType.PAYMENT_CREATED,
-                "created",
-                payment.id,
-        )
+        Map<String, Object> notificationArgs = [
+                subject: [payment.id] as Object[],
+                body: [payment.value, payment.payer.name] as Object[],
+                customer: payment.customer,
+                type: NotificationType.PAYMENT_CREATED,
+                paymentId: payment.id
+
+        ] as Map<String, Object>
+
+        notificationService.createNotificationPaymentCreated(notificationArgs)
+
         return payment
     }
 
@@ -86,14 +89,17 @@ class PaymentService {
         payment.status = PaymentStatus.CANCELED
         payment.save(failOnError: true)
         emailService.notifyPaymentDeleted(payment)
-        notificationService.create(
-                [payment.id] as Object[],
-                [payment.value, payment.payer.name] as Object[],
-                payment.customer,
-                NotificationType.PAYMENT_DELETED,
-                "deleted",
-                payment.id,
-        )
+
+        Map<String, Object> notificationArgs = [
+                subject: [payment.id] as Object[],
+                body: [payment.value, payment.payer.name] as Object[],
+                customer: payment.customer,
+                type: NotificationType.PAYMENT_DELETED,
+                paymentId: payment.id
+
+        ] as Map<String, Object>
+
+        notificationService.createNotificationPaymentDeleted(notificationArgs)
     }
 
     public void restore(Long customerId, Long id) {
@@ -119,14 +125,17 @@ class PaymentService {
         payment.status = PaymentStatus.RECEIVED
         payment.paymentDate = new Date()
         emailService.notifyPaymentReceive(payment)
-        notificationService.create(
-                [payment.id] as Object[],
-                [payment.value, payment.payer.name] as Object[],
-                payment.customer,
-                NotificationType.PAYMENT_RECEIVED,
-                "received",
-                payment.id,
-        )
+
+        Map<String, Object> notificationArgs = [
+                subject: [payment.id] as Object[],
+                body: [payment.value, payment.payer.name] as Object[],
+                customer: payment.customer,
+                type: NotificationType.PAYMENT_RECEIVED,
+                paymentId: payment.id
+
+        ] as Map<String, Object>
+
+        notificationService.createNotificationPaymentReceived(notificationArgs)
 
         payment.save(failOnError: true)
     }
@@ -146,14 +155,17 @@ class PaymentService {
                     payment.status = PaymentStatus.OVERDUE
                     payment.save(failOnError: true)
                     emailService.notifyPaymentOverdue(payment)
-                    notificationService.create(
-                            [payment.id] as Object[],
-                            [payment.value, payment.payer.name, payment.dueDate] as Object[],
-                            payment.customer,
-                            NotificationType.PAYMENT_OVERDUE,
-                            "overdue",
-                            payment.id,
-                    )
+
+                    Map<String, Object> notificationArgs = [
+                            subject: [payment.id] as Object[],
+                            body: [payment.value, payment.payer.name, payment.dueDate] as Object[],
+                            customer: payment.customer,
+                            type: NotificationType.PAYMENT_OVERDUE,
+                            paymentId: payment.id
+
+                    ] as Map<String, Object>
+
+                    notificationService.createNotificationPaymentOverdue(notificationArgs)
                 } catch (Exception exception) {
                     log.error("Erro ao processar pagamento", exception)
                     throw new RuntimeException("Erro ao processar pagamento!" + exception)
