@@ -13,4 +13,14 @@ class Utils {
         }
         return cleanedParams
     }
+
+    public static Long toLong(value) {
+        try {
+            if (value instanceof Long) return value
+            if (value instanceof BigInteger) return Long.valueOf(value.toString())
+            return Long.valueOf(value as String)
+        } catch (Exception exception) {
+            return null
+        }
+    }
 }

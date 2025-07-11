@@ -11,7 +11,11 @@
 
 <body>
 <g:if test="${flash.message}">
-    <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
+    <atlas-alert
+            type="${flash.success ? 'success' : 'error'}"
+            message="${flash.message}"
+            class="js-atlas-alert"
+    ></atlas-alert>
 </g:if>
 
 <atlas-form-panel header="Detalhes da cobrança" description="" submit-button-label=""
@@ -38,7 +42,7 @@
         </atlas-button>
     </g:if>
 
-    <g:if test="${payment.deleted || payment.status == PaymentStatus.CANCELED || payment.status == PaymentStatus.OVERDUE}">
+    <g:if test="${payment.deleted || payment.status == PaymentStatus.CANCELED}">
         <atlas-button slot="actions" description="Restaurar" icon="refresh" theme="danger"
                       href="${createLink(controller: "payment", action: "restore", params: [id: payment.id])}">
         </atlas-button>

@@ -4,9 +4,9 @@ import com.mini.asaas.BaseController
 import com.mini.asaas.Payment.Payment
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
-import com.mini.asaas.exceptions.BusinessException
 import grails.gorm.PagedResultList
 import grails.plugin.springsecurity.annotation.Secured
+import grails.validation.ValidationException
 
 class PaymentController extends BaseController{
 
@@ -52,12 +52,12 @@ class PaymentController extends BaseController{
             Payment payment = paymentService.save(customerId, adapter)
             createFlash("Cadastro de pagamento realizado!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payment.id)
-        } catch (BusinessException exception) {
-            createFlash("Ocorreu um erro no cadastro do pagamento: " + exception.getMessage(), AlertType.ERROR, false)
-            redirect(action: "create", params: params)
+        } catch (ValidationException validationException) {
+            createFlash(validationException.errors.allErrors.defaultMessage.join("; "), AlertType.ERROR, false)
+            redirect(controller: "createPayment", action: "index", params: params)
         } catch (Exception exception) {
             createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
-            redirect(action: "create", params: params)
+            redirect(controller: "createPayment", action: "index", params: params)
         }
     }
 
@@ -69,11 +69,11 @@ class PaymentController extends BaseController{
             Payment payment = paymentService.update(customerId, adapter)
             createFlash("Pagamento atualizado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payment.id)
-        } catch (BusinessException exception) {
-            createFlash("Ocorreu um erro ao atualizar pagamento: " + exception.getMessage(), AlertType.ERROR, false)
+        } catch (ValidationException validationException) {
+            createFlash(validationException.errors.allErrors.defaultMessage.join("; "), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         } catch (Exception exception) {
-            createFlash("Ocorreu um erro ao atualizar pagamento: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Ocorreu um erro ao atualizar pagamento! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         }
     }
@@ -86,11 +86,8 @@ class PaymentController extends BaseController{
             paymentService.delete(customerId, id)
             createFlash("Pagamento deletado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "index")
-        } catch (BusinessException exception) {
-            createFlash("Ocorreu um erro ao deletar: " + exception.getMessage(), AlertType.ERROR, false)
-            redirect(action: "index")
         } catch (Exception exception) {
-            createFlash("Ocorreu um erro ao deletar: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Ocorreu um erro ao deletar! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "index")
         }
     }
@@ -103,11 +100,8 @@ class PaymentController extends BaseController{
             paymentService.restore(customerId, id)
             createFlash("Pagamento restaurado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "index")
-        } catch (BusinessException exception) {
-            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
-            redirect(action: "index")
         } catch (Exception exception) {
-            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Houve um erro! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "index")
         }
     }
@@ -119,12 +113,9 @@ class PaymentController extends BaseController{
         try {
             paymentService.receive(id)
             redirect(action: "show", id: params.id)
-        } catch (BusinessException exception) {
-            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
-            redirect(action: "show", id: params.id)
         } catch (Exception exception) {
             log.error(exception)
-            createFlash("Houve um erro: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Houve um erro! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         }
     }
@@ -138,7 +129,7 @@ class PaymentController extends BaseController{
             return [payment: payment]
         } catch (Exception exception) {
             log.error(exception)
-            createFlash("Houve um erro ao visualizar o comprovante: " + exception.getMessage(), AlertType.ERROR, false)
+            createFlash("Houve um erro ao visualizar o comprovante! " + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: id)
         }
     }

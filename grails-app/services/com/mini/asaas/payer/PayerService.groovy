@@ -7,8 +7,7 @@ import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.utils.StringUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
-
-import javax.xml.bind.ValidationException
+import grails.validation.ValidationException
 
 @Transactional
 @GrailsCompileStatic
@@ -17,9 +16,11 @@ class PayerService {
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
         Customer customer = Customer.get(1)
-        validate(adapter, payer)
+        validate(customer.id, adapter, payer)
 
-        if (payer.hasErrors()) throw new ValidationException("Falha ao salvar novo Pagador", payer.errors as String)
+        if (payer.hasErrors()) {
+            throw new ValidationException(" Falha ao cadastrar pagador: ", payer.errors)
+        }
 
         buildPayer(adapter, payer)
 
@@ -39,9 +40,11 @@ class PayerService {
 
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
-        validate(adapter, payer)
+        validate(customerId, adapter, payer)
 
-        if (payer.hasErrors()) throw new ValidationException("Falha ao atualizar o Pagador", payer.errors as String)
+        if (payer.hasErrors()) {
+            throw new ValidationException(" Falha ao atualizar pagador: ", payer.errors)
+        }
 
         buildPayer(adapter, payer)
 
@@ -77,7 +80,32 @@ class PayerService {
         return PayerRepository.query([customerId: customerId, deletedOnly: true]).readOnly().list([max: max, offset: offset])
     }
 
-    private void validate(PayerAdapter adapter, Payer payer) {
+    private void validate(Long customerId, PayerAdapter adapter, Payer payer) {
+        String searchedCpfCnpj = StringUtils.removeNonNumeric(adapter.cpfCnpj as String) ?: null
+
+        Map<String, Object> queryCpfCnpj = [
+                customerId: customerId,
+                cpfCnpj: searchedCpfCnpj
+        ] as Map<String, Object>
+
+        if (payer.id) queryCpfCnpj."id[ne]" = payer.id
+        Boolean existingWithCpfCnpj = PayerRepository.query(queryCpfCnpj).exists()
+
+        if (existingWithCpfCnpj) {
+            DomainErrorUtils.addError(payer, "O cpf/cnpj informado já existe")
+        }
+
+        Map<String, Object> queryEmail = [
+                customerId: customerId,
+                email: adapter.email
+        ] as Map<String, Object>
+
+        if (payer.id) queryEmail."id[ne]" = payer.id
+        Boolean existingWithEmail = PayerRepository.query(queryEmail).exists()
+
+        if (existingWithEmail) {
+            DomainErrorUtils.addError(payer, "O email informado já existe")
+        }
 
         if (!adapter.name) DomainErrorUtils.addError(payer, "Campo nome vazio")
 

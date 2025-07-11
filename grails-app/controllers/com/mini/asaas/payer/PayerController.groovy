@@ -3,9 +3,9 @@ package com.mini.asaas.payer
 import com.mini.asaas.BaseController
 import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
-import com.mini.asaas.exceptions.BusinessException
 import grails.gorm.PagedResultList
 import grails.plugin.springsecurity.annotation.Secured
+import grails.validation.ValidationException
 
 class PayerController extends BaseController {
 
@@ -71,8 +71,8 @@ class PayerController extends BaseController {
             Payer payer = payerService.save(adapter)
             createFlash("Cadastro realizado!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payer.id)
-        } catch (BusinessException exception) {
-            createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
+        } catch (ValidationException validationException) {
+            createFlash(validationException.errors.allErrors.defaultMessage.join("; "), AlertType.ERROR, false)
             render view: "create"
         } catch (Exception exception) {
             createFlash("Ocorreu um erro no cadastro!" + exception.getMessage(), AlertType.ERROR, false)
@@ -90,11 +90,11 @@ class PayerController extends BaseController {
             Payer payer = payerService.update(customerId, id, adapter)
             createFlash("Pagador atualizado com sucesso!", AlertType.SUCCESS, true)
             redirect(action: "show", id: payer.id)
-        } catch (BusinessException error) {
-            createFlash(error.getMessage(), AlertType.ERROR, false)
+        } catch (ValidationException validationException) {
+            createFlash(validationException.errors.allErrors.defaultMessage.join("; "), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
-        } catch (Exception error) {
-            createFlash("Ocorreu um erro durante o cadastro.", AlertType.ERROR, false)
+        } catch (Exception exception) {
+            createFlash("Ocorreu um erro ao atualizar!" + exception.getMessage(), AlertType.ERROR, false)
             redirect(action: "show", id: params.id)
         }
     }

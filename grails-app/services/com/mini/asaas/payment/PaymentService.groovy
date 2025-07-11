@@ -10,8 +10,8 @@ import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
 
-import javax.xml.bind.ValidationException
 
 @Transactional
 @GrailsCompileStatic
@@ -25,8 +25,9 @@ class PaymentService {
 
         validate(adapter, payment)
 
-        if (payment.hasErrors()) throw new ValidationException("Falha ao salvar novo Pagamento", payment.errors as String)
-
+        if (payment.hasErrors()) {
+            throw new ValidationException(" Falha ao realizar operação no pagamento: ", payment.errors)
+        }
         buildPayment(adapter, payment)
 
         payment.customer = customer
@@ -41,7 +42,9 @@ class PaymentService {
         if (!payment) throw new RuntimeException("Pagamento não encontrado")
         validateUpdate(adapter, payment)
 
-        if (payment.hasErrors()) throw new ValidationException("Falha ao atualizar o Pagador", payment.errors as String)
+        if (payment.hasErrors()) {
+            throw new ValidationException(" Falha ao atualizar pagamento: ", payment.errors)
+        }
 
         payment.payer = Payer.get(adapter.payerId)
         payment.billingType = adapter.billingType

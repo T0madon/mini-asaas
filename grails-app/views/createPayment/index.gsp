@@ -13,7 +13,11 @@
 
     <atlas-page-content slot="content" class="js-atlas-content">
         <g:if test="${flash.message}">
-            <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
+            <atlas-alert
+                    type="${flash.success ? 'success' : 'error'}"
+                    message="${flash.message}"
+                    class="js-atlas-alert"
+            ></atlas-alert>
         </g:if>
 
         <atlas-form class="form" action="${createLink(controller: "payment", action: "save")}">
@@ -83,7 +87,7 @@
             <atlas-button submit="true" description="Finalizar"></atlas-button>
 
             <atlas-button theme="danger" description="Cancelar" icon="x"
-                          href="${createLink(controller: "payment", action: "create")}">
+                          href="${createLink(controller: "createPayment", action: "index")}">
             </atlas-button>
         </atlas-form>
     </atlas-page-content>
