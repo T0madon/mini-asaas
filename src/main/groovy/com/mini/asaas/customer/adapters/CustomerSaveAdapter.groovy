@@ -29,6 +29,14 @@ class CustomerSaveAdapter {
     PersonType personType
 
     public CustomerSaveAdapter(Map originalParams) {
+        if (!originalParams) return
+
+        if (originalParams.personTypeString == 'NATURAL') {
+            originalParams.cpfCnpj = originalParams.cpf
+        } else {
+            originalParams.cpfCnpj = originalParams.cnpj
+        }       
+         
         Map<String, String> params = Utils.normalizeParams(originalParams)
         
         if (!params) return
