@@ -14,8 +14,23 @@
     <g:layoutHead/>
 </head>
 <body class="has-atlas">
+    <atlas-screen>
+        <g:render template="/templates/sidebar" />
+        <atlas-page class="js-atlas-page">
+            <atlas-page-header>
+                <atlas-breadcrumb slot="breadcrumb">
+                    <atlas-breadcrumb-item text="${pageProperty(name: "body.page-title")}" icon="home">
+                    </atlas-breadcrumb-item>
+                </atlas-breadcrumb>
+            </atlas-page-header>
 
-    <g:layoutBody/>
-    
+            <atlas-page-content slot="content" class="js-atlas-content">
+                <g:render template='/templates/notification/center' />
+                <g:layoutBody />
+            </atlas-page-content>
+        </atlas-page>
+    </atlas-screen>
+<asset:javascript src="application.js"/>
+<asset:javascript src="notification/ListNotificationController.js"/>
 </body>
 </html> 
